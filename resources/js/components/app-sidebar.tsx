@@ -1,0 +1,128 @@
+import { NavMain } from '@/components/nav-main';
+import { CompanySwitcher } from '@/components/company-switcher';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { useLanguage } from '@/hooks/use-language';
+import { type NavItem } from '@/types';
+import { Link } from '@inertiajs/react';
+import { 
+    LayoutGrid, 
+    Users, 
+    Building, 
+    Clock, 
+    Calculator, 
+    Calendar, 
+    CreditCard, 
+    Shield, 
+    Settings, 
+    Briefcase,
+    UserCheck,
+    Crown
+} from 'lucide-react';
+import AppLogo from './app-logo';
+
+export function AppSidebar() {
+    const { t, isRTL } = useLanguage();
+    
+    const mainNavItems: NavItem[] = [
+        {
+            title: t('nav.dashboard'),
+            href: '/dashboard',
+            icon: LayoutGrid,
+        },
+        {
+            title: t('nav.companies'),
+            href: '/companies',
+            icon: Building,
+        },
+    ];
+
+    const hrmNavItems: NavItem[] = [
+        {
+            title: t('nav.employees'),
+            href: '/hrm/employees',
+            icon: Users,
+        },
+        {
+            title: t('nav.departments'),
+            href: '/hrm/departments',
+            icon: Building,
+        },
+        {
+            title: t('nav.attendance'),
+            href: '/hrm/attendance',
+            icon: Clock,
+        },
+        {
+            title: t('nav.payroll'),
+            href: '/hrm/payroll',
+            icon: Calculator,
+        },
+        {
+            title: t('nav.leaves'),
+            href: '/hrm/leaves',
+            icon: Calendar,
+        },
+        {
+            title: t('nav.banks'),
+            href: '/hrm/banks',
+            icon: CreditCard,
+        },
+    ];
+
+    const adminNavItems: NavItem[] = [
+        {
+            title: t('nav.employmentTypes'),
+            href: '/admin/employment-types',
+            icon: Briefcase,
+        },
+        {
+            title: t('nav.security'),
+            href: '/admin/security',
+            icon: Shield,
+        },
+        {
+            title: t('nav.roles'),
+            href: '/admin/roles',
+            icon: Crown,
+        },
+        {
+            title: t('nav.admin'),
+            href: '/admin/users',
+            icon: UserCheck,
+        },
+        {
+            title: t('nav.settings'),
+            href: '/settings',
+            icon: Settings,
+        },
+    ];
+    return (
+        <Sidebar collapsible="icon" variant="inset" side={isRTL ? "right" : "left"}>
+            <SidebarHeader>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton size="lg" asChild>
+                            <Link href="/dashboard" prefetch>
+                                <AppLogo />
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+                {/* Company Switcher */}
+                <div className="px-2 py-2">
+                    <CompanySwitcher />
+                </div>
+            </SidebarHeader>
+
+            <SidebarContent>
+                <NavMain items={mainNavItems} />
+                <NavMain items={hrmNavItems} />
+                <NavMain items={adminNavItems} />
+            </SidebarContent>
+
+            <SidebarFooter>
+                {/* Footer content can be added here if needed */}
+            </SidebarFooter>
+        </Sidebar>
+    );
+}
