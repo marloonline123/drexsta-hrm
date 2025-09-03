@@ -11,16 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_titles', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->decimal('annual_budget', 10)->default(0);
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->unique(['company_id', 'title']);
+            $table->unique(['company_id', 'name']);
             $table->unique(['company_id', 'slug']);
+
+            $table->index('is_active');
         });
     }
 
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_titles');
+        Schema::dropIfExists('departments');
     }
 };
