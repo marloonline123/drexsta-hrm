@@ -4,21 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\RolesController;
 
-Route::get('/', function () {
-    return Inertia::render('landing');
-})->name('home');
-
-Route::get('/pricing', function () {
-    return Inertia::render('pricing');
-})->name('pricing');
-
-Route::get('/about', function () {
-    return Inertia::render('about');
-})->name('about');
-
-Route::get('/contact', function () {
-    return Inertia::render('contact');
-})->name('contact');
+Route::redirect('/', '/dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -29,15 +15,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('companies', function () {
         return Inertia::render('companies');
     })->name('companies');
-    
-    // Billing & Subscriptions
-    Route::get('billing', function () {
-        return Inertia::render('billing');
-    })->name('billing');
-    
-    Route::get('subscriptions', function () {
-        return Inertia::render('subscriptions');
-    })->name('subscriptions');
     
     // HRM Routes
     Route::prefix('hrm')->group(function () {
