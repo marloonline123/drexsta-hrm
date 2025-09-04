@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('responsibility_assignments', function (Blueprint $table) {
+        Schema::create('approval_instances', function (Blueprint $table) {
             $table->id();
+            $table->morphs('approvable'); // approvable_type + approvable_id
+            $table->foreignId('approval_policy_id')->constrained()->cascadeOnDelete();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('responsibility_id')->constrained()->cascadeOnDelete();
+            $table->integer('current_step')->default(1);
+            $table->boolean('is_completed')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('responsibility_assignments');
+        Schema::dropIfExists('approval_instances');
     }
 };

@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('responsibility_assignments', function (Blueprint $table) {
+        Schema::create('approval_policies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('responsibility_id')->constrained()->cascadeOnDelete();
+            $table->string('action'); // e.g. offer_approval
+            $table->json('steps'); // ["department_head", "hr_manager", "finance_approver"]
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('responsibility_assignments');
+        Schema::dropIfExists('approval_policies');
     }
 };
