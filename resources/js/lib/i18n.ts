@@ -83,7 +83,30 @@ const resources = {
                 companyDetails: 'Company Details',
                 basicInfo: 'Basic Information',
                 contactInfo: 'Contact Information',
-                businessInfo: 'Business Information'
+                businessInfo: 'Business Information',
+                // Form specific translations
+                createCompany: 'Create New Company',
+                editCompanyTitle: 'Edit Company',
+                addNewCompany: 'Add a new company to your organization',
+                updateCompanyInfo: 'Update company information for',
+                companyNameRequired: 'Company Name',
+                companyNamePlaceholder: 'Enter company name',
+                industryRequired: 'Industry',
+                industryPlaceholder: 'e.g., Technology, Healthcare, Finance',
+                emailPlaceholder: 'company@example.com',
+                phonePlaceholder: '+1 (555) 000-0000',
+                addressPlaceholder: 'Enter company address',
+                descriptionPlaceholder: 'Brief description about the company',
+                companyLogo: 'Company Logo',
+                uploadLogo: 'Upload Logo',
+                changeLogo: 'Change Logo',
+                logoDescription: 'Accepted formats: PNG, JPG, JPEG (Max size: 5MB)',
+                companyStatus: 'Company Status',
+                companyStatusDescription: 'Set whether this company is active or inactive',
+                creating: 'Creating...',
+                updating: 'Updating...',
+                createCompanyButton: 'Create Company',
+                updateCompanyButton: 'Update Company'
             },
             // Billing
             billing: {
@@ -172,7 +195,7 @@ const resources = {
                     deleteRole: 'Delete Role',
                     viewRole: 'View Role',
                     roleName: 'Role Name',
-                    description: 'Description',
+                    roleDescription: 'Description',
                     permissions: 'Permissions',
                     assignPermissions: 'Assign Permissions',
                     selectPermissions: 'Select Permissions',
@@ -313,7 +336,7 @@ const resources = {
     },
     ar: {
         translation: {
-            // Common UI
+            // Common
             common: {
                 actions: 'الإجراءات',
                 create: 'إنشاء',
@@ -327,7 +350,7 @@ const resources = {
                 search: 'بحث',
                 filter: 'تصفية',
                 loading: 'جارٍ التحميل...',
-                noData: 'لا توجد بيانات',
+                noData: 'لا توجد بيانات متاحة',
                 confirm: 'تأكيد',
                 status: 'الحالة',
                 active: 'نشط',
@@ -335,7 +358,18 @@ const resources = {
                 name: 'الاسم',
                 description: 'الوصف',
                 createdAt: 'تاريخ الإنشاء',
-                updatedAt: 'تاريخ التحديث'
+                updatedAt: 'تاريخ التحديث',
+                add: 'إضافة',
+                export: 'تصدير',
+                import: 'استيراد',
+                success: 'نجح',
+                error: 'خطأ',
+                warning: 'تحذير',
+                info: 'معلومات',
+                next: 'التالي',
+                previous: 'السابق',
+                submit: 'إرسال',
+                reset: 'إعادة تعيين'
             },
             // Navigation
             nav: {
@@ -390,7 +424,30 @@ const resources = {
                 companyDetails: 'تفاصيل الشركة',
                 basicInfo: 'المعلومات الأساسية',
                 contactInfo: 'معلومات الاتصال',
-                businessInfo: 'معلومات العمل'
+                businessInfo: 'معلومات العمل',
+                // Form specific translations
+                createCompany: 'إنشاء شركة جديدة',
+                editCompanyTitle: 'تعديل الشركة',
+                addNewCompany: 'إضافة شركة جديدة إلى مؤسستك',
+                updateCompanyInfo: 'تحديث معلومات الشركة لـ',
+                companyNameRequired: 'اسم الشركة',
+                companyNamePlaceholder: 'أدخل اسم الشركة',
+                industryRequired: 'القطاع',
+                industryPlaceholder: 'مثال: التكنولوجيا، الرعاية الصحية، المالية',
+                emailPlaceholder: 'company@example.com',
+                phonePlaceholder: '+966 50 000 0000',
+                addressPlaceholder: 'أدخل عنوان الشركة',
+                descriptionPlaceholder: 'وصف مختصر عن الشركة',
+                companyLogo: 'شعار الشركة',
+                uploadLogo: 'رفع الشعار',
+                changeLogo: 'تغيير الشعار',
+                logoDescription: 'الصيغ المقبولة: PNG، JPG، JPEG (الحد الأقصى: 5 ميجابايت)',
+                companyStatus: 'حالة الشركة',
+                companyStatusDescription: 'تحديد ما إذا كانت هذه الشركة نشطة أم غير نشطة',
+                creating: 'جاري الإنشاء...',
+                updating: 'جاري التحديث...',
+                createCompanyButton: 'إنشاء الشركة',
+                updateCompanyButton: 'تحديث الشركة'
             },
             // Billing
             billing: {
@@ -479,7 +536,7 @@ const resources = {
                     deleteRole: 'حذف الدور',
                     viewRole: 'عرض الدور',
                     roleName: 'اسم الدور',
-                    description: 'الوصف',
+                    roleDescription: 'الوصف',
                     permissions: 'الصلاحيات',
                     assignPermissions: 'تعيين الصلاحيات',
                     selectPermissions: 'اختيار الصلاحيات',
@@ -588,33 +645,6 @@ const resources = {
                 addEmployee: 'إضافة موظف',
                 processPayroll: 'معالجة كشوف المرتبات',
                 viewReports: 'عرض التقارير'
-            },
-            // Common
-            common: {
-                save: 'حفظ',
-                cancel: 'إلغاء',
-                delete: 'حذف',
-                edit: 'تعديل',
-                add: 'إضافة',
-                search: 'بحث',
-                filter: 'تصفية',
-                export: 'تصدير',
-                import: 'استيراد',
-                loading: 'جاري التحميل...',
-                noData: 'لا توجد بيانات متاحة',
-                success: 'نجح',
-                error: 'خطأ',
-                warning: 'تحذير',
-                info: 'معلومات',
-                close: 'إغلاق',
-                next: 'التالي',
-                previous: 'السابق',
-                submit: 'إرسال',
-                reset: 'إعادة تعيين',
-                view: 'عرض',
-                create: 'إنشاء',
-                update: 'تحديث',
-                confirm: 'تأكيد'
             }
         }
     }

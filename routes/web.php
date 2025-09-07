@@ -15,6 +15,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('companies', function () {
         return Inertia::render('companies');
     })->name('companies');
+    Route::get('companies/create', function () {
+        return Inertia::render('companies/create');
+    })->name('companies.create');
+    Route::get('companies/edit', function () {
+        return Inertia::render('companies/edit');
+    })->name('companies.edit');
     
     // HRM Routes
     Route::prefix('hrm')->group(function () {
