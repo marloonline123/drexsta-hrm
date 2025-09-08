@@ -16,10 +16,10 @@ class CompanyController extends Controller
     public function __construct(protected FileService $fileService) {}
 
     /**
-    * Display a listing of the companies.
-    *
-    * @return \Inertia\Response
-    */
+     * Display a listing of the companies.
+     *
+     * @return \Inertia\Response
+     */
     public function index(): Response
     {
         $user = Auth::user();
@@ -31,8 +31,15 @@ class CompanyController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $employeesCount = $user->companies()
+            ->withCount(['nonOwnerUsers'])
+            ->get()
+            ->sum('non_owner_users_count');
+
+        $companies = CompanyResource::collection($companies)->additional(['meta' => ['employees_count' => $employeesCount]]);
+        // $companies['meta']['employees_count'] = $employeesCount;
         return inertia()->render('Admin/Companies/Index', [
-            'companies' => CompanyResource::collection($companies)
+            'companies' => $companies,
         ]);
     }
 

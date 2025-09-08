@@ -13,6 +13,7 @@ import { PaginatedData } from '@/Types/global';
 import { Company } from '@/Types/companies';
 import Filter from '@/Components/Shared/Filter';
 import CompaniesGrid from '@/Components/Companies/CompaniesGrid';
+import CompaniesStats from '@/Components/Companies/CompaniesStats';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,6 +28,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function CompaniesPage({ companies }: { companies: PaginatedData<Company> }) {
     const companiesData = companies.data || [];
+    console.log('Companies Data:', companies);
+    
     const { t } = useLanguage();
 
     return (
@@ -52,54 +55,7 @@ export default function CompaniesPage({ companies }: { companies: PaginatedData<
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">
-                                {t('companies.totalCompanies')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                            <div className="text-2xl font-bold">{companiesData.length}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">
-                                {t('companies.activeCompanies')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                            <div className="text-2xl font-bold text-green-600">
-                                {companiesData.filter(c => c.status === 'active').length}
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">
-                                {t('companies.employeesCount')}
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <CardContent className="pt-0">
-                            <div className="text-2xl font-bold">
-                                {companies.reduce((sum, c) => sum + c.employeesCount, 0)}
-                            </div>
-                        </CardContent> */}
-                    </Card>
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">
-                                Industr
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <CardContent className="pt-0">
-                            <div className="text-2xl font-bold">
-                                {new Set(companies.map(c => c.industry)).size}
-                            </div>
-                        </CardContent> */}
-                    </Card>
-                </div>
+                <CompaniesStats companies={companies} />
 
                 <Filter 
                     routeName='dashboard.companies.index'

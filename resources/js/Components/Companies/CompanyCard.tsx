@@ -168,7 +168,7 @@ export default function CompanyCard({ company }: { company: Company }) {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Globe className="h-4 w-4" />
-                                            {viewCompany?.website ?? 'N/A'}
+                                            https://google.com
                                         </div>
                                     </div>
                                 </div>
