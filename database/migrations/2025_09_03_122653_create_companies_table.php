@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Fields to add:
+        // tax_number (string, nullable)
+        // website (string, nullable)
+        // founded_date (date, nullable)
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');

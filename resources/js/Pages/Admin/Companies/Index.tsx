@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
+import { Card, CardContent } from '@/Components/Ui/card';
 import { useLanguage } from '@/Hooks/use-language';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
@@ -9,8 +9,7 @@ import {
     Plus,
 } from 'lucide-react';
 import Pagination from '@/Components/Shared/Pagination';
-import { PaginatedData } from '@/Types/global';
-import { Company } from '@/Types/companies';
+import { CompaniesResponse } from '@/Types/companies';
 import Filter from '@/Components/Shared/Filter';
 import CompaniesGrid from '@/Components/Companies/CompaniesGrid';
 import CompaniesStats from '@/Components/Companies/CompaniesStats';
@@ -26,7 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function CompaniesPage({ companies }: { companies: PaginatedData<Company> }) {
+export default function CompaniesPage({ companies }: { companies: CompaniesResponse }) {
     const companiesData = companies.data || [];
     console.log('Companies Data:', companies);
     

@@ -13,22 +13,17 @@ import {
     Calendar,
     CheckCircle,
     XCircle,
-    Globe,
-    FileText,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/Components/Ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/Ui/dialog';
-import { DeleteModal } from '@/Components/Shared/DeleteModal';
 import { Badge } from '@/Components/Ui/badge';
 import { useState } from 'react';
 import { useLanguage } from '@/Hooks/use-language';
 import { router } from '@inertiajs/react';
+import DeleteCompanyModal from './DeleteCompanyModal';
 
 export default function CompanyCard({ company }: { company: Company }) {
-    const [viewCompany, setViewCompany] = useState<Company | null>(null);
-    const [deleteCompany, setDeleteCompany] = useState<Company | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const { t } = useLanguage();
 
     const getStatusBadge = (isActive: boolean) => {
@@ -43,22 +38,6 @@ export default function CompanyCard({ company }: { company: Company }) {
                 {t('companies.inactive')}
             </Badge>
         );
-    };
-
-    const handleDeleteCompany = async () => {
-        if (!deleteCompany) return;
-
-        setIsDeleting(true);
-        try {
-            router.delete(route('dashboard.companies.destroy', deleteCompany.id), {
-                preserveScroll: true,
-            });
-            setDeleteCompany(null);
-        } catch (error) {
-            console.error('Failed to delete company:', error);
-        } finally {
-            setIsDeleting(false);
-        }
     };
 
     return (
@@ -84,15 +63,15 @@ export default function CompanyCard({ company }: { company: Company }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setViewCompany(company)}>
+                            <DropdownMenuItem onClick={() => router.visit(route('dashboard.companies.show', company.slug))}>
                                 <Eye className="h-4 w-4 mr-2" />
                                 {t('common.view')}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(route('dashboard.companies.edit', company.id))}>
+                            <DropdownMenuItem onClick={() => router.visit(route('dashboard.companies.edit', company.slug))}>
                                 <Edit className="h-4 w-4 mr-2" />
                                 {t('common.edit')}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setDeleteCompany(company)}>
+                            <DropdownMenuItem onClick={() => setShowDeleteModal(true)}>
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 {t('common.delete')}
                             </DropdownMenuItem>
@@ -128,87 +107,8 @@ export default function CompanyCard({ company }: { company: Company }) {
                 </div>
             </CardContent>
 
-            {/* View Company Dialog */}
-            <Dialog open={!!viewCompany} onOpenChange={() => setViewCompany(null)}>
-                <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle>{t('companies.companyDetails')}</DialogTitle>
-                    </DialogHeader>
-                    {viewCompany && (
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="h-16 w-16">
-                                    <AvatarImage src={viewCompany.logo_url} alt={viewCompany.name} />
-                                    <AvatarFallback className="bg-primary/10 text-primary text-xl">
-                                        {viewCompany.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <h3 className="text-xl font-bold">{viewCompany.name}</h3>
-                                    <p className="text-muted-foreground">{viewCompany.industry}</p>
-                                    {getStatusBadge(viewCompany.is_active)}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-6">
-                                <div>
-                                    <h4 className="font-medium mb-3">{t('companies.contactInfo')}</h4>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <Mail className="h-4 w-4" />
-                                            {viewCompany.email}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Phone className="h-4 w-4" />
-                                            {viewCompany.phone}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Globe className="h-4 w-4" />
-                                            https://google.com
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="font-medium mb-3">{t('companies.businessInfo')}</h4>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <FileText className="h-4 w-4" />
-                                            12000
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Users className="h-4 w-4" />
-                                            {viewCompany.employees_count} employees
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4" />
-                                            Est. {new Date(viewCompany.established_date).getFullYear()}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h4 className="font-medium mb-2">{t('companies.address')}</h4>
-                                <p className="text-sm text-muted-foreground">{viewCompany.address}</p>
-                            </div>
-                        </div>
-                    )}
-                </DialogContent>
-            </Dialog>
-
             {/* Delete Modal */}
-            <DeleteModal
-                open={!!deleteCompany}
-                onOpenChange={() => setDeleteCompany(null)}
-                onConfirm={handleDeleteCompany}
-                loading={isDeleting}
-                title={deleteCompany ? `${t('companies.deleteCompany')} "${deleteCompany.name}"` : ''}
-                description={deleteCompany ?
-                    `${t('companies.confirmDelete')} ${t('companies.deleteWarning')}`
-                    : ''
-                }
-            />
+            <DeleteCompanyModal company={company} showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal} />
         </Card>
     )
 }

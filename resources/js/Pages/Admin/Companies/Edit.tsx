@@ -13,7 +13,6 @@ interface EditCompanyProps {
 
 export default function EditCompany({ company }: EditCompanyProps) {
     const { t } = useLanguage();
-    console.log('Editing Company:', company);
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('nav.dashboard'),
@@ -25,11 +24,11 @@ export default function EditCompany({ company }: EditCompanyProps) {
         },
         {
             title: company.name,
-            href: route('dashboard.companies.show', company.id),
+            href: route('dashboard.companies.show', company.slug),
         },
         {
             title: t('common.edit'),
-            href: route('dashboard.companies.edit', company.id),
+            href: route('dashboard.companies.edit', company.slug),
         },
     ];
 
@@ -60,7 +59,7 @@ export default function EditCompany({ company }: EditCompanyProps) {
                 </div>
 
                 <CompanyForm 
-                    action={route('dashboard.companies.update', company.id)} 
+                    action={route('dashboard.companies.update', company.slug)} 
                     company={company}
                     method="put"
                 />

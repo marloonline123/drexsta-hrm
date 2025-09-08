@@ -80,6 +80,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $company->load('users');
         return inertia()->render('Admin/Companies/Show', [
             'company' => CompanyResource::make($company)->resolve()
         ]);

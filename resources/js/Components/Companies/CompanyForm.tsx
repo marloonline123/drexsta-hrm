@@ -113,7 +113,7 @@ export default function CompanyForm({
 
                             {/* Description */}
                             <div className="space-y-2">
-                                <Label htmlFor="description">{t('common.description')}</Label>
+                                <Label htmlFor="description">{t('companies.description')}</Label>
                                 <Textarea
                                     id="description"
                                     name="description"
@@ -133,7 +133,7 @@ export default function CompanyForm({
                         <CardContent>
                             <ImageUpload
                                 name="logo_image"
-                                label={t('companies.companyLogo')}
+                                label=''
                                 error={errors.logo}
                                 maxSize={5}
                                 value={company?.logo_url || ''}
@@ -144,7 +144,7 @@ export default function CompanyForm({
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>{t('common.status')}</CardTitle>
+                            <CardTitle>{t('companies.status')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="flex items-center justify-between">
@@ -157,6 +157,7 @@ export default function CompanyForm({
                                 <Switch
                                     name="is_active"
                                     defaultChecked={company?.is_active ?? true}
+                                    defaultValue={company?.is_active ? '1' : '0'}
                                 />
                             </div>
                             <InputError message={errors.is_active} />
