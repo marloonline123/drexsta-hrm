@@ -50,13 +50,9 @@ export default function CompanyCard({ company }: { company: Company }) {
 
         setIsDeleting(true);
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Here you would make the actual API call
-            // await fetch(`/companies/${deleteCompany.id}`, { method: 'DELETE' });
-
-            console.log('Company deleted:', deleteCompany.name);
+            router.delete(route('dashboard.companies.destroy', deleteCompany.id), {
+                preserveScroll: true,
+            });
             setDeleteCompany(null);
         } catch (error) {
             console.error('Failed to delete company:', error);
