@@ -2,56 +2,34 @@ import { Button } from '@/Components/Ui/button';
 
 import { useLanguage } from '@/Hooks/use-language';
 import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/types';
-import { Form, Head } from '@inertiajs/react';
-import { Building, Save, ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { type BreadcrumbItem } from '@/Types';
+import { Head } from '@inertiajs/react';
+import { Building, ArrowLeft } from 'lucide-react';
 import CompanyForm from '@/Components/Companies/CompanyForm';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Companies',
-        href: '/companies',
-    },
-    {
-        title: 'Create Company',
-        href: '/companies/create',
-    },
-];
 
 export default function CreateCompany() {
     const { t } = useLanguage();
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    
-        const handleLogoChange = (file: File | null) => {
-            setSelectedFile(file);
-        };
-    
 
     // Dynamic breadcrumbs with translations
     const translatedBreadcrumbs: BreadcrumbItem[] = [
         {
             title: t('nav.dashboard'),
-            href: '/dashboard',
+            href: route('dashboard.index'),
         },
         {
             title: t('nav.companies'),
-            href: '/companies',
+            href: route('dashboard.companies.index'),
         },
         {
             title: t('companies.createCompany'),
-            href: '/companies/create',
+            href: route('dashboard.companies.create'),
         },
     ];
 
     return (
         <AppLayout breadcrumbs={translatedBreadcrumbs}>
             <Head title={t('companies.createCompany')} />
-            
+
             <div className={`p-6`}>
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-6">
@@ -71,7 +49,7 @@ export default function CreateCompany() {
                     </div>
                 </div>
 
-                <CompanyForm action={route('dashboard.companies.store')} handleLogoChange={handleLogoChange} />
+                <CompanyForm action={route('dashboard.companies.store')} />
             </div>
         </AppLayout>
     );

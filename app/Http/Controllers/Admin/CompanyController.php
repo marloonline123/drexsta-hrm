@@ -81,7 +81,7 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         return inertia()->render('Admin/Companies/Show', [
-            'company' => $company
+            'company' => CompanyResource::make($company)->resolve()
         ]);
     }
 
@@ -94,7 +94,7 @@ class CompanyController extends Controller
     public function edit(Company $company)
     {
         return inertia()->render('Admin/Companies/Edit', [
-            'company' => $company
+            'company' => CompanyResource::make($company)->resolve()
         ]);
     }
 
@@ -105,9 +105,15 @@ class CompanyController extends Controller
      * @param \App\Models\Company $company
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyRequest $request, Company $company)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('logo_image')) {
+            $data['logo_path'] = $this->fileService->storeImage($request->file('logo_image'), 'companies');
+        }
+        $company->update($data);
+
+        return back()->with('success', 'Company updated successfully.');
     }
 
     /**

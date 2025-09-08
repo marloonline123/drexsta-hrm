@@ -61,7 +61,7 @@ const resources = {
                 contactInfo: 'Contact Information',
                 businessInfo: 'Business Information',
                 // Form specific translations
-                createCompany: 'Create New Company',
+                saveCompany: 'Create New Company',
                 editCompanyTitle: 'Edit Company',
                 addNewCompany: 'Add a new company to your organization',
                 updateCompanyInfo: 'Update company information for',
@@ -79,8 +79,10 @@ const resources = {
                 logoDescription: 'Accepted formats: PNG, JPG, JPEG (Max size: 5MB)',
                 companyStatus: 'Company Status',
                 companyStatusDescription: 'Set whether this company is active or inactive',
+                saving: 'Saving...',
                 creating: 'Creating...',
                 updating: 'Updating...',
+                saveCompanyButton: 'Save Company',
                 createCompanyButton: 'Create Company',
                 updateCompanyButton: 'Update Company'
             },
@@ -424,8 +426,10 @@ const resources = {
                 logoDescription: 'الصيغ المقبولة: PNG، JPG، JPEG (الحد الأقصى: 5 ميجابايت)',
                 companyStatus: 'حالة الشركة',
                 companyStatusDescription: 'تحديد ما إذا كانت هذه الشركة نشطة أم غير نشطة',
+                saving: 'جاري الحفظ...',
                 creating: 'جاري الإنشاء...',
                 updating: 'جاري التحديث...',
+                saveCompanyButton: 'حفظ الشركة',
                 createCompanyButton: 'إنشاء الشركة',
                 updateCompanyButton: 'تحديث الشركة'
             },

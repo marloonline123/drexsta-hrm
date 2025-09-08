@@ -29,11 +29,12 @@ class CompanyRequest extends FormRequest
      */
     public function rules(): array
     {
+        $companyId = $this->route('company')?->id;
         return [
             'name' => 'required|string|max:255',
             'industry' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20|unique:companies,phone,' . $this->route('company'),
-            'email' => 'nullable|email|max:255|unique:companies,email,' . $this->route('company'),
+            'phone' => 'nullable|string|max:20|unique:companies,phone,' . $companyId,
+            'email' => 'nullable|email|max:255|unique:companies,email,' . $companyId,
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5148', // Max 5MB

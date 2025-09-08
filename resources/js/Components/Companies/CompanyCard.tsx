@@ -71,7 +71,7 @@ export default function CompanyCard({ company }: { company: Company }) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Avatar className="h-12 w-12">
-                            <AvatarImage src={company.logo_url || ""} alt={company.name} />
+                            <AvatarImage src={company.logo_url || ""} className='object-cover' alt={company.name} />
                             <AvatarFallback className="bg-primary/10 text-primary">
                                 {company.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                             </AvatarFallback>

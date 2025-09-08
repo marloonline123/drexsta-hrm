@@ -10,27 +10,32 @@ import { useLanguage } from '@/Hooks/use-language';
 import { Button, buttonVariants } from '../Ui/button';
 import { Save } from 'lucide-react';
 import { Form, Link } from '@inertiajs/react';
+import { Company } from '@/Types/companies';
 
 interface CompanyFormProps {
     action: string;
-    handleLogoChange?: (file: File | null) => void;
+    company?: Company;
+    method?: 'post' | 'put' | 'patch';
 }
 export default function CompanyForm({
     action,
-    handleLogoChange
+    company,
+    method = 'post',
 }: CompanyFormProps) {
     const { t } = useLanguage();
-    
 
     return (
         <Form
             action={action}
-            method="post"
+            method='post'
             encType="multipart/form-data"
             className="max-w-4xl"
         >
             {({ processing, errors }) => (
                 <div className="space-y-6">
+                    { method === 'put' && (
+                        <input type="hidden" name="_method" value="PUT" />
+                    )}
                     <Card>
                         <CardHeader>
                             <CardTitle>{t('companies.basicInfo')}</CardTitle>
@@ -48,6 +53,7 @@ export default function CompanyForm({
                                         placeholder={t('companies.companyNamePlaceholder')}
                                         required
                                         autoFocus
+                                        defaultValue={company?.name || ''}
                                     />
                                     <InputError message={errors.name} />
                                 </div>
@@ -60,6 +66,7 @@ export default function CompanyForm({
                                         name="industry"
                                         placeholder={t('companies.industryPlaceholder')}
                                         required
+                                        defaultValue={company?.industry || ''}
                                     />
                                     <InputError message={errors.industry} />
                                 </div>
@@ -74,6 +81,7 @@ export default function CompanyForm({
                                         name="email"
                                         type="email"
                                         placeholder={t('companies.emailPlaceholder')}
+                                        defaultValue={company?.email || ''}
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -84,6 +92,7 @@ export default function CompanyForm({
                                         name="phone"
                                         type="tel"
                                         placeholder={t('companies.phonePlaceholder')}
+                                        defaultValue={company?.phone || ''}
                                     />
                                     <InputError message={errors.phone} />
                                 </div>
@@ -97,6 +106,7 @@ export default function CompanyForm({
                                     name="address"
                                     placeholder={t('companies.addressPlaceholder')}
                                     rows={3}
+                                    defaultValue={company?.address || ''}
                                 />
                                 <InputError message={errors.address} />
                             </div>
@@ -109,6 +119,7 @@ export default function CompanyForm({
                                     name="description"
                                     placeholder={t('companies.descriptionPlaceholder')}
                                     rows={4}
+                                    defaultValue={company?.description || ''}
                                 />
                                 <InputError message={errors.description} />
                             </div>
@@ -123,9 +134,9 @@ export default function CompanyForm({
                             <ImageUpload
                                 name="logo_image"
                                 label={t('companies.companyLogo')}
-                                onChange={handleLogoChange}
                                 error={errors.logo}
                                 maxSize={5}
+                                value={company?.logo_url || ''}
                                 description={t('companies.logoDescription')}
                             />
                         </CardContent>
@@ -145,7 +156,7 @@ export default function CompanyForm({
                                 </div>
                                 <Switch
                                     name="is_active"
-                                    defaultChecked={true}
+                                    defaultChecked={company?.is_active ?? true}
                                 />
                             </div>
                             <InputError message={errors.is_active} />
@@ -159,7 +170,7 @@ export default function CompanyForm({
                         </Link>
                         <Button type="submit" disabled={processing}>
                             <Save className="h-4 w-4 mr-2" />
-                            {processing ? t('companies.creating') : t('companies.createCompanyButton')}
+                            {processing ? t('companies.saving') : t('companies.saveCompanyButton')}
                         </Button>
                     </div>
                 </div>
