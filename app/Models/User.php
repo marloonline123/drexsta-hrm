@@ -47,4 +47,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function ownedCompanies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user')->where('company_user.role', 'owner');
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user');
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CompanyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\RolesController;
@@ -7,20 +8,19 @@ use App\Http\Controllers\Admin\RolesController;
 Route::redirect('/', '/dashboard')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('simple-dashboard');
-    })->name('dashboard');
-    
-    // Companies Management
-    Route::get('companies', function () {
-        return Inertia::render('companies');
-    })->name('companies');
-    Route::get('companies/create', function () {
-        return Inertia::render('companies/create');
-    })->name('companies.create');
-    Route::get('companies/edit', function () {
-        return Inertia::render('companies/edit');
-    })->name('companies.edit');
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('dashboard');
+    // })->name('dashboard');
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+
+        // Main dashboard page
+        Route::get('/', function () {
+            return Inertia::render('dashboard');
+        })->name('index');
+
+        // Companies
+        Route::resource('companies', CompanyController::class);
+    });
     
     // HRM Routes
     Route::prefix('hrm')->group(function () {
