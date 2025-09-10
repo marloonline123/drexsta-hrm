@@ -29,7 +29,6 @@ export default function CompanyForm({
             action={action}
             method='post'
             encType="multipart/form-data"
-            className="max-w-4xl"
         >
             {({ processing, errors }) => (
                 <div className="space-y-6">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DepartmentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\RolesController;
@@ -20,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Companies
         Route::resource('companies', CompanyController::class);
+        
+        // Departments
+        Route::resource('departments', DepartmentController::class);
     });
     
     // HRM Routes
@@ -27,10 +31,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('employees', function () {
             return Inertia::render('hrm/employees');
         })->name('hrm.employees');
-        
-        Route::get('departments', function () {
-            return Inertia::render('hrm/departments');
-        })->name('hrm.departments');
         
         Route::get('attendance', function () {
             return Inertia::render('hrm/attendance');

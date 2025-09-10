@@ -61,7 +61,7 @@ const resources = {
                 contactInfo: 'Contact Information',
                 businessInfo: 'Business Information',
                 // Form specific translations
-                saveCompany: 'Create New Company',
+                createCompany: 'Create New Company',
                 editCompanyTitle: 'Edit Company',
                 addNewCompany: 'Add a new company to your organization',
                 updateCompanyInfo: 'Update company information for',

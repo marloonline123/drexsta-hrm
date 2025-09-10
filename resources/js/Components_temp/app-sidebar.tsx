@@ -1,5 +1,5 @@
 import { NavMain } from '@/Components/nav-main';
-import { CompanySwitcher } from '@/Components/company-switcher';
+import { CompanySwitcher } from '@/Components/Companies/CompanySwitcher';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/Components/Ui/sidebar';
 import { useLanguage } from '@/Hooks/use-language';
 import { type NavItem } from '@/types';

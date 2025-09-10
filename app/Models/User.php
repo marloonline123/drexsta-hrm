@@ -48,6 +48,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function activeCompany()
+    {
+        return Company::find($this->active_company_id);
+    }
+
     public function ownedCompanies()
     {
         return $this->belongsToMany(Company::class, 'company_user')->where('company_user.role', 'owner');

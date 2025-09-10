@@ -6,6 +6,7 @@ use App\Traits\GlobalScopes\HasFilterByScope;
 use App\Traits\GlobalScopes\HasSearchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
@@ -39,8 +40,13 @@ class Company extends Model
         return $this->belongsToMany(User::class, 'company_user');
     }
 
-    public function nonOwnerUsers(): BelongsToMany
+    public function employees(): BelongsToMany
     {
         return $this->users()->where('company_user.role', '!=', 'owner');
+    }
+
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class);
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Traits\GlobalScopes;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait HasIsFeaturedScope
 {
-    public function scopeIsFeatured($query, string|bool|null $isFeatured = true)
+    public function scopeIsFeatured(Builder $query, string|bool|null $isFeatured = true)
     {
         if (empty($isFeatured)) return $query;
         if (gettype($isFeatured) !== 'string') {

@@ -13,6 +13,7 @@ export type Company = {
     is_active: boolean;
     employees_count: number;
     established_date: string;
+    my_role?: string;
     created_at: string;
     updated_at: string;
 }

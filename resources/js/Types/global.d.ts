@@ -4,7 +4,7 @@ declare global {
     const route: typeof routeFn;
 }
 
-export type PaginatedData<T, M extends object = {}> = {
+export type PaginatedData<T, M extends Record<string, unknown> = Record<string, never>> = {
     data: T[];
     links: {
         first: string | null;

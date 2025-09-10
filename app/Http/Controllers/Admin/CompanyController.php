@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\CompanyCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CompanyRequest;
+use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\Admin\CompanyResource;
 use App\Models\Company;
 use App\Services\Shared\FileService;
@@ -24,7 +25,7 @@ class CompanyController extends Controller
     {
         $user = Auth::user();
         $companies = $user->ownedCompanies()
-            ->with('users')
+            ->with('employees')
             ->search(request('search'), ['name', 'industry', 'email', 'phone'])
             ->filterBy('companies.is_active', request()->has('status') ? request('status') === 'active' : null)
             ->latest()
@@ -32,12 +33,11 @@ class CompanyController extends Controller
             ->withQueryString();
 
         $employeesCount = $user->companies()
-            ->withCount(['nonOwnerUsers'])
+            ->withCount(['employees'])
             ->get()
-            ->sum('non_owner_users_count');
+            ->sum('employees_count');
 
         $companies = CompanyResource::collection($companies)->additional(['meta' => ['employees_count' => $employeesCount]]);
-        // $companies['meta']['employees_count'] = $employeesCount;
         return inertia()->render('Admin/Companies/Index', [
             'companies' => $companies,
         ]);
@@ -69,6 +69,8 @@ class CompanyController extends Controller
         $company = Company::create($data);
         $company->users()->attach(Auth::id(), ['role' => 'owner', 'created_at' => now(), 'updated_at' => now()]);
 
+        event(new CompanyCreated($company));
+
         return to_route('dashboard.companies.index')->with('success', 'Company created successfully.');
     }
 
@@ -80,7 +82,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $company->load('users');
+        $company->load('employees');
         return inertia()->render('Admin/Companies/Show', [
             'company' => CompanyResource::make($company)->resolve()
         ]);

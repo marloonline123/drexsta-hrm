@@ -1,6 +1,6 @@
 import { SidebarProvider } from '@/Components/Ui/sidebar';
 import { useLanguage } from '@/Hooks/use-language';
-import { SharedData } from '@/types';
+import { SharedData } from '@/Types';
 import { usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
