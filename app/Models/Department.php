@@ -22,6 +22,11 @@ class Department extends Model
         'annual_budget',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function employees(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'department_employee', 'department_id', 'employee_id')->withPivot('role');

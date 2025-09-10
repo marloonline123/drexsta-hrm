@@ -5,41 +5,28 @@ import { type BreadcrumbItem } from '@/Types';
 import { Head, Link } from '@inertiajs/react';
 import { Building, ArrowLeft } from 'lucide-react';
 import DepartmentForm from '@/Components/Departments/DepartmentForm';
-
-interface Employee {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    position: string;
-}
+import { User } from '@/Types/user';
 
 interface Props {
-    employees: Employee[];
+    employees: User[];
 }
 
 export default function CreateDepartment({ employees }: Props) {
-    const { t } = useLanguage();
-    console.log('Employees:', employees);
-    
+    const { t } = useLanguage();    
 
     // Dynamic breadcrumbs with translations
     const translatedBreadcrumbs: BreadcrumbItem[] = [
         {
             title: t('nav.dashboard'),
-            href: '/dashboard',
-        },
-        {
-            title: 'Admin',
-            href: '/admin',
+            href: route('dashboard.index'),
         },
         {
             title: t('departments'),
-            href: '/dashboard/departments',
+            href: route('dashboard.departments.index'),
         },
         {
             title: 'Create Department',
-            href: '/dashboard/departments/create',
+            href: route('dashboard.departments.create'),
         },
     ];
 

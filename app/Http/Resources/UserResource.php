@@ -24,6 +24,10 @@ class UserResource extends JsonResource
             'profile_photo_url' => $this->profile_photo_path
                 ? Storage::disk(config('filesystems.default'))->url($this->profile_photo_path)
                 : null,
+            'department_role' => $this->when(
+                isset($this->pivot),
+                fn() => $this->pivot->role
+            ),
             'joined_at' => $this->created_at?->format('Y-m-d'),
         ];
     }

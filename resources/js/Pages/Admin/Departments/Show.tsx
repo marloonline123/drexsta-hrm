@@ -2,10 +2,9 @@ import { Button } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Badge } from '@/Components/Ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/Components/Ui/avatar';
-import { useLanguage } from '@/Hooks/use-language';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import {
     Building,
     ArrowLeft,
@@ -27,79 +26,34 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/Ui/table';
-
-interface Employee {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    position: string;
-    role: 'manager' | 'employee';
-}
-
-interface Department {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    is_active: boolean;
-    annual_budget: number;
-    manager: {
-        id: number;
-        name: string;
-        email: string;
-        avatar?: string;
-        position: string;
-    };
-    employee_count: number;
-    created_at: string;
-    updated_at: string;
-}
+import DeleteDepartmentModal from '@/Components/Departments/DeleteDepartmentModal';
+import { Department } from '@/Types/deparments';
+import { t } from 'i18next';
+import { formatCurrency } from '@/Lib/utils';
 
 interface Props {
     department: Department;
-    employees: Employee[];
 }
 
-export default function ShowDepartment({ department, employees }: Props) {
-    const { t } = useLanguage();
+export default function ShowDepartment({ department }: Props) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    console.log('Department:', department);
+    
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('nav.dashboard'),
-            href: '/dashboard',
+            href: route('dashboard.index'),
         },
         {
-            title: 'Admin',
-            href: '/admin',
-        },
-        {
-            title: t('departments'),
-            href: '/dashboard/departments',
+            title: t('nav.departments'),
+            href: route('dashboard.departments.index'),
         },
         {
             title: department.name,
-            href: `/dashboard/departments/${department.id}`,
+            href: route('dashboard.departments.show', department.slug),
         },
     ];
-
-    const handleDelete = () => {
-        if (confirm('Are you sure you want to delete this department?')) {
-            router.delete(`/dashboard/departments/${department.id}`, {
-                onSuccess: () => {
-                    router.visit('/dashboard/departments');
-                }
-            });
-        }
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
-    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -124,14 +78,14 @@ export default function ShowDepartment({ department, employees }: Props) {
                     </div>
                     <div className="flex items-center gap-2">
                         <Button variant="outline" asChild>
-                            <Link href={`/dashboard/departments/${department.id}/edit`}>
+                            <Link href={route('dashboard.departments.edit', department.slug)}>
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                             </Link>
                         </Button>
                         <Button
                             variant="outline"
-                            onClick={handleDelete}
+                            onClick={() => setShowDeleteModal(true)}
                             className="text-destructive hover:text-destructive"
                         >
                             <Trash2 className="h-4 w-4 mr-2" />
@@ -156,9 +110,9 @@ export default function ShowDepartment({ department, employees }: Props) {
                                             {department.is_active ? 'Active' : 'Inactive'}
                                         </Badge>
                                         <span className="text-sm text-muted-foreground">•</span>
-                                        <span className="text-sm text-muted-foreground">
-                                            {department.employee_count} Employees
-                                        </span>
+                                        {/* <span className="text-sm text-muted-foreground">
+                                            {department.employees_count} Employees
+                                        </span> */}
                                     </div>
                                 </div>
                             </div>
@@ -173,13 +127,13 @@ export default function ShowDepartment({ department, employees }: Props) {
                                 <Users className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">{department.employee_count}</div>
+                                <div className="text-2xl font-bold">{department.employees_count + 1}</div>
                                 <p className="text-xs text-muted-foreground">
                                     Including manager
                                 </p>
                             </CardContent>
                         </Card>
-                        
+
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Annual Budget</CardTitle>
@@ -192,7 +146,7 @@ export default function ShowDepartment({ department, employees }: Props) {
                                 </p>
                             </CardContent>
                         </Card>
-                        
+
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Created</CardTitle>
@@ -207,7 +161,7 @@ export default function ShowDepartment({ department, employees }: Props) {
                                 </p>
                             </CardContent>
                         </Card>
-                        
+
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Status</CardTitle>
@@ -232,7 +186,7 @@ export default function ShowDepartment({ department, employees }: Props) {
                         <CardContent>
                             <div className="flex items-center gap-4">
                                 <Avatar className="h-12 w-12">
-                                    <AvatarImage src={department.manager.avatar} />
+                                    <AvatarImage src={department.manager.profile_photo_url} />
                                     <AvatarFallback>
                                         {department.manager.name.split(' ').map(n => n[0]).join('')}
                                     </AvatarFallback>
@@ -267,12 +221,12 @@ export default function ShowDepartment({ department, employees }: Props) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {employees.map((employee) => (
+                                        {department.employees.map((employee) => (
                                             <TableRow key={employee.id}>
                                                 <TableCell>
                                                     <div className="flex items-center gap-3">
                                                         <Avatar className="h-8 w-8">
-                                                            <AvatarImage src={employee.avatar} />
+                                                            <AvatarImage src={employee.profile_photo_url} />
                                                             <AvatarFallback>
                                                                 {employee.name.split(' ').map(n => n[0]).join('')}
                                                             </AvatarFallback>
@@ -283,8 +237,8 @@ export default function ShowDepartment({ department, employees }: Props) {
                                                 <TableCell>{employee.position}</TableCell>
                                                 <TableCell>{employee.email}</TableCell>
                                                 <TableCell>
-                                                    <Badge variant={employee.role === 'manager' ? 'default' : 'outline'}>
-                                                        {employee.role === 'manager' ? (
+                                                    <Badge variant={employee.department_role === 'manager' ? 'default' : 'outline'}>
+                                                        {employee.department_role === 'manager' ? (
                                                             <>
                                                                 <Crown className="h-3 w-3 mr-1" />
                                                                 Manager
@@ -306,6 +260,12 @@ export default function ShowDepartment({ department, employees }: Props) {
                     </Card>
                 </div>
             </div>
+
+            <DeleteDepartmentModal
+                department={department}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+            />
         </AppLayout>
     );
 }

@@ -33,7 +33,6 @@ type MultiSelectFields =
 
 
 type Props = {
-    filterSectionName: string,
     routeName?: string,
     fullRoute?: string,
     fields: Record<string, FilterField>,

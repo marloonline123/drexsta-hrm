@@ -1,63 +1,40 @@
 import { Button } from '@/Components/Ui/button';
-import { useLanguage } from '@/Hooks/use-language';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Head, Link } from '@inertiajs/react';
 import { Building, ArrowLeft } from 'lucide-react';
 import DepartmentForm from '@/Components/Departments/DepartmentForm';
+import { Department } from '@/Types/deparments';
+import { t } from 'i18next';
+import { User } from '@/Types/user';
 
-interface Employee {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    position: string;
-}
-
-interface Department {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    is_active: boolean;
-    annual_budget: number;
-    manager: {
-        id: number;
-        name: string;
-        email: string;
-        avatar?: string;
-    };
-}
 
 interface Props {
     department: Department;
-    employees: Employee[];
+    employees: User[];
 }
 
 export default function EditDepartment({ department, employees }: Props) {
-    const { t } = useLanguage();
-
-    // Dynamic breadcrumbs with translations
+    console.log('Employees:', employees);
+    console.log('Department:', department);
+    
+    
     const translatedBreadcrumbs: BreadcrumbItem[] = [
         {
             title: t('nav.dashboard'),
-            href: '/dashboard',
-        },
-        {
-            title: 'Admin',
-            href: '/admin',
+            href: route('dashboard.index'),
         },
         {
             title: t('departments'),
-            href: '/dashboard/departments',
+            href: route('dashboard.departments.index'),
         },
         {
             title: department.name,
-            href: `/dashboard/departments/${department.id}`,
+            href: route('dashboard.departments.show', department.slug),
         },
         {
             title: 'Edit',
-            href: `/dashboard/departments/${department.id}/edit`,
+            href: route('dashboard.departments.edit', department.slug),
         },
     ];
 
@@ -85,7 +62,7 @@ export default function EditDepartment({ department, employees }: Props) {
                 </div>
 
                 <DepartmentForm 
-                    action={`/dashboard/departments/${department.id}`}
+                    action={route('dashboard.departments.update', department.slug)}
                     method="put"
                     department={department}
                     employees={employees}

@@ -17,7 +17,7 @@ type PaginationProps<T> = {
  * It renders previous/next buttons and a compact list of page links.
  */
 export default function Pagination<T>({ meta }: PaginationProps<T>) {
-    if (!meta) return null;
+    if (!meta || (meta && meta.last_page === 1)) return null;
 
     const links: PageLink[] = meta.links || [];
 

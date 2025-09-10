@@ -6,7 +6,8 @@ export interface Department {
     slug: string;
     description: string;
     manager: User;
-    employee_count: number;
+    employees: User[];
+    employees_count: number;
     annual_budget: number;
     is_active: boolean;
     created_at: string;

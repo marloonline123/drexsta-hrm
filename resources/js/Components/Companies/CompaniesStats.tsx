@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
-import { Company } from '@/Types/companies';
-import { PaginatedData } from '@/Types/global';
+import { CompaniesResponse, Company } from '@/Types/companies';
 import { t } from 'i18next';
 
-export default function CompaniesStats({ companies }: { companies: PaginatedData<Company> }) {
+export default function CompaniesStats({ companies }: { companies: CompaniesResponse }) {
     const companiesData: Company[] = companies.data || [];
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

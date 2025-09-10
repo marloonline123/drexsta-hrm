@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@/Components/Ui/card';
-import { useLanguage } from '@/Hooks/use-language';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Head, Link } from '@inertiajs/react';
@@ -13,28 +12,26 @@ import { CompaniesResponse } from '@/Types/companies';
 import Filter from '@/Components/Shared/Filter';
 import CompaniesGrid from '@/Components/Companies/CompaniesGrid';
 import CompaniesStats from '@/Components/Companies/CompaniesStats';
+import { t } from 'i18next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
+        title: t('nav.dashboard'),
+        href: route('dashboard.index'),
     },
     {
-        title: 'Companies',
-        href: '/companies',
+        title: t('nav.companies'),
+        href: route('dashboard.companies.index'),
     },
 ];
 
 export default function CompaniesPage({ companies }: { companies: CompaniesResponse }) {
     const companiesData = companies.data || [];
-    console.log('Companies Data:', companies);
-    
-    const { t } = useLanguage();
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('companies.title')} />
-            
+
             <div className={`space-y-6 p-6`}>
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -56,17 +53,18 @@ export default function CompaniesPage({ companies }: { companies: CompaniesRespo
                 {/* Stats Cards */}
                 <CompaniesStats companies={companies} />
 
-                <Filter 
+                <Filter
                     routeName='dashboard.companies.index'
-                    filterSectionName='Company'
-                    fields={{ 
+                    fields={{
                         search: { type: 'text', placeholder: 'Search by name, email...' },
-                        status: { type: 'select', placeholder: 'Select Status', options: [
-                            { value: 'all', label: 'All' },
-                            { value: 'active', label: 'Active' },
-                            { value: 'inactive', label: 'Inactive' },
-                        ] },
-                     }}
+                        status: {
+                            type: 'select', placeholder: 'Select Status', options: [
+                                { value: 'all', label: 'All' },
+                                { value: 'active', label: 'Active' },
+                                { value: 'inactive', label: 'Inactive' },
+                            ]
+                        },
+                    }}
                 />
 
                 {/* Companies Grid */}
@@ -78,18 +76,14 @@ export default function CompaniesPage({ companies }: { companies: CompaniesRespo
                             <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                             <h3 className="text-lg font-medium mb-2">{t('companies.noCompanies')}</h3>
                             <p className="text-muted-foreground">
-                                { t('companies.createFirst') }
+                                {t('companies.createFirst')}
                             </p>
                         </CardContent>
                     </Card>
                 )}
 
                 {/* Pagination */}
-                {companies.meta && (
-                    <div className="mt-6">
-                        <Pagination meta={companies.meta} />
-                    </div>
-                )}
+                <Pagination meta={companies.meta} />
             </div>
         </AppLayout>
     );

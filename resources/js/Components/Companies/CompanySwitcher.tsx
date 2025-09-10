@@ -20,9 +20,12 @@ interface CompanySwitcherProps {
 export function CompanySwitcher({ className = '' }: CompanySwitcherProps) {
     const page = usePage().props;
     const user = (page.auth as { user: User }).user;
-    const companies: Company[] = (page.companies as Company[]) || [];
+    const companies: Company[] = (page.companies.data as Company[]) || [];
+    console.log('companies from switcher', companies);
     const [currentCompanyId, setCurrentCompanyId] = useState<number | undefined>(user?.active_company_id);
     const currentCompany = companies.find(c => c.id === currentCompanyId);
+
+    
 
     // const getRoleColor = (role: string) => {
     //     switch (role) {

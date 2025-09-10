@@ -16,34 +16,13 @@ import InputError from '@/Components/input-error';
 import { Button, buttonVariants } from '../Ui/button';
 import { Save } from 'lucide-react';
 import { Form, Link } from '@inertiajs/react';
-
-interface Employee {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    position: string;
-}
-
-interface Department {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    is_active: boolean;
-    annual_budget: number;
-    manager: {
-        id: number;
-        name: string;
-        email: string;
-        avatar?: string;
-    };
-}
+import { User } from '@/Types/user';
+import { Department } from '@/Types/deparments';
 
 interface DepartmentFormProps {
     action: string;
     department?: Department;
-    employees: Employee[];
+    employees: User[];
     method?: 'post' | 'put' | 'patch';
 }
 
@@ -56,13 +35,10 @@ export default function DepartmentForm({
     return (
         <Form
             action={action}
-            method='post'
+            method={method}
         >
             {({ processing, errors }) => (
                 <div className="space-y-6">
-                    {method === 'put' && (
-                        <input type="hidden" name="_method" value="PUT" />
-                    )}
                     
                     <Card>
                         <CardHeader>
@@ -137,7 +113,7 @@ export default function DepartmentForm({
                                             <SelectItem key={employee.id} value={employee.id.toString()}>
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="h-6 w-6">
-                                                        <AvatarImage src={employee.avatar} />
+                                                        <AvatarImage src={employee.profile_photo_url} />
                                                         <AvatarFallback>
                                                             {employee.name.split(' ').map(n => n[0]).join('')}
                                                         </AvatarFallback>
