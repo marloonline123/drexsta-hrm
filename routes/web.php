@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\EmploymentTypeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\RolesController;
@@ -24,6 +25,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Departments
         Route::resource('departments', DepartmentController::class);
+
+        // Employment Types
+        Route::apiResource('employment-types', EmploymentTypeController::class);
     });
     
     // HRM Routes
@@ -51,10 +55,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Administration Routes
     Route::prefix('admin')->group(function () {
-        Route::get('employment-types', function () {
-            return Inertia::render('admin/employment-types');
-        })->name('admin.employment-types');
-        
         Route::get('security', function () {
             return Inertia::render('admin/security');
         })->name('admin.security');

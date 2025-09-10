@@ -72,7 +72,7 @@ export function AppSidebar() {
     const adminNavItems: NavItem[] = [
         {
             title: t('nav.employmentTypes'),
-            href: '/admin/employment-types',
+            href: route('dashboard.employment-types.index'),
             icon: Briefcase,
         },
         {

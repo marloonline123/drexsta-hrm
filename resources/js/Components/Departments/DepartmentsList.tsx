@@ -10,6 +10,7 @@ import { Department } from '@/Types/deparments';
 import DepartmentTableRow from './DepartmentTableRow';
 import { Building } from 'lucide-react';
 import { t } from 'i18next';
+import EmptyResource from '../Shared/EmptyResource';
 
 export default function DepartmentsList({ departments }: { departments: Department[] }) {
 
@@ -44,15 +45,7 @@ export default function DepartmentsList({ departments }: { departments: Departme
                         </Table>
                     </div>
                 ) : (
-                    <Card>
-                        <CardContent className="p-12 text-center">
-                            <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-medium mb-2">{t('departments.noCompanies')}</h3>
-                            <p className="text-muted-foreground">
-                                {t('departments.createFirst')}
-                            </p>
-                        </CardContent>
-                    </Card>
+                        <EmptyResource icon={Building} title={t('departments.noCompanies')} text={t('departments.noDepartments')} />
                 )}
             </CardContent>
         </Card>

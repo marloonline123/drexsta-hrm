@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->string('name'); // e.g. Employment Contract
+            $table->string('slug'); // e.g. Employment Contract
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['company_id', 'slug']);
         });
     }
 
