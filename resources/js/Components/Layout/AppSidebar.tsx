@@ -88,7 +88,7 @@ export function AppSidebar() {
         },
         {
             title: t('nav.roles'),
-            href: '/admin/roles',
+            href: route('dashboard.roles.index'),
             icon: Crown,
         },
         {

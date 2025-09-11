@@ -4,9 +4,9 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
 use App\Http\Controllers\Admin\JobTitleController;
+use App\Http\Controllers\Admin\RolesController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\RolesController;
 
 Route::redirect('/', '/dashboard')->name('home');
 
@@ -32,6 +32,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Job Titles
         Route::apiResource('job-titles', JobTitleController::class);
+
+        // Roles
+        Route::get('roles/permissions', [RolesController::class, 'permissions'])->name('roles.permissions');
+        Route::apiResource('roles', RolesController::class);
     });
     
     // HRM Routes
@@ -62,12 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('security', function () {
             return Inertia::render('admin/security');
         })->name('admin.security');
-        
-        Route::get('roles', [RolesController::class, 'index'])->name('admin.roles');
-        Route::post('roles', [RolesController::class, 'store'])->name('admin.roles.store');
-        Route::put('roles/{id}', [RolesController::class, 'update'])->name('admin.roles.update');
-        Route::delete('roles/{id}', [RolesController::class, 'destroy'])->name('admin.roles.destroy');
-        Route::get('roles/permissions', [RolesController::class, 'permissions'])->name('admin.roles.permissions');
         
         Route::get('users', function () {
             return Inertia::render('admin/users');
