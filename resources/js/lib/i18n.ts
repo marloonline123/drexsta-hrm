@@ -23,6 +23,7 @@ const resources = {
                 security: 'Security Guards',
                 banks: 'Banks',
                 employmentTypes: 'Employment Types',
+                jobTitles: 'Job Titles',
                 designations: 'Designations',
                 billing: 'Billing',
                 subscriptions: 'Subscriptions',
@@ -153,6 +154,13 @@ const resources = {
                     benefits: 'Benefits',
                     included: 'Included',
                     notIncluded: 'Not Included'
+                },
+                jobTitles: {
+                    title: 'Job Titles',
+                    description: 'Manage job titles and their configurations',
+                    addTitle: 'Add Job Title',
+                    titleName: 'Title Name',
+                    description: 'Description'
                 },
                 security: {
                     title: 'Security Guards',
@@ -370,6 +378,7 @@ const resources = {
                 security: 'حراس الأمن',
                 banks: 'البنوك',
                 employmentTypes: 'أنواع التوظيف',
+                jobTitles: 'المسميات الوظيفية',
                 designations: 'المسميات الوظيفية',
                 billing: 'الفواتير',
                 subscriptions: 'الاشتراكات',
@@ -500,6 +509,13 @@ const resources = {
                     benefits: 'المزايا',
                     included: 'مشمولة',
                     notIncluded: 'غير مشمولة'
+                },
+                jobTitles: {
+                    title: 'المسميات الوظيفية',
+                    description: 'إدارة المسميات الوظيفية وتكويناتها',
+                    addTitle: 'إضافة مسمى وظيفي',
+                    titleName: 'اسم المسمى',
+                    description: 'الوصف'
                 },
                 security: {
                     title: 'حراس الأمن',

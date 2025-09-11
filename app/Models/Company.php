@@ -54,4 +54,9 @@ class Company extends Model
     {
         return $this->hasMany(EmploymentType::class);
     }
+
+    public function jobTitles(): HasMany
+    {
+        return $this->hasMany(JobTitle::class);
+    }
 }

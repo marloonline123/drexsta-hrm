@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(['company_id', 'title']);
             $table->unique(['company_id', 'slug']);

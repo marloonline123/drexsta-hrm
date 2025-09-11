@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
+use App\Http\Controllers\Admin\JobTitleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\RolesController;
@@ -28,6 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Employment Types
         Route::apiResource('employment-types', EmploymentTypeController::class);
+        
+        // Job Titles
+        Route::apiResource('job-titles', JobTitleController::class);
     });
     
     // HRM Routes

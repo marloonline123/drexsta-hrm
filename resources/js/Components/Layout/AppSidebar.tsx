@@ -16,7 +16,8 @@ import {
     Settings, 
     Briefcase,
     UserCheck,
-    Crown
+    Crown,
+    BadgeCheck
 } from 'lucide-react';
 import AppLogo from '../app-logo';
 
@@ -74,6 +75,11 @@ export function AppSidebar() {
             title: t('nav.employmentTypes'),
             href: route('dashboard.employment-types.index'),
             icon: Briefcase,
+        },
+        {
+            title: t('nav.jobTitles'),
+            href: route('dashboard.job-titles.index'),
+            icon: BadgeCheck,
         },
         {
             title: t('nav.security'),
