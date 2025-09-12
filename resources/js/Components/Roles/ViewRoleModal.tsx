@@ -3,17 +3,16 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from '@/Components/Ui/button';
 import { Badge } from '@/Components/Ui/badge';
 import { Separator } from '@/Components/Ui/separator';
-import { Edit, Crown, Shield, Users, Building, Clock, Calculator, FileText, Settings } from 'lucide-react';
+import { Crown, Shield, Users, Building, Clock, Calculator, FileText, Settings } from 'lucide-react';
 import { Role } from '@/Types/roles';
 
 interface ViewRoleModalProps {
     role: Role;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    groupedPermissions: Record<string, any[]>;
 }
 
-export default function ViewRoleModal({ role, open, onOpenChange, groupedPermissions }: ViewRoleModalProps) {
+export default function ViewRoleModal({ role, open, onOpenChange }: ViewRoleModalProps) {
     const getCategoryIcon = (category: string) => {
         const icons = {
             users: Users,
@@ -38,7 +37,7 @@ export default function ViewRoleModal({ role, open, onOpenChange, groupedPermiss
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Crown className="h-5 w-5 text-primary" />
@@ -125,13 +124,6 @@ export default function ViewRoleModal({ role, open, onOpenChange, groupedPermiss
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
                         Close
-                    </Button>
-                    <Button onClick={() => {
-                        onOpenChange(false);
-                        // We'll handle the edit action in the parent component
-                    }}>
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit Role
                     </Button>
                 </DialogFooter>
             </DialogContent>

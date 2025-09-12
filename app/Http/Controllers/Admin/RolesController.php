@@ -22,14 +22,16 @@ class RolesController extends Controller
         $user = Auth::user();
         $company = $user->activeCompany();
         
-        $roles = $company ? Role::where('company_id', $company->id)
+        $roles = $company?->roles()
             ->with('permissions', 'users')
-            ->paginate(12) : [];
+            ->search(request('search'), 'name')
+            ->paginate(12)
+            ->withQueryString();
             
-        $rolesCollection = $roles ? RoleResource::collection($roles) : [];
+        $rolesCollection = RoleResource::collection($roles);
 
         // Also fetch permissions for the frontend
-        $permissions = $company ? Permission::where('company_id', $company->id)->get() : [];
+        $permissions = $company->permissions()->get();
         
         // Group permissions by name pattern (e.g., users.view, users.create)
         $groupedPermissions = [];
