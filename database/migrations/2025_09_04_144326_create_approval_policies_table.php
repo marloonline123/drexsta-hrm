@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('approval_policies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->string('action'); // e.g. offer_approval
             $table->json('steps'); // ["department_head", "hr_manager", "finance_approver"]
             $table->timestamps();

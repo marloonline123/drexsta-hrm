@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ResponsibilityAssignment extends Model
+class AbilityAssignment extends Model
 {
     //
 }

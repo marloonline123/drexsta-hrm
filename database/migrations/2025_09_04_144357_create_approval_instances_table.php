@@ -16,6 +16,7 @@ return new class extends Migration
             $table->morphs('approvable'); // approvable_type + approvable_id
             $table->foreignId('approval_policy_id')->constrained()->cascadeOnDelete();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->string('type'); // e.g. offer_approval or leave_approval
             $table->integer('current_step')->default(1);
             $table->boolean('is_completed')->default(false);
             $table->timestamps();

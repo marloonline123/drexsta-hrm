@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('responsibility_id')->constrained()->cascadeOnDelete();
             $table->integer('step_order'); // 1, 2, 3...
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('performed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
             $table->timestamps();
