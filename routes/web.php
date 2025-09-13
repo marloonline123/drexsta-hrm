@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
+use App\Http\Controllers\Admin\JobRequisitionController;
 use App\Http\Controllers\Admin\JobTitleController;
 use App\Http\Controllers\Admin\RolesController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Approval Policies
         Route::get('approval-policies', [ApprovalPolicyController::class, 'index'])->name('approval-policies.index');
         Route::patch('approval-policies/{approvalPolicy}', [ApprovalPolicyController::class, 'update'])->name('approval-policies.update');
+        
+        // Job Requisitions
+        Route::resource('job-requisitions', JobRequisitionController::class);
     });
     
     // HRM Routes

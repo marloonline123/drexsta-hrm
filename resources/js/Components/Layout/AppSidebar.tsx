@@ -83,6 +83,11 @@ export function AppSidebar() {
             icon: BadgeCheck,
         },
         {
+            title: t('nav.jobRequisitions'),
+            href: route('dashboard.job-requisitions.index'),
+            icon: Briefcase,
+        },
+        {
             title: t('nav.approvalPolicies'),
             href: route('dashboard.approval-policies.index'),
             icon: CheckCheck,

@@ -29,7 +29,8 @@ const resources = {
                 subscriptions: 'Subscriptions',
                 companies: 'Companies',
                 roles: 'Roles & Permissions',
-                approvalPolicies: 'Approval Policies'
+                approvalPolicies: 'Approval Policies',
+                jobRequisitions: 'Job Requisitions'
             },
             // Companies
             companies: {
@@ -384,7 +385,8 @@ const resources = {
                 billing: 'الفواتير',
                 subscriptions: 'الاشتراكات',
                 companies: 'الشركات',
-                roles: 'الأدوار والصلاحيات'
+                roles: 'الأدوار والصلاحيات',
+                jobRequisitions: 'طلبات التوظيف'
             },
             // Companies
             companies: {
