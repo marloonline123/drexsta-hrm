@@ -69,4 +69,14 @@ class Company extends Model
     {
         return $this->hasMany(Permission::class);
     }
+
+    public function abilities(): HasMany
+    {
+        return $this->hasMany(Ability::class);
+    }
+
+    public function approvalPolicies(): HasMany
+    {
+        return $this->hasMany(ApprovalPolicy::class);
+    }
 }

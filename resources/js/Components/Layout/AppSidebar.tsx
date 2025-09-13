@@ -17,7 +17,8 @@ import {
     Briefcase,
     UserCheck,
     Crown,
-    BadgeCheck
+    BadgeCheck,
+    CheckCheck
 } from 'lucide-react';
 import AppLogo from '../app-logo';
 
@@ -80,6 +81,11 @@ export function AppSidebar() {
             title: t('nav.jobTitles'),
             href: route('dashboard.job-titles.index'),
             icon: BadgeCheck,
+        },
+        {
+            title: t('nav.approvalPolicies'),
+            href: route('dashboard.approval-policies.index'),
+            icon: CheckCheck,
         },
         {
             title: t('nav.security'),

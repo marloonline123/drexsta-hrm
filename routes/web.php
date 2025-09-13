@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Roles
         Route::get('roles/permissions', [RolesController::class, 'permissions'])->name('roles.permissions');
         Route::apiResource('roles', RolesController::class);
+        
+        // Approval Policies
+        Route::get('approval-policies', [ApprovalPolicyController::class, 'index'])->name('approval-policies.index');
+        Route::patch('approval-policies/{approvalPolicy}', [ApprovalPolicyController::class, 'update'])->name('approval-policies.update');
     });
     
     // HRM Routes

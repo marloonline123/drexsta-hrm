@@ -28,7 +28,8 @@ const resources = {
                 billing: 'Billing',
                 subscriptions: 'Subscriptions',
                 companies: 'Companies',
-                roles: 'Roles & Permissions'
+                roles: 'Roles & Permissions',
+                approvalPolicies: 'Approval Policies'
             },
             // Companies
             companies: {
