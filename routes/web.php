@@ -4,9 +4,11 @@ use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
+use App\Http\Controllers\Admin\JobPostingController as AdminJobPostingController;
 use App\Http\Controllers\Admin\JobRequisitionController;
 use App\Http\Controllers\Admin\JobTitleController;
 use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\JobPostingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -45,6 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Job Requisitions
         Route::resource('job-requisitions', JobRequisitionController::class);
+        
+        // Job Postings
+        Route::resource('job-postings', AdminJobPostingController::class);
+        Route::patch('job-postings/{jobPosting}/status', [AdminJobPostingController::class, 'updateStatus'])->name('job-postings.update-status');
     });
     
     // HRM Routes
@@ -80,6 +86,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('admin/users');
         })->name('admin.users');
     });
+    
+    // Public Job Postings Routes
+    Route::get('jobs', [JobPostingController::class, 'index'])->name('jobs.index');
+    Route::get('jobs/{jobPosting}', [JobPostingController::class, 'show'])->name('jobs.show');
+    Route::post('jobs/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
+    Route::get('applications/{token}/edit', [JobPostingController::class, 'editApplication'])->name('applications.edit');
+    Route::put('applications/{token}', [JobPostingController::class, 'updateApplication'])->name('applications.update');
 });
 
 require __DIR__.'/settings.php';

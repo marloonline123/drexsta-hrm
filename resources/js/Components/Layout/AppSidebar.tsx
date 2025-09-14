@@ -88,6 +88,11 @@ export function AppSidebar() {
             icon: Briefcase,
         },
         {
+            title: t('nav.jobPostings'),
+            href: route('dashboard.job-postings.index'),
+            icon: Briefcase,
+        },
+        {
             title: t('nav.approvalPolicies'),
             href: route('dashboard.approval-policies.index'),
             icon: CheckCheck,

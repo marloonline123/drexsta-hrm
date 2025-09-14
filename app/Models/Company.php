@@ -79,4 +79,9 @@ class Company extends Model
     {
         return $this->hasMany(ApprovalPolicy::class);
     }
+
+    public function jobRequisitions(): HasMany
+    {
+        return $this->hasMany(JobRequisition::class);
+    }
 }

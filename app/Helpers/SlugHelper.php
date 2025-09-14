@@ -1,5 +1,6 @@
 <?php
 
+
 function generateSlug($string, $separator = '-')
 {
     if (is_null($string) || $string === '') {
@@ -38,4 +39,13 @@ function generateSlug($string, $separator = '-')
     }
 
     return $string;
+}
+
+function uniqueSlug(string $model, $companyId, string $title): string {
+    $slug = generateSlug($title);
+    if ($model::where('company_id', $companyId)->where('slug', $slug)->exists()) {
+        $slug = $slug . '-' . rand(1000, 9999);
+        return uniqueSlug($model, $slug);
+    }
+    return $slug;
 }

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\GlobalScopes\HasFilterByScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobRequisition extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFilterByScope;
 
     protected $fillable = [
         'company_id',

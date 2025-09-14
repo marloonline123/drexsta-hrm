@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\JobRequisitionCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobRequisitionRequest;
 use App\Http\Resources\Admin\JobRequisitionResource;
@@ -65,6 +66,8 @@ class JobRequisitionController extends Controller
             'requisition_code' => $this->generateRequisitionCode(),
             'requested_by' => request()->user()->id
         ]);
+
+        event(new JobRequisitionCreated($requisition));
 
         return redirect()->route('dashboard.job-requisitions.index')
             ->with('success', 'Job requisition created successfully.');
