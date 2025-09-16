@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\GlobalScopes\HasSearchScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, HasSearchScope;
 
     /**
      * The attributes that are mass assignable.
@@ -22,8 +23,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'username',
+        'phone',
         'email',
         'password',
+        'active_company_id',
     ];
 
     /**
@@ -51,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function activeCompany()
     {
-        return Company::find($this->active_company_id);
+        return $this->belongsTo(Company::class, 'active_company_id');
     }
 
     public function ownedCompanies()
@@ -62,5 +65,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function companies()
     {
         return $this->belongsToMany(Company::class, 'company_user');
+    }
+
+    public function abilities()
+    {
+        return $this->belongsToMany(Ability::class, 'ability_assignments')->withPivot('company_id');
     }
 }

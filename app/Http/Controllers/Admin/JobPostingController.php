@@ -24,7 +24,7 @@ class JobPostingController extends Controller
     {
         $company = request()->user()->activeCompany();
         
-        $postings = JobPosting::where('company_id', $company->id)
+        $postings = JobPosting::where('company_id', $company?->id)
             ->with(['jobRequisition.department', 'jobRequisition.jobTitle'])
             ->latest()
             ->paginate(10);
@@ -89,7 +89,7 @@ class JobPostingController extends Controller
         $company = request()->user()->activeCompany();
         $employmentTypes = $company?->employmentTypes()->active()->get();
         
-        $requisitions = JobRequisition::where('company_id', $company->id)
+        $requisitions = JobRequisition::where('company_id', $company?->id)
             // ->where('status', 'approved')
             ->with(['department', 'jobTitle'])
             ->get();

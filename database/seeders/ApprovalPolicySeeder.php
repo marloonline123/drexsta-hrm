@@ -49,6 +49,18 @@ class ApprovalPolicySeeder extends Seeder
                 'label' => 'Team Lead',
                 'description' => 'Can approve team-related actions'
             ],
+            [
+                'company_id' => $company->id,
+                'key' => 'hiring_manager',
+                'label' => 'Hiring Manager',
+                'description' => 'Can approve hiring related actions'
+            ],
+            [
+                'company_id' => $company->id,
+                'key' => 'recruiter',
+                'label' => 'Recruiter',
+                'description' => 'Can approve recruiting related actions'
+            ]
         ];
 
         foreach ($abilities as $abilityData) {
@@ -63,6 +75,16 @@ class ApprovalPolicySeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'action' => 'offer_approval',
+                'steps' => ['department_head', 'hr_manager', 'finance_approver']
+            ],
+            [
+                'company_id' => $company->id,
+                'action' => 'job_requisition_approval',
+                'steps' => ['department_head', 'hr_manager', 'finance_approver']
+            ],
+            [
+                'company_id' => $company->id,
+                'action' => 'job_posting_approval',
                 'steps' => ['department_head', 'hr_manager', 'finance_approver']
             ],
             [

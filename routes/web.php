@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\EmployeesController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
 use App\Http\Controllers\Admin\JobPostingController as AdminJobPostingController;
 use App\Http\Controllers\Admin\JobRequisitionController;
@@ -51,6 +52,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Job Postings
         Route::resource('job-postings', AdminJobPostingController::class);
         Route::patch('job-postings/{jobPosting}/status', [AdminJobPostingController::class, 'updateStatus'])->name('job-postings.update-status');
+        
+        // Employees
+        Route::resource('employees', EmployeesController::class);
+        Route::get('employees/{employee}/assign-roles', [EmployeesController::class, 'showAssignRoles'])->name('employees.assign-roles');
+        Route::get('employees/{employee}/assign-abilities', [EmployeesController::class, 'showAssignAbilities'])->name('employees.assign-abilities');
+        Route::post('employees/{employee}/assign-roles', [EmployeesController::class, 'assignRoles'])->name('employees.assign-roles.store');
+        Route::post('employees/{employee}/assign-abilities', [EmployeesController::class, 'assignAbilities'])->name('employees.assign-abilities.store');
+        Route::get('employees/export', [EmployeesController::class, 'export'])->name('employees.export');
+        Route::post('employees/import', [EmployeesController::class, 'import'])->name('employees.import');
     });
     
     // HRM Routes

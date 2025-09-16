@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+import { Employee } from './employees';
 
 export interface Auth {
     user: User;
@@ -41,3 +42,5 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export type { Employee } from './employees';

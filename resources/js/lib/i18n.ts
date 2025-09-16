@@ -163,7 +163,6 @@ const resources = {
                     description: 'Manage job titles and their configurations',
                     addTitle: 'Add Job Title',
                     titleName: 'Title Name',
-                    description: 'Description'
                 },
                 security: {
                     title: 'Security Guards',
@@ -679,7 +678,6 @@ const resources = {
                     description: 'إدارة المسميات الوظيفية وتكويناتها',
                     addTitle: 'إضافة مسمى وظيفي',
                     titleName: 'اسم المسمى',
-                    description: 'الوصف'
                 },
                 security: {
                     title: 'حراس الأمن',

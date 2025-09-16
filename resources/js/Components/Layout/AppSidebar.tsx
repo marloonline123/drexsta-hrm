@@ -41,7 +41,7 @@ export function AppSidebar() {
     const hrmNavItems: NavItem[] = [
         {
             title: t('nav.employees'),
-            href: '/hrm/employees',
+            href: route('dashboard.employees.index'),
             icon: Users,
         },
         {
