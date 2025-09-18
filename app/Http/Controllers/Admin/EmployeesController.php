@@ -126,7 +126,7 @@ class EmployeesController extends Controller
         
         $employee->delete();
 
-        return back()->with('success', 'Employee deleted successfully');
+        return redirect()->route('dashboard.employees.index')->with('success', 'Employee deleted successfully');
     }
 
     /**

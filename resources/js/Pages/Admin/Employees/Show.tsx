@@ -8,31 +8,33 @@ import { User, Mail, Calendar, BadgeCheck, BadgeX } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { cn } from '@/Lib/utils';
+import DeleteEmployee from '@/Components/Employees/DeleteEmployee';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('dashboard.index'),
-    },
-    {
-        title: 'Employees',
-        href: route('dashboard.employees.index'),
-    },
-];
 
 interface ShowEmployeeProps {
     employee: Employee;
 }
 
 export default function ShowEmployee({ employee }: ShowEmployeeProps) {
-    breadcrumbs.push({
-        title: 'View',
-        href: route('dashboard.employees.show', employee.username),
-    });
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: route('dashboard.index'),
+        },
+        {
+            title: 'Employees',
+            href: route('dashboard.employees.index'),
+        },
+        {
+            title: employee.name,
+            href: route('dashboard.employees.show', employee.username),
+        }
+    ];
+    breadcrumbs.push();
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Employee Details - ${employee.name}`} />
-            
+
             <div className="space-y-6 p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -46,19 +48,18 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Link 
+                        <Link
                             href={route('dashboard.employees.edit', employee.username)}
                             className={cn(buttonVariants({ variant: 'outline' }))}
                         >
                             Edit Employee
                         </Link>
-                        <Button 
-                            variant="destructive"
-                        >
-                            Delete Employee
-                        </Button>
+
+                        {/* Delete Modal */}
+                        <DeleteEmployee employee={employee} />
                     </div>
                 </div>
+
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Employee Info Card */}
@@ -90,9 +91,9 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <Separator />
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-4">
                                         <div>
@@ -109,7 +110,7 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="space-y-4">
                                         <div>
                                             <h4 className="text-sm font-semibold text-muted-foreground">Account Information</h4>
@@ -152,15 +153,15 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                 ) : (
                                     <p className="text-muted-foreground text-sm">No roles assigned</p>
                                 )}
-                                <Link 
+                                <Link
                                     href={route('dashboard.employees.assign-roles', employee.username)}
-                                    className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))} 
+                                    className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))}
                                 >
                                     Manage Roles
                                 </Link>
                             </CardContent>
                         </Card>
-                        
+
                         <Card>
                             <CardHeader>
                                 <CardTitle>Permissions</CardTitle>
@@ -177,7 +178,7 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                 ) : (
                                     <p className="text-muted-foreground text-sm">No direct permissions assigned</p>
                                 )}
-                                <Link 
+                                <Link
                                     href={route('dashboard.employees.assign-abilities', employee.username)}
                                     className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))}
                                 >
