@@ -1,26 +1,17 @@
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
-
-import { useLanguage } from '@/Hooks/use-language';
-import { FormEvent, useState } from 'react';
-import { EmployeeFormData } from '@/Types/employees';
-import { router } from '@inertiajs/react';
 import { UserPlus } from 'lucide-react';
 import EmployeeForm from '@/Components/Employees/EmployeeForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard.index'),
     },
     {
         title: 'Employees',
-        href: '/dashboard/employees',
-    },
-    {
-        title: 'Create',
-        href: '/dashboard/employees/create',
+        href: route('dashboard.employees.index'),
     },
 ];
 

@@ -6,6 +6,7 @@ export type Employee = {
     name: string;
     email: string;
     username: string;
+    phone: number | null;
     email_verified_at: string | null;
     active_company_id: number;
     created_at: string;

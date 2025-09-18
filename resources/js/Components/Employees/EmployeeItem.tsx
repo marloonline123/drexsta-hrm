@@ -46,7 +46,6 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
     };
     return (
         <Card
-            key={employee.id}
             className="hover:shadow-lg transition-all duration-200 group cursor-pointer animate-in fade-in slide-in-from-bottom"
             style={{ animationDelay: `${index * 50}ms` }}
         >
@@ -84,10 +83,10 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="flex items-center gap-2">
+                                    {/* <div className="flex items-center gap-2">
                                         <Building className="h-4 w-4" />
                                         <span>Employee ID: {employee.id}</span>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-2">
                                         <FileText className="h-4 w-4" />
                                         <span>Joined: {new Date(employee.created_at).toLocaleDateString()}</span>
@@ -99,13 +98,13 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
 
                     <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" asChild>
-                            <a href={route('dashboard.employees.show', employee.id)}>
+                            <a href={route('dashboard.employees.show', employee.username)}>
                                 <Eye className="h-4 w-4 mr-2" />
                                 View
                             </a>
                         </Button>
                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
-                            <a href={route('dashboard.employees.edit', employee.id)}>
+                            <a href={route('dashboard.employees.edit', employee.username)}>
                                 <Edit className="h-4 w-4" />
                             </a>
                         </Button>

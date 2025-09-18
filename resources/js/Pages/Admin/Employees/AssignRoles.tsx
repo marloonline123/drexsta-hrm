@@ -3,7 +3,6 @@ import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
-import { useLanguage } from '@/Hooks/use-language';
 import { Employee } from '@/Types/employees';
 import { router } from '@inertiajs/react';
 import { User, Users } from 'lucide-react';
@@ -11,29 +10,25 @@ import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
 import { FormEvent, useState } from 'react';
+import { Role } from '@/Types/roles';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard.index'),
     },
     {
         title: 'Employees',
-        href: '/dashboard/employees',
-    },
-    {
-        title: 'Assign Roles',
-        href: '/dashboard/employees/assign-roles',
+        href: route('dashboard.employees.index'),
     },
 ];
 
 interface AssignRolesProps {
     employee: Employee;
-    roles: any[]; // We'll need to define proper types for roles
+    roles: Role[]; // We'll need to define proper types for roles
 }
 
 export default function AssignRoles({ employee, roles }: AssignRolesProps) {
-    const { t } = useLanguage();
     const [selectedRoles, setSelectedRoles] = useState<number[]>(
         employee.roles?.map(role => role.id) || []
     );
@@ -137,11 +132,11 @@ export default function AssignRoles({ employee, roles }: AssignRolesProps) {
                                                         >
                                                             {role.name}
                                                         </label>
-                                                        {role.description && (
+                                                        {/* {role.description && (
                                                             <p className="text-xs text-muted-foreground mt-1">
                                                                 {role.description}
                                                             </p>
-                                                        )}
+                                                        )} */}
                                                     </div>
                                                 </div>
                                             ))}

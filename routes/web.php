@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Employees
         Route::resource('employees', EmployeesController::class);
+        Route::patch('employees/{employee}/update-password', [EmployeesController::class, 'updatePassword'])->name('employees.update-password');
         Route::get('employees/{employee}/assign-roles', [EmployeesController::class, 'showAssignRoles'])->name('employees.assign-roles');
         Route::get('employees/{employee}/assign-abilities', [EmployeesController::class, 'showAssignAbilities'])->name('employees.assign-abilities');
         Route::post('employees/{employee}/assign-roles', [EmployeesController::class, 'assignRoles'])->name('employees.assign-roles.store');

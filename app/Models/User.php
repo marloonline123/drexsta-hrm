@@ -52,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
     public function activeCompany()
     {
         return $this->belongsTo(Company::class, 'active_company_id');
@@ -70,5 +75,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function abilities()
     {
         return $this->belongsToMany(Ability::class, 'ability_assignments')->withPivot('company_id');
+    }
+
+    public function jobTitles()
+    {
+        return $this->belongsToMany(JobTitle::class, 'job_title_user', 'employee_id', 'job_title_id')->withPivot('company_id');
+    }
+
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class, 'department_employee', 'employee_id', 'department_id')->withPivot('company_id');
     }
 }

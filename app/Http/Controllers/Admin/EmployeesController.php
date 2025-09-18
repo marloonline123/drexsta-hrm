@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\EmployeeCreated;
 use App\Exports\EmployeesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\Admin\EmployeeResource;
 use App\Imports\EmployeesImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -65,7 +68,9 @@ class EmployeesController extends Controller
         ]);
         
         // Attach the employee to the company
-        $company->users()->attach($employee->id, ['role' => 'employee']);
+        $company->users()->attach($employee->id, ['role' => 'employee', 'created_at' => now(), 'updated_at' => now()]);
+
+        event(new EmployeeCreated($employee));
 
         return redirect()->route('dashboard.employees.index')->with('success', 'Employee created successfully');
     }
@@ -77,10 +82,10 @@ class EmployeesController extends Controller
     {
         // $this->authorize('view', $employee);
         
-        $employee->load('roles', 'permissions');
+        $employee->load('roles', 'permissions', 'abilities', 'activeCompany', 'departments', 'jobTitles');
         
         return Inertia::render('Admin/Employees/Show', [
-            'employee' => new EmployeeResource($employee),
+            'employee' => (new EmployeeResource($employee))->resolve(),
         ]);
     }
 
@@ -89,34 +94,27 @@ class EmployeesController extends Controller
      */
     public function edit(User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
-        $employee->load('roles', 'permissions');
+        $employee->load('roles', 'permissions', 'abilities', 'activeCompany', 'departments', 'jobTitles');
         
         return Inertia::render('Admin/Employees/Edit', [
-            'employee' => new EmployeeResource($employee),
+            'employee' => (new EmployeeResource($employee))->resolve(),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EmployeeRequest $request, User $employee)
+    public function update(UpdateEmployeeRequest $request, User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
         $data = $request->validated();
         
-        // Remove password from data if not provided
-        if (empty($data['password'])) {
-            unset($data['password']);
-        } else {
-            $data['password'] = Hash::make($data['password']);
-        }
-        
         $employee->update($data);
 
-        return back()->with('success', 'Employee updated successfully');
+        return redirect()->back()->with('success', 'Employee updated successfully');
     }
 
     /**
@@ -124,7 +122,7 @@ class EmployeesController extends Controller
      */
     public function destroy(User $employee)
     {
-        $this->authorize('delete', $employee);
+        // $this->authorize('delete', $employee);
         
         $employee->delete();
 
@@ -132,18 +130,30 @@ class EmployeesController extends Controller
     }
 
     /**
+     * Show the form for updating the password.
+     */
+    public function updatePassword(Request $request, User $employee)
+    {
+        $validated = $request->validate([
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $employee->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('success', 'Password updated successfully');
+    }
+
+    /**
      * Show the assign roles form.
      */
     public function showAssignRoles(User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
         $user = Auth::user();
         $company = $user->activeCompany;
-        
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
         
         $employee->load('roles', 'permissions');
         
@@ -161,7 +171,7 @@ class EmployeesController extends Controller
      */
     public function showAssignAbilities(User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
         $user = Auth::user();
         $company = $user->activeCompany;
@@ -186,7 +196,7 @@ class EmployeesController extends Controller
      */
     public function assignRoles(Request $request, User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
         $request->validate([
             'roles' => 'array',
@@ -213,7 +223,7 @@ class EmployeesController extends Controller
      */
     public function assignAbilities(Request $request, User $employee)
     {
-        $this->authorize('update', $employee);
+        // $this->authorize('update', $employee);
         
         $request->validate([
             'abilities' => 'array',

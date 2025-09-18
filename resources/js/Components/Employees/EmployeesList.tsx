@@ -6,7 +6,7 @@ export default function EmployeesList({ employees }: { employees: Employee[] }) 
     return (
         <div className="grid gap-4">
             {employees.map((employee, index) => (
-                <EmployeeItem key={employee.id} employee={employee} index={index} />
+                <EmployeeItem key={employee.username} employee={employee} index={index} />
             ))}
         </div>
     )

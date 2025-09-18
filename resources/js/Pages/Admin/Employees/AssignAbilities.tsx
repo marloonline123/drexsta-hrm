@@ -3,7 +3,6 @@ import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
-import { useLanguage } from '@/Hooks/use-language';
 import { Employee } from '@/Types/employees';
 import { router } from '@inertiajs/react';
 import { User, Key } from 'lucide-react';
@@ -11,29 +10,25 @@ import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
 import { FormEvent, useState } from 'react';
+import { Ability } from '@/Types/approval-policies';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard.index'),
     },
     {
         title: 'Employees',
-        href: '/dashboard/employees',
-    },
-    {
-        title: 'Assign Abilities',
-        href: '/dashboard/employees/assign-abilities',
+        href: route('dashboard.employees.index'),
     },
 ];
 
 interface AssignAbilitiesProps {
     employee: Employee;
-    abilities: any[]; // We'll need to define proper types for abilities
+    abilities: Ability[]; // We'll need to define proper types for abilities
 }
 
 export default function AssignAbilities({ employee, abilities }: AssignAbilitiesProps) {
-    const { t } = useLanguage();
     const [selectedAbilities, setSelectedAbilities] = useState<number[]>(
         employee.permissions?.map(permission => permission.id) || []
     );
@@ -135,7 +130,7 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
                                                             htmlFor={`ability-${ability.id}`} 
                                                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                         >
-                                                            {ability.name}
+                                                            {ability.key}
                                                         </label>
                                                         {ability.description && (
                                                             <p className="text-xs text-muted-foreground mt-1">

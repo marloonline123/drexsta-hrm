@@ -1,27 +1,22 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
-import { Button } from '@/Components/Ui/button';
+import { Button, buttonVariants } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
-import { useLanguage } from '@/Hooks/use-language';
 import { Employee } from '@/Types/employees';
-import { router } from '@inertiajs/react';
 import { User, Mail, Calendar, BadgeCheck, BadgeX } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
+import { cn } from '@/Lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard.index'),
     },
     {
         title: 'Employees',
-        href: '/dashboard/employees',
-    },
-    {
-        title: 'View',
-        href: '/dashboard/employees/view',
+        href: route('dashboard.employees.index'),
     },
 ];
 
@@ -30,8 +25,10 @@ interface ShowEmployeeProps {
 }
 
 export default function ShowEmployee({ employee }: ShowEmployeeProps) {
-    const { t } = useLanguage();
-
+    breadcrumbs.push({
+        title: 'View',
+        href: route('dashboard.employees.show', employee.username),
+    });
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Employee Details - ${employee.name}`} />
@@ -49,19 +46,14 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button 
-                            variant="outline"
-                            onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
+                        <Link 
+                            href={route('dashboard.employees.edit', employee.username)}
+                            className={cn(buttonVariants({ variant: 'outline' }))}
                         >
                             Edit Employee
-                        </Button>
+                        </Link>
                         <Button 
                             variant="destructive"
-                            onClick={() => {
-                                if (confirm('Are you sure you want to delete this employee?')) {
-                                    router.delete(route('dashboard.employees.destroy', employee.id));
-                                }
-                            }}
                         >
                             Delete Employee
                         </Button>
@@ -124,7 +116,7 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                             <div className="mt-2 space-y-2">
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-medium">Employee ID:</span>
-                                                    <span>#{employee.id}</span>
+                                                    <span>#{employee.username}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -160,14 +152,12 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                 ) : (
                                     <p className="text-muted-foreground text-sm">No roles assigned</p>
                                 )}
-                                <Button 
-                                    className="w-full mt-4" 
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => router.visit(route('dashboard.employees.assign-roles', employee.id))}
+                                <Link 
+                                    href={route('dashboard.employees.assign-roles', employee.username)}
+                                    className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))} 
                                 >
                                     Manage Roles
-                                </Button>
+                                </Link>
                             </CardContent>
                         </Card>
                         
@@ -187,14 +177,12 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                 ) : (
                                     <p className="text-muted-foreground text-sm">No direct permissions assigned</p>
                                 )}
-                                <Button 
-                                    className="w-full mt-4" 
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => router.visit(route('dashboard.employees.assign-abilities', employee.id))}
+                                <Link 
+                                    href={route('dashboard.employees.assign-abilities', employee.username)}
+                                    className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))}
                                 >
                                     Manage Permissions
-                                </Button>
+                                </Link>
                             </CardContent>
                         </Card>
                     </div>
