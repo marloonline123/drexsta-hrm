@@ -161,7 +161,7 @@ class EmployeesController extends Controller
         $roles = $company->roles()->get();
 
         return Inertia::render('Admin/Employees/AssignRoles', [
-            'employee' => new EmployeeResource($employee),
+            'employee' => (new EmployeeResource($employee))->resolve(),
             'roles' => $roles,
         ]);
     }
@@ -186,7 +186,7 @@ class EmployeesController extends Controller
         $abilities = $company->abilities()->get();
 
         return Inertia::render('Admin/Employees/AssignAbilities', [
-            'employee' => new EmployeeResource($employee),
+            'employee' => (new EmployeeResource($employee))->resolve(),
             'abilities' => $abilities,
         ]);
     }
@@ -197,9 +197,9 @@ class EmployeesController extends Controller
     public function assignRoles(Request $request, User $employee)
     {
         // $this->authorize('update', $employee);
-        
+        // dd($request->all());
         $request->validate([
-            'roles' => 'array',
+            'roles' => 'required|array',
             'roles.*' => 'exists:roles,id',
         ]);
         

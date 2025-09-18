@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
@@ -11,17 +11,10 @@ import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
 import { FormEvent, useState } from 'react';
 import { Role } from '@/Types/roles';
+import FormButton from '@/Components/Ui/form-button';
+import { InputError } from '@/Components/Ui/InputError';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('dashboard.index'),
-    },
-    {
-        title: 'Employees',
-        href: route('dashboard.employees.index'),
-    },
-];
+
 
 interface AssignRolesProps {
     employee: Employee;
@@ -33,20 +26,31 @@ export default function AssignRoles({ employee, roles }: AssignRolesProps) {
         employee.roles?.map(role => role.id) || []
     );
 
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: route('dashboard.index'),
+        },
+        {
+            title: 'Employees',
+            href: route('dashboard.employees.index'),
+        },
+        {
+            title: employee.name,
+            href: route('dashboard.employees.show', employee.username),
+        },
+        {
+            title: 'Assign Roles',
+            href: route('dashboard.employees.assign-roles', employee.username),
+        },
+    ];
+
     const handleRoleToggle = (roleId: number) => {
         setSelectedRoles(prev => 
             prev.includes(roleId) 
                 ? prev.filter(id => id !== roleId)
                 : [...prev, roleId]
         );
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        
-        router.post(route('dashboard.employees.assign-roles', employee.id), {
-            roles: selectedRoles
-        });
     };
 
     return (
@@ -112,58 +116,59 @@ export default function AssignRoles({ employee, roles }: AssignRolesProps) {
                                 <CardTitle>Available Roles</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    {roles && roles.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {roles.map((role) => (
-                                                <div 
-                                                    key={role.id} 
-                                                    className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                                                >
-                                                    <Checkbox
-                                                        id={`role-${role.id}`}
-                                                        checked={selectedRoles.includes(role.id)}
-                                                        onCheckedChange={() => handleRoleToggle(role.id)}
-                                                    />
-                                                    <div className="flex-1">
-                                                        <label 
-                                                            htmlFor={`role-${role.id}`} 
-                                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                <Form action={route('dashboard.employees.assign-roles', employee.username)} method='post' className="space-y-6">
+                                    {({ processing, errors }) => (
+                                        <>
+                                            {roles && roles.length > 0 ? (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {roles.map((role) => (
+                                                        <div
+                                                            key={role.id}
+                                                            className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                                                         >
-                                                            {role.name}
-                                                        </label>
-                                                        {/* {role.description && (
-                                                            <p className="text-xs text-muted-foreground mt-1">
-                                                                {role.description}
-                                                            </p>
-                                                        )} */}
-                                                    </div>
+                                                            <Checkbox
+                                                                id={`role-${role.id}`}
+                                                                name='roles[]'
+                                                                checked={selectedRoles.includes(role.id)}
+                                                                onCheckedChange={() => handleRoleToggle(role.id)}
+                                                                disabled={processing}
+                                                                value={role.id}
+                                                            />
+                                                            <div className="flex-1">
+                                                                <label
+                                                                    htmlFor={`role-${role.id}`}
+                                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                                >
+                                                                    {role.name}
+                                                                </label>
+                                                            </div>
+                                                            <InputError message={errors?.roles} className="mt-2" />
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-8">
-                                            <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                            <h3 className="text-lg font-semibold mb-2">No roles available</h3>
-                                            <p className="text-muted-foreground">
-                                                Create roles first to assign them to employees.
-                                            </p>
-                                        </div>
+                                            ) : (
+                                                <div className="text-center py-8">
+                                                    <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                                                    <h3 className="text-lg font-semibold mb-2">No roles available</h3>
+                                                    <p className="text-muted-foreground">
+                                                        Create roles first to assign them to employees.
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            <div className="flex justify-end gap-3 pt-4">
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <FormButton text="Assign Roles" loadingText="Assigning..." isLoading={processing} />
+                                            </div>
+                                        </>
                                     )}
-                                    
-                                    <div className="flex justify-end gap-3 pt-4">
-                                        <Button 
-                                            type="button" 
-                                            variant="outline"
-                                            onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button type="submit">
-                                            Save Roles
-                                        </Button>
-                                    </div>
-                                </form>
+                                </Form>
                             </CardContent>
                         </Card>
                     </div>
