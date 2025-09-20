@@ -15,36 +15,38 @@ return new class extends Migration
 
         // Add company_id to permissions table
         Schema::table($tableNames['permissions'], function (Blueprint $table) {
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            // Drop the existing unique constraint and create a new one with company_id
-            $table->dropUnique(['name', 'guard_name']);
-            $table->unique(['name', 'guard_name', 'company_id']);
+            if (! Schema::hasColumn($table->getTable(), 'company_id')) {
+                $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
+                // Drop the existing unique constraint and create a new one with company_id
+                $table->dropUnique(['name', 'guard_name']);
+                $table->unique(['name', 'guard_name', 'company_id']);
+            }
         });
 
         // Add company_id to roles table
         Schema::table($tableNames['roles'], function (Blueprint $table) {
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            // Drop the existing unique constraint and create a new one with company_id
-            $table->dropUnique(['name', 'guard_name']);
-            $table->unique(['name', 'guard_name', 'company_id']);
+            if (! Schema::hasColumn($table->getTable(), 'company_id')) {
+                $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
+                // Drop the existing unique constraint and create a new one with company_id
+                $table->dropUnique(['name', 'guard_name']);
+                $table->unique(['name', 'guard_name', 'company_id']);
+            }
         });
 
         // Add company_id to model_has_permissions table
         Schema::table($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            // Add index for better performance
-            $table->index(['company_id'], 'model_has_permissions_company_id_index');
+            if (! Schema::hasColumn($table->getTable(), 'company_id')) {
+                $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
+                $table->primary(['permission_id', 'model_type', 'model_id', 'company_id'], 'model_has_permissions_primary');
+            }
         });
 
         // Add company_id to model_has_roles table
         Schema::table($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            // Add index for better performance
-            $table->index(['company_id'], 'model_has_roles_company_id_index');
+            if (! Schema::hasColumn($table->getTable(), 'company_id')) {
+                $table->foreignId('company_id')->nullable()->constrained()->cascadeOnDelete();
+                $table->primary(['role_id', 'model_type', 'model_id', 'company_id'], 'model_has_roles_primary');
+            }
         });
     }
 
@@ -57,15 +59,15 @@ return new class extends Migration
 
         // Remove company_id from model_has_roles table
         Schema::table($tableNames['model_has_roles'], function (Blueprint $table) {
+            $table->dropPrimary('model_has_roles_primary');
             $table->dropForeign(['company_id']);
-            $table->dropIndex(['model_has_roles_company_id_index']);
             $table->dropColumn('company_id');
         });
 
         // Remove company_id from model_has_permissions table
         Schema::table($tableNames['model_has_permissions'], function (Blueprint $table) {
+            $table->dropPrimary('model_has_permissions_primary');
             $table->dropForeign(['company_id']);
-            $table->dropIndex(['model_has_permissions_company_id_index']);
             $table->dropColumn('company_id');
         });
 

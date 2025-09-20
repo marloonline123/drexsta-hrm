@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\GlobalScopes\HasSearchScope;
+use App\Traits\HasCompanyScope;
 use Spatie\Permission\Models\Role as SpatieRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Role extends SpatieRole
 {
-    use HasSearchScope;
+    use HasSearchScope, HasCompanyScope;
     /**
      * Get the company that owns the role.
      */

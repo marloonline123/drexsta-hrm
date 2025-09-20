@@ -213,7 +213,7 @@ class EmployeesController extends Controller
         // Get roles that belong to the current company
         $roles = $company->roles()->whereIn('id', $request->input('roles', []))->get();
         
-        $employee->syncRoles($roles);
+        $employee->syncRolesWithCompany($roles, $company->id);
 
         return redirect()->route('dashboard.employees.edit', $employee)->with('success', 'Roles assigned successfully');
     }

@@ -9,7 +9,7 @@ import { User, Users } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { Role } from '@/Types/roles';
 import FormButton from '@/Components/Ui/form-button';
 import { InputError } from '@/Components/Ui/InputError';
@@ -122,29 +122,28 @@ export default function AssignRoles({ employee, roles }: AssignRolesProps) {
                                             {roles && roles.length > 0 ? (
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     {roles.map((role) => (
-                                                        <div
+                                                        <label
                                                             key={role.id}
-                                                            className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                                                            htmlFor={`role-${role.id}`}
+                                                            className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
                                                         >
                                                             <Checkbox
                                                                 id={`role-${role.id}`}
-                                                                name='roles[]'
+                                                                name="roles[]"
                                                                 checked={selectedRoles.includes(role.id)}
                                                                 onCheckedChange={() => handleRoleToggle(role.id)}
                                                                 disabled={processing}
                                                                 value={role.id}
                                                             />
                                                             <div className="flex-1">
-                                                                <label
-                                                                    htmlFor={`role-${role.id}`}
-                                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                                >
+                                                                <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                                                     {role.name}
-                                                                </label>
+                                                                </span>
                                                             </div>
                                                             <InputError message={errors?.roles} className="mt-2" />
-                                                        </div>
+                                                        </label>
                                                     ))}
+
                                                 </div>
                                             ) : (
                                                 <div className="text-center py-8">

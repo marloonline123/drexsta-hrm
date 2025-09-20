@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
-import { Button, buttonVariants } from '@/Components/Ui/button';
+import { buttonVariants } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Employee } from '@/Types/employees';
 import { User, Mail, Calendar, BadgeCheck, BadgeX } from 'lucide-react';
@@ -30,7 +30,8 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
             href: route('dashboard.employees.show', employee.username),
         }
     ];
-    breadcrumbs.push();
+    console.log('Employee:', employee);
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Employee Details - ${employee.name}`} />
@@ -164,25 +165,25 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
 
                         <Card>
                             <CardHeader>
-                                <CardTitle>Permissions</CardTitle>
+                                <CardTitle>Abilities</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                {employee.permissions && employee.permissions.length > 0 ? (
+                                {employee.abilities && employee.abilities.length > 0 ? (
                                     <div className="space-y-2">
-                                        {employee.permissions.map((permission) => (
-                                            <Badge key={permission.id} variant="secondary" className="mr-2 mb-2">
-                                                {permission.name}
+                                        {employee.abilities.map((ability) => (
+                                            <Badge key={ability.id} variant="secondary" className="mr-2 mb-2">
+                                                {ability.key}
                                             </Badge>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-muted-foreground text-sm">No direct permissions assigned</p>
+                                    <p className="text-muted-foreground text-sm">No direct abilities assigned</p>
                                 )}
                                 <Link
                                     href={route('dashboard.employees.assign-abilities', employee.username)}
                                     className={cn("w-full mt-4", buttonVariants({ variant: "outline", size: "sm" }))}
                                 >
-                                    Manage Permissions
+                                    Manage Abilities
                                 </Link>
                             </CardContent>
                         </Card>

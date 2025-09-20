@@ -24,18 +24,21 @@ class EmployeeResource extends JsonResource
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
             'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'roles' => $this->roles->map(function ($role) {
+            'roles' => $this->when('roles', $this->roles->map(function ($role) {
                 return [
                     'id' => $role->id,
                     'name' => $role->name,
+                    'company_id' => $role->company_id,
                 ];
-            }),
-            'permissions' => $this->permissions->map(function ($permission) {
+            })),
+            'permissions' => $this->when('permissions', $this->permissions->map(function ($permission) {
                 return [
                     'id' => $permission->id,
                     'name' => $permission->name,
+                    'company_id' => $permission->company_id,
                 ];
-            }),
+            })),
+            'abilities' => $this->when('abilities', $this->abilities),
         ];
     }
 }
