@@ -9,7 +9,9 @@ use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\Admin\EmployeeResource;
 use App\Imports\EmployeesImport;
+use App\Models\Ability;
 use App\Models\User;
+use App\Services\Business\AbilityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +21,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeesController extends Controller
 {
+    public function __construct(protected AbilityService $abilityService) {}
     /**
      * Display a listing of the resource.
      */
@@ -224,29 +227,22 @@ class EmployeesController extends Controller
     public function assignAbilities(Request $request, User $employee)
     {
         // $this->authorize('update', $employee);
-        
+        // dd($request->all());
         $request->validate([
-            'abilities' => 'array',
-            'abilities.*' => 'exists:abilities,id',
+            'abilities' => 'required|array',
+            'abilities.*' => 'required|exists:abilities,id',
         ]);
         
         $user = Auth::user();
         $company = $user->activeCompany;
         
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
-        
         // Get abilities that belong to the current company
         $abilityIds = $company->abilities()->whereIn('id', $request->input('abilities', []))->pluck('id');
         
         // Sync abilities through the ability assignments table
-        $employee->abilities()->wherePivot('company_id', $company->id)->detach();
-        foreach ($abilityIds as $abilityId) {
-            $employee->abilities()->attach($abilityId, ['company_id' => $company->id]);
-        }
+        $this->abilityService->syncEmployeeAbilities($company, $employee, $abilityIds->toArray());
 
-        return redirect()->route('dashboard.employees.edit', $employee)->with('success', 'Abilities assigned successfully');
+        return redirect()->route('dashboard.employees.show', $employee)->with('success', 'Abilities assigned successfully');
     }
 
     /**

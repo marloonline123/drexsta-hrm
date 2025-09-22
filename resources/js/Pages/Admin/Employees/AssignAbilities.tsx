@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
@@ -9,19 +9,10 @@ import { User, Key } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { Ability } from '@/Types/approval-policies';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('dashboard.index'),
-    },
-    {
-        title: 'Employees',
-        href: route('dashboard.employees.index'),
-    },
-];
+import FormButton from '@/Components/Ui/form-button';
+import InputError from '@/Components/input-error';
 
 interface AssignAbilitiesProps {
     employee: Employee;
@@ -32,6 +23,25 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
     const [selectedAbilities, setSelectedAbilities] = useState<number[]>(
         employee.permissions?.map(permission => permission.id) || []
     );
+    
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: route('dashboard.index'),
+        },
+        {
+            title: 'Employees',
+            href: route('dashboard.employees.index'),
+        },
+        {
+            title: employee.name,
+            href: route('dashboard.employees.show', employee.username),
+        },
+        {
+            title: 'Assign Abilities',
+            href: route('dashboard.employees.assign-abilities', employee.username),
+        },
+    ];
 
     const handleAbilityToggle = (abilityId: number) => {
         setSelectedAbilities(prev => 
@@ -39,14 +49,6 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
                 ? prev.filter(id => id !== abilityId)
                 : [...prev, abilityId]
         );
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        
-        router.post(route('dashboard.employees.assign-abilities', employee.id), {
-            abilities: selectedAbilities
-        });
     };
 
     return (
@@ -112,58 +114,63 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
                                 <CardTitle>Available Abilities</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    {abilities && abilities.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {abilities.map((ability) => (
-                                                <div 
-                                                    key={ability.id} 
-                                                    className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                                                >
-                                                    <Checkbox
-                                                        id={`ability-${ability.id}`}
-                                                        checked={selectedAbilities.includes(ability.id)}
-                                                        onCheckedChange={() => handleAbilityToggle(ability.id)}
-                                                    />
-                                                    <div className="flex-1">
-                                                        <label 
-                                                            htmlFor={`ability-${ability.id}`} 
-                                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                <Form action={route('dashboard.employees.assign-abilities', employee.username)} method='post' className="space-y-6">
+                                    {({processing, errors}) => (
+                                        <>
+                                            {abilities && abilities.length > 0 ? (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {abilities.map((ability) => (
+                                                        <label
+                                                            htmlFor={`ability-${ability.id}`}
+                                                            key={ability.id}
+                                                            className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                                                         >
-                                                            {ability.key}
+                                                            <Checkbox
+                                                                id={`ability-${ability.id}`}
+                                                                name="abilities[]"
+                                                                value={ability.id}
+                                                                checked={selectedAbilities.includes(ability.id)}
+                                                                onCheckedChange={() => handleAbilityToggle(ability.id)}
+                                                            />
+                                                            <div className="flex-1">
+                                                                <div
+                                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                                >
+                                                                    {ability.label}
+                                                                </div>
+                                                                {ability.description && (
+                                                                    <p className="text-xs text-muted-foreground mt-1">
+                                                                        {ability.description}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                            <InputError message={errors?.abilities} className="mt-2" />
                                                         </label>
-                                                        {ability.description && (
-                                                            <p className="text-xs text-muted-foreground mt-1">
-                                                                {ability.description}
-                                                            </p>
-                                                        )}
-                                                    </div>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-8">
-                                            <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                            <h3 className="text-lg font-semibold mb-2">No abilities available</h3>
-                                            <p className="text-muted-foreground">
-                                                Create abilities first to assign them to employees.
-                                            </p>
-                                        </div>
+                                            ) : (
+                                                <div className="text-center py-8">
+                                                    <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                                                    <h3 className="text-lg font-semibold mb-2">No abilities available</h3>
+                                                    <p className="text-muted-foreground">
+                                                        Create abilities first to assign them to employees.
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            <div className="flex justify-end gap-3 pt-4">
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <FormButton text='Assign Abilities' loadingText='Assigning...' type="submit" isLoading={processing} />
+                                            </div>
+                                        </>
                                     )}
-                                    
-                                    <div className="flex justify-end gap-3 pt-4">
-                                        <Button 
-                                            type="button" 
-                                            variant="outline"
-                                            onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button type="submit">
-                                            Save Abilities
-                                        </Button>
-                                    </div>
-                                </form>
+                                </Form>
                             </CardContent>
                         </Card>
                     </div>

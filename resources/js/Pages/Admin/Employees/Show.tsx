@@ -172,7 +172,7 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
                                     <div className="space-y-2">
                                         {employee.abilities.map((ability) => (
                                             <Badge key={ability.id} variant="secondary" className="mr-2 mb-2">
-                                                {ability.key}
+                                                {ability.label}
                                             </Badge>
                                         ))}
                                     </div>
