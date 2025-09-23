@@ -18,7 +18,8 @@ import {
     UserCheck,
     Crown,
     BadgeCheck,
-    CheckCheck
+    CheckCheck,
+    Zap
 } from 'lucide-react';
 import AppLogo from '../app-logo';
 
@@ -106,6 +107,11 @@ export function AppSidebar() {
             title: t('nav.roles'),
             href: route('dashboard.roles.index'),
             icon: Crown,
+        },
+        {
+            title: t('nav.abilities'),
+            href: route('dashboard.abilities.index'),
+            icon: Zap,
         },
         {
             title: t('nav.admin'),

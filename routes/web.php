@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AbilitiesController;
 use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -45,6 +46,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Roles
         Route::get('roles/permissions', [RolesController::class, 'permissions'])->name('roles.permissions');
         Route::apiResource('roles', RolesController::class);
+        
+        // Abilities
+        Route::apiResource('abilities', AbilitiesController::class);
         
         // Approval Policies
         Route::get('approval-policies', [ApprovalPolicyController::class, 'index'])->name('approval-policies.index');

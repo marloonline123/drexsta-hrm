@@ -29,6 +29,7 @@ const resources = {
                 subscriptions: 'Subscriptions',
                 companies: 'Companies',
                 roles: 'Roles & Permissions',
+                abilities: 'Abilities',
                 approvalPolicies: 'Approval Policies',
                 jobRequisitions: 'Job Requisitions',
                 jobPostings: 'Job Postings'
@@ -545,6 +546,7 @@ const resources = {
                 subscriptions: 'الاشتراكات',
                 companies: 'الشركات',
                 roles: 'الأدوار والصلاحيات',
+                abilities: 'القدرات',
                 jobRequisitions: 'طلبات التوظيف',
                 jobPostings: 'إعلانات الوظائف'
             },
