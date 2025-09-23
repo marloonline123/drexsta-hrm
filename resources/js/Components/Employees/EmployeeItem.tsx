@@ -7,7 +7,7 @@ import {
     CheckCircle,
     XCircle,
     AlertCircle,
-    MoreHorizontal, Edit, Users, Eye, Trash2,
+    Edit, Eye,
     MoreVertical,
     Shield,
     IdCard,
@@ -105,17 +105,6 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {/* <Button variant="outline" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" asChild>
-                            <a href={route('dashboard.employees.show', employee.username)}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                            </a>
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
-                            <a href={route('dashboard.employees.edit', employee.username)}>
-                                <Edit className="h-4 w-4" />
-                            </a>
-                        </Button> */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -155,7 +144,7 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                                         Assign Departments
                                     </DropdownMenuItem>
                                 </Link>
-                                <Link href={route('dashboard.employees.assign-roles', employee.username)}>
+                                <Link href={route('dashboard.employees.assign-jobTitles', employee.username)}>
                                     <DropdownMenuItem>
                                         <IdCard className="mr-2 h-4 w-4" />
                                         Assign Job Titles

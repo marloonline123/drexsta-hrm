@@ -63,9 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('employees/{employee}/assign-roles', [EmployeeActionsController::class, 'showAssignRoles'])->name('employees.assign-roles');
         Route::get('employees/{employee}/assign-abilities', [EmployeeActionsController::class, 'showAssignAbilities'])->name('employees.assign-abilities');
         Route::get('employees/{employee}/assign-departments', [EmployeeActionsController::class, 'showAssigndepartments'])->name('employees.assign-departments');
+        Route::get('employees/{employee}/assign-jobTitles', [EmployeeActionsController::class, 'showAssignJobTitles'])->name('employees.assign-jobTitles');
         Route::post('employees/{employee}/assign-roles', [EmployeeActionsController::class, 'assignRoles'])->name('employees.assign-roles.store');
         Route::post('employees/{employee}/assign-abilities', [EmployeeActionsController::class, 'assignAbilities'])->name('employees.assign-abilities.store');
         Route::post('employees/{employee}/assign-departments', [EmployeeActionsController::class, 'assigndepartments'])->name('employees.assign-departments.store');
+        Route::post('employees/{employee}/assign-jobTitles', [EmployeeActionsController::class, 'assignJobTitles'])->name('employees.assign-jobTitles.store');
         Route::get('employees/export', [EmployeeExcelController::class, 'export'])->name('employees.export');
         Route::post('employees/import', [EmployeeExcelController::class, 'import'])->name('employees.import');
     });

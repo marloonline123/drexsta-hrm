@@ -31,7 +31,7 @@ class CompanyResource extends JsonResource
             'employees_count' => $this->whenLoaded('users', function () {
                 return $this->employees()->count();
             }),
-            'my_role' => $this->when(isset($this->pivot), function () {
+            'myRole' => $this->when(isset($this->pivot), function () {
                 return $this->pivot->role;
             }) ?? null,
             'established_date' => $this->created_at?->format('Y-m-d'),

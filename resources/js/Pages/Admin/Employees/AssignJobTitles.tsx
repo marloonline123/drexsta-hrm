@@ -5,25 +5,29 @@ import { Button } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Employee } from '@/Types/employees';
 import { router } from '@inertiajs/react';
-import { User, Key } from 'lucide-react';
+import { User, Warehouse } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { Checkbox } from '@/Components/Ui/checkbox';
 import { useState } from 'react';
-import { Ability } from '@/Types/approval-policies';
 import FormButton from '@/Components/Ui/form-button';
 import InputError from '@/Components/input-error';
+import { truncateText } from '@/Lib/utils';
+import { JobTitle } from '@/Types/job-titles';
 
-interface AssignAbilitiesProps {
+interface AssignJobTitlesProps {
     employee: Employee;
-    abilities: Ability[]; // We'll need to define proper types for abilities
+    jobTitles: JobTitle[];
 }
 
-export default function AssignAbilities({ employee, abilities }: AssignAbilitiesProps) {
-    const [selectedAbilities, setSelectedAbilities] = useState<number[]>(
-        employee.permissions?.map(permission => permission.id) || []
+export default function AssignJobTitles({ employee, jobTitles }: AssignJobTitlesProps) {
+    console.log(employee);
+    const [selectedJobTitles, setSelectedJobTitles] = useState<number[]>(
+        employee.jobTitles?.map(jobTitle => jobTitle.id) || []
     );
-    
+
+
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -38,33 +42,33 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
             href: route('dashboard.employees.show', employee.username),
         },
         {
-            title: 'Assign Abilities',
-            href: route('dashboard.employees.assign-abilities', employee.username),
+            title: 'Assign Job Titles',
+            href: route('dashboard.employees.assign-jobTitles', employee.username),
         },
     ];
 
-    const handleAbilityToggle = (abilityId: number) => {
-        setSelectedAbilities(prev => 
-            prev.includes(abilityId) 
-                ? prev.filter(id => id !== abilityId)
-                : [...prev, abilityId]
+    const handleJobTitlesToggle = (jobTitleId: number) => {
+        setSelectedJobTitles(prev =>
+            prev.includes(jobTitleId)
+                ? prev.filter(id => id !== jobTitleId)
+                : [...prev, jobTitleId]
         );
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Assign Abilities - ${employee.name}`} />
-            
+            <Head title={`Assign Job Titles - ${employee.name}`} />
+
             <div className="space-y-6 p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold flex items-center gap-2">
-                            <Key className="h-8 w-8" />
-                            Assign Abilities
+                            <Warehouse className="h-8 w-8" />
+                            Assign Job Titles
                         </h1>
                         <p className="text-muted-foreground mt-1">
-                            Manage abilities for employee: {employee.name}
+                            Manage Job Titles for employee: {employee.name}
                         </p>
                     </div>
                 </div>
@@ -86,74 +90,74 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
                                         <p className="text-muted-foreground">{employee.email}</p>
                                     </div>
                                 </div>
-                                
+
                                 <Separator />
-                                
+
                                 <div>
-                                    <h4 className="font-semibold mb-2">Current Abilities</h4>
-                                    {employee.permissions && employee.permissions.length > 0 ? (
+                                    <h4 className="font-semibold mb-2">Current Job Titles</h4>
+                                    {employee.jobTitles && employee.jobTitles.length > 0 ? (
                                         <div className="flex flex-wrap gap-2">
-                                            {employee.permissions.map((permission) => (
-                                                <Badge key={permission.id} variant="secondary" className="mr-2 mb-2">
-                                                    {permission.name}
+                                            {employee.jobTitles.map((department) => (
+                                                <Badge key={department.id} variant="secondary" className="mr-2 mb-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                                                    {department.title}
                                                 </Badge>
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-muted-foreground text-sm">No abilities assigned</p>
+                                        <p className="text-muted-foreground text-sm">No Job Titles assigned</p>
                                     )}
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
 
-                    {/* Abilities Assignment Card */}
+                    {/* jobTitles Assignment Card */}
                     <div className="lg:col-span-2">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Available Abilities</CardTitle>
+                                <CardTitle>Available Job Titles</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <Form action={route('dashboard.employees.assign-abilities', employee.username)} method='post' className="space-y-6">
-                                    {({processing, errors}) => (
+                                <Form action={route('dashboard.employees.assign-jobTitles', employee.username)} method='post' className="space-y-6">
+                                    {({ processing, errors }) => (
                                         <>
-                                            {abilities && abilities.length > 0 ? (
+                                            {jobTitles && jobTitles.length > 0 ? (
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    {abilities.map((ability) => (
+                                                    {jobTitles.map((jobTitle) => (
                                                         <label
-                                                            htmlFor={`ability-${ability.id}`}
-                                                            key={ability.id}
+                                                            htmlFor={`jobTitle-${jobTitle.id}`}
+                                                            key={jobTitle.id}
                                                             className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                                                         >
                                                             <Checkbox
-                                                                id={`ability-${ability.id}`}
-                                                                name="abilities[]"
-                                                                value={ability.id}
-                                                                checked={selectedAbilities.includes(ability.id)}
-                                                                onCheckedChange={() => handleAbilityToggle(ability.id)}
+                                                                id={`jobTitle-${jobTitle.id}`}
+                                                                name="jobTitles[]"
+                                                                value={jobTitle.id}
+                                                                checked={selectedJobTitles.includes(jobTitle.id)}
+                                                                onCheckedChange={() => handleJobTitlesToggle(jobTitle.id)}
                                                             />
                                                             <div className="flex-1">
                                                                 <div
                                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                                 >
-                                                                    {ability.label}
+                                                                    {jobTitle.title}
                                                                 </div>
-                                                                {ability.description && (
+                                                                {jobTitle.description && (
                                                                     <p className="text-xs text-muted-foreground mt-1">
-                                                                        {ability.description}
+                                                                        {truncateText(jobTitle.description, 100)}
                                                                     </p>
                                                                 )}
                                                             </div>
-                                                            <InputError message={errors?.abilities} className="mt-2" />
+                                                            <InputError message={errors?.jobTitles} className="mt-2" />
                                                         </label>
                                                     ))}
                                                 </div>
                                             ) : (
                                                 <div className="text-center py-8">
-                                                    <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                                                    <h3 className="text-lg font-semibold mb-2">No abilities available</h3>
+                                                    <Warehouse className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                                                    <h3 className="text-lg font-semibold mb-2">No Job Titles available</h3>
                                                     <p className="text-muted-foreground">
-                                                        Create abilities first to assign them to employees.
+                                                        Create Job Titles first to assign them to employees.
                                                     </p>
                                                 </div>
                                             )}
@@ -162,11 +166,11 @@ export default function AssignAbilities({ employee, abilities }: AssignAbilities
                                                 <Button
                                                     type="button"
                                                     variant="outline"
-                                                    onClick={() => router.visit(route('dashboard.employees.show', employee.username))}
+                                                    onClick={() => router.visit(route('dashboard.employees.index'))}
                                                 >
                                                     Cancel
                                                 </Button>
-                                                <FormButton text='Assign Abilities' loadingText='Assigning...' type="submit" isLoading={processing} />
+                                                <FormButton text='Assign Job Titles' loadingText='Assigning...' type="submit" isLoading={processing} />
                                             </div>
                                         </>
                                     )}

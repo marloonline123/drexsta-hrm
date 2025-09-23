@@ -21,7 +21,6 @@ interface AssignDepartmentsProps {
 }
 
 export default function AssignDepartments({ employee, departments }: AssignDepartmentsProps) {
-    console.log(employee);
     const [selectedDepartments, setSelectedDepartments] = useState<number[]>(
         employee.departments?.map(department => department.id) || []
     );
@@ -47,11 +46,11 @@ export default function AssignDepartments({ employee, departments }: AssignDepar
         },
     ];
 
-    const handleDepartmentToggle = (abilityId: number) => {
+    const handleDepartmentToggle = (departmentId: number) => {
         setSelectedDepartments(prev =>
-            prev.includes(abilityId)
-                ? prev.filter(id => id !== abilityId)
-                : [...prev, abilityId]
+            prev.includes(departmentId)
+                ? prev.filter(id => id !== departmentId)
+                : [...prev, departmentId]
         );
     };
 
@@ -168,7 +167,7 @@ export default function AssignDepartments({ employee, departments }: AssignDepar
                                                 <Button
                                                     type="button"
                                                     variant="outline"
-                                                    onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
+                                                    onClick={() => router.visit(route('dashboard.employees.index'))}
                                                 >
                                                     Cancel
                                                 </Button>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Resources\Admin\CompanyResource;
+use App\Http\Resources\CompanyResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -41,12 +41,13 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user() ? (new UserResource($request->user()))->resolve() : null,
+                'user' => $request->user() ? (new UserResource($request->user()->load('activeCompany')))->resolve() : null,
             ],
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
@@ -56,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn (): ?string => $request->session()->get('success'),
                 'error' => fn (): ?string => $request->session()->get('error'),
             ],
-            'companies' => fn (): array => $request->user() ? CompanyResource::collection($request->user()->companies()->with('users')->get())->resolve() : [],
+            'sidebarCompanies' => fn (): array => $request->user() ? CompanyResource::collection($request->user()->companies()->with('users')->get())->resolve() : [],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

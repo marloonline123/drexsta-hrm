@@ -1,14 +1,33 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
-import { buttonVariants } from '@/Components/Ui/button';
+import { Button, buttonVariants } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Employee } from '@/Types/employees';
-import { User, Mail, Calendar, BadgeCheck, BadgeX } from 'lucide-react';
 import { Separator } from '@/Components/Ui/separator';
 import { Badge } from '@/Components/Ui/badge';
 import { cn } from '@/Lib/utils';
 import DeleteEmployee from '@/Components/Employees/DeleteEmployee';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/Components/Ui/dropdown-menu';
+import {
+    Mail,
+    MoreVertical,
+    Shield,
+    IdCard,
+    Warehouse,
+    Handshake,
+    User,
+    Calendar,
+    BadgeCheck,
+    BadgeX
+} from 'lucide-react';
 
 
 interface ShowEmployeeProps {
@@ -31,7 +50,7 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
         }
     ];
     console.log('Employee:', employee);
-    
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Employee Details - ${employee.name}`} />
@@ -58,6 +77,42 @@ export default function ShowEmployee({ employee }: ShowEmployeeProps) {
 
                         {/* Delete Modal */}
                         <DeleteEmployee employee={employee} />
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <Link href={route('dashboard.employees.assign-roles', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Shield className="mr-2 h-4 w-4" />
+                                        Assign Roles
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-abilities', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Handshake className="mr-2 h-4 w-4" />
+                                        Assign Abilities
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-departments', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Warehouse className="mr-2 h-4 w-4" />
+                                        Assign Departments
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-jobTitles', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <IdCard className="mr-2 h-4 w-4" />
+                                        Assign Job Titles
+                                    </DropdownMenuItem>
+                                </Link>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
 

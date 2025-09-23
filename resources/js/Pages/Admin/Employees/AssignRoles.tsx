@@ -159,7 +159,7 @@ export default function AssignRoles({ employee, roles }: AssignRolesProps) {
                                                 <Button
                                                     type="button"
                                                     variant="outline"
-                                                    onClick={() => router.visit(route('dashboard.employees.edit', employee.id))}
+                                                    onClick={() => router.visit(route('dashboard.employees.show', employee.username))}
                                                 >
                                                     Cancel
                                                 </Button>

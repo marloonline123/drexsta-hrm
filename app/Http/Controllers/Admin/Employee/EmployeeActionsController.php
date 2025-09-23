@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\AbilityResource;
 use App\Http\Resources\Admin\DepartmentResource;
 use App\Http\Resources\Admin\EmployeeResource;
+use App\Http\Resources\Admin\JobTitleResource;
 use App\Http\Resources\Admin\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +61,7 @@ class EmployeeActionsController extends Controller
     }
 
     /**
-     * Show the assign abilities form.
+     * Show the assign departments form.
      */
     public function showAssigndepartments(User $employee)
     {
@@ -77,6 +78,27 @@ class EmployeeActionsController extends Controller
         return Inertia::render('Admin/Employees/AssignDepartments', [
             'employee' => (new EmployeeResource($employee))->resolve(),
             'departments' => DepartmentResource::collection($departments)->resolve(),
+        ]);
+    }
+
+    /**
+     * Show the assign jobTitles form.
+     */
+    public function showAssignJobTitles(User $employee)
+    {
+        // $this->authorize('update', $employee);
+
+        $user = Auth::user();
+        $company = $user->activeCompany;
+
+        $employee->load('jobTitles');
+
+        // Get all abilities for the current company
+        $jobTitles = $company->jobTitles()->active(column: 'job_titles.is_active')->get();
+
+        return Inertia::render('Admin/Employees/AssignJobTitles', [
+            'employee' => (new EmployeeResource($employee))->resolve(),
+            'jobTitles' => JobTitleResource::collection($jobTitles)->resolve(),
         ]);
     }
 
@@ -132,7 +154,7 @@ class EmployeeActionsController extends Controller
     }
 
     /**
-     * Assign abilities to the employee.
+     * Assign departments to the employee.
      */
     public function assignDepartments(Request $request, User $employee)
     {
@@ -153,5 +175,29 @@ class EmployeeActionsController extends Controller
         $employee->departments()->syncWithPivotValues($departmentsIds->toArray(), ['company_id' => $company->id]);
 
         return redirect()->route('dashboard.employees.show', $employee)->with('success', 'Departments assigned successfully');
+    }
+
+    /**
+     * Assign jobTitles to the employee.
+     */
+    public function assignJobTitles(Request $request, User $employee)
+    {
+        // $this->authorize('update', $employee);
+        // dd($request->all());
+        $request->validate([
+            'jobTitles' => 'required|array',
+            'jobTitles.*' => 'required|exists:job_titles,id',
+        ]);
+
+        $user = Auth::user();
+        $company = $user->activeCompany;
+
+        // Get abilities that belong to the current company
+        $jobTitlesIds = $company->jobTitles()->whereIn('id', $request->input('jobTitles', []))->pluck('id');
+
+        // Sync abilities through the ability assignments table
+        $employee->jobTitles()->syncWithPivotValues($jobTitlesIds->toArray(), ['company_id' => $company->id]);
+
+        return redirect()->route('dashboard.employees.show', $employee)->with('success', 'Job Titles assigned successfully');
     }
 }

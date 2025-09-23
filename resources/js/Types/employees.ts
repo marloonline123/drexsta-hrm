@@ -2,6 +2,7 @@ import { Role } from './roles';
 import { Permission } from './permissions';
 import { Ability } from './approval-policies';
 import { Department } from './deparments';
+import { JobTitle } from './job-titles';
 
 export type Employee = {
     id: number;
@@ -18,6 +19,7 @@ export type Employee = {
     permissions: Permission[];
     abilities: Ability[];
     departments?: Department[];
+    jobTitles?: JobTitle[];
 };
 
 export type EmployeeFormData = {

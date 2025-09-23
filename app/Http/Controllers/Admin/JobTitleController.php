@@ -19,7 +19,7 @@ class JobTitleController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $company = $user->activeCompany();
+        $company = $user->activeCompany;
         
         $jobTitles = $company?->jobTitles()
             ->search($request->get('search'), ['title', 'description'])

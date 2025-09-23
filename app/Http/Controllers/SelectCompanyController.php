@@ -27,6 +27,8 @@ class SelectCompanyController extends Controller
         $user->active_company_id = $company->id;
         $user->save();
 
-        return redirect()->route('dashboard.index');
+        return redirect()
+            ->back()
+            ->with('success', 'Company switched successfully. You are now working for: ' . $company->name);
     }
 }

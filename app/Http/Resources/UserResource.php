@@ -28,6 +28,7 @@ class UserResource extends JsonResource
                 isset($this->pivot),
                 fn() => $this->pivot->role
             ),
+            'activeCompany' => $this->when('activeCompany', (new CompanyResource($this->activeCompany))->resolve()),
             'joined_at' => $this->created_at?->format('Y-m-d'),
         ];
     }

@@ -21,7 +21,7 @@ class EmploymentTypeController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $company = $user->activeCompany();
+        $company = $user->activeCompany;
         
         $employmentTypes = $company?->employmentTypes()
             ->search($request->get('search'), ['name', 'description'])
