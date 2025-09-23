@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\GlobalScopes\HasActiveScope;
 use App\Traits\GlobalScopes\HasFilterByScope;
 use App\Traits\GlobalScopes\HasSearchScope;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
-    use SoftDeletes, HasSearchScope, HasFilterByScope;
+    use SoftDeletes, HasSearchScope, HasFilterByScope, HasActiveScope;
 
     protected $fillable = [
         'name',
@@ -37,12 +38,12 @@ class Company extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'company_user');
+        return $this->belongsToMany(User::class, 'company_user')->withPivot('role');
     }
 
     public function employees(): BelongsToMany
     {
-        return $this->users()->where('company_user.role', '!=', 'owner');
+        return $this->users()->where('company_user.role', '!=', 'owner')->withPivot('role');
     }
 
     public function departments(): HasMany

@@ -1,4 +1,6 @@
 import { PaginatedData } from "./global";
+import { JobTitle } from "./job-titles";
+import { Role } from "./roles";
 
 export type Company = {
     id: number;
@@ -13,7 +15,9 @@ export type Company = {
     is_active: boolean;
     employees_count: number;
     established_date: string;
-    my_role?: string;
+    myRole?: string;
+    myRoles?: Role[];
+    myJobTitles?: JobTitle[];
     created_at: string;
     updated_at: string;
 }

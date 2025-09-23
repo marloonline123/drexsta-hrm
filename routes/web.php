@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\JobRequisitionController;
 use App\Http\Controllers\Admin\JobTitleController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\SelectCompanyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/dashboard', function () {
     //     return Inertia::render('dashboard');
     // })->name('dashboard');
-    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->middleware('hasActiveCompany')->group(function () {
 
         // Main dashboard page
         Route::get('/', function () {
@@ -63,6 +64,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('employees/export', [EmployeesController::class, 'export'])->name('employees.export');
         Route::post('employees/import', [EmployeesController::class, 'import'])->name('employees.import');
     });
+
+    Route::get('select-company', [SelectCompanyController::class, 'select'])->name('select-company.show');
+    Route::post('select-company/{company}', [SelectCompanyController::class, 'save'])->name('select-company.save');
     
     // HRM Routes
     Route::prefix('hrm')->group(function () {
@@ -97,14 +101,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('admin/users');
         })->name('admin.users');
     });
-    
-    // Public Job Postings Routes
-    Route::get('jobs', [JobPostingController::class, 'index'])->name('jobs.index');
-    Route::get('jobs/{jobPosting}', [JobPostingController::class, 'show'])->name('jobs.show');
-    Route::post('jobs/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
-    Route::get('applications/{token}/edit', [JobPostingController::class, 'editApplication'])->name('applications.edit');
-    Route::put('applications/{token}', [JobPostingController::class, 'updateApplication'])->name('applications.update');
 });
+
+// Public Job Postings Routes
+Route::get('jobs/{company}', [JobPostingController::class, 'index'])->name('jobs.index');
+Route::get('jobs/{company}/{jobPosting}', [JobPostingController::class, 'show'])->name('jobs.show');
+Route::post('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
+Route::get('applications/{company}/{token}/edit', [JobPostingController::class, 'editApplication'])->name('applications.edit');
+Route::put('applications/{company}/{token}', [JobPostingController::class, 'updateApplication'])->name('applications.update');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
