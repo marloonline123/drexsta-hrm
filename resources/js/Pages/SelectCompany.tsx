@@ -29,20 +29,15 @@ export default function SelectCompany({ companies }: SelectCompanyProps) {
         setIsLoading(true);
         setSelectedCompany(company.id);
 
-        try {
-            router.post(`/select-company/${company.id}`, {}, {
-                onSuccess: () => {
-                    // Success handling is done by the controller redirect
-                },
-                onError: () => {
-                    setIsLoading(false);
-                    setSelectedCompany(null);
-                }
-            });
-        } catch {
-            setIsLoading(false);
-            setSelectedCompany(null);
-        }
+        router.post(`/select-company/${company.slug}`, {}, {
+            onSuccess: () => {
+                // Success handling is done by the controller redirect
+            },
+            onFinish: () => {
+                setIsLoading(false);
+                setSelectedCompany(null);
+            }
+        });
     };
 
     const getRoleColor = (role: string | null) => {
@@ -72,7 +67,6 @@ export default function SelectCompany({ companies }: SelectCompanyProps) {
                 return Building2;
         }
     };
-    console.log(companies);
     
 
     return (

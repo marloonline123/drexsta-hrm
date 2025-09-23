@@ -33,6 +33,7 @@ class EmployeeResource extends JsonResource
                 ];
             })),
             'abilities' => $this->when('abilities', $this->abilities),
+            'departments' => $this->when('departments', $this->departments),
         ];
     }
 }

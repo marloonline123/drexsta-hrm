@@ -19,14 +19,14 @@ class SelectCompanyController extends Controller
     public function save(Company $company)
     {
         $user = request()->user();
-        $company->load('employees');
-        if (! $company->employees->contains($user->id)) {
+        $company->load('users');
+        if (! $company->users->contains($user->id)) {
             abort(403);
         }
 
         $user->active_company_id = $company->id;
         $user->save();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard.index');
     }
 }

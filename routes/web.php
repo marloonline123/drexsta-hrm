@@ -3,7 +3,10 @@
 use App\Http\Controllers\Admin\ApprovalPolicyController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DepartmentController;
-use App\Http\Controllers\Admin\EmployeesController;
+use App\Http\Controllers\Admin\Employee\EmployeeActionsController;
+use App\Http\Controllers\Admin\Employee\EmployeeExcelController;
+use App\Http\Controllers\Admin\Employee\EmployeesResourceController;
+use App\Http\Controllers\Admin\Employee\UpdateEmployeePasswordController;
 use App\Http\Controllers\Admin\EmploymentTypeController;
 use App\Http\Controllers\Admin\JobPostingController as AdminJobPostingController;
 use App\Http\Controllers\Admin\JobRequisitionController;
@@ -55,14 +58,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('job-postings/{jobPosting}/status', [AdminJobPostingController::class, 'updateStatus'])->name('job-postings.update-status');
         
         // Employees
-        Route::resource('employees', EmployeesController::class);
-        Route::patch('employees/{employee}/update-password', [EmployeesController::class, 'updatePassword'])->name('employees.update-password');
-        Route::get('employees/{employee}/assign-roles', [EmployeesController::class, 'showAssignRoles'])->name('employees.assign-roles');
-        Route::get('employees/{employee}/assign-abilities', [EmployeesController::class, 'showAssignAbilities'])->name('employees.assign-abilities');
-        Route::post('employees/{employee}/assign-roles', [EmployeesController::class, 'assignRoles'])->name('employees.assign-roles.store');
-        Route::post('employees/{employee}/assign-abilities', [EmployeesController::class, 'assignAbilities'])->name('employees.assign-abilities.store');
-        Route::get('employees/export', [EmployeesController::class, 'export'])->name('employees.export');
-        Route::post('employees/import', [EmployeesController::class, 'import'])->name('employees.import');
+        Route::resource('employees', EmployeesResourceController::class);
+        Route::patch('employees/{employee}/update-password', [UpdateEmployeePasswordController::class, 'updatePassword'])->name('employees.update-password');
+        Route::get('employees/{employee}/assign-roles', [EmployeeActionsController::class, 'showAssignRoles'])->name('employees.assign-roles');
+        Route::get('employees/{employee}/assign-abilities', [EmployeeActionsController::class, 'showAssignAbilities'])->name('employees.assign-abilities');
+        Route::get('employees/{employee}/assign-departments', [EmployeeActionsController::class, 'showAssigndepartments'])->name('employees.assign-departments');
+        Route::post('employees/{employee}/assign-roles', [EmployeeActionsController::class, 'assignRoles'])->name('employees.assign-roles.store');
+        Route::post('employees/{employee}/assign-abilities', [EmployeeActionsController::class, 'assignAbilities'])->name('employees.assign-abilities.store');
+        Route::post('employees/{employee}/assign-departments', [EmployeeActionsController::class, 'assigndepartments'])->name('employees.assign-departments.store');
+        Route::get('employees/export', [EmployeeExcelController::class, 'export'])->name('employees.export');
+        Route::post('employees/import', [EmployeeExcelController::class, 'import'])->name('employees.import');
     });
 
     Route::get('select-company', [SelectCompanyController::class, 'select'])->name('select-company.show');

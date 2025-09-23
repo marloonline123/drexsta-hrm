@@ -20,7 +20,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $company = $user->activeCompany();
+        $company = $user->activeCompany;
         $departments = $company?->departments()
             ->with('managerRelation', 'employees')
             ->search(request('search'), ['name', 'description'])

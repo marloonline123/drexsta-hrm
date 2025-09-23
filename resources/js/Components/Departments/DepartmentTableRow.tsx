@@ -52,7 +52,7 @@ export default function DepartmentTableRow({ department }: { department: Departm
             <TableCell>
                 <div className="flex items-center gap-1">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    {department.employee_count}
+                    {department.employees_count}
                 </div>
             </TableCell>
             <TableCell>

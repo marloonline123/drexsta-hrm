@@ -1,6 +1,7 @@
 import { Role } from './roles';
 import { Permission } from './permissions';
 import { Ability } from './approval-policies';
+import { Department } from './deparments';
 
 export type Employee = {
     id: number;
@@ -16,6 +17,7 @@ export type Employee = {
     roles: Role[];
     permissions: Permission[];
     abilities: Ability[];
+    departments?: Department[];
 };
 
 export type EmployeeFormData = {

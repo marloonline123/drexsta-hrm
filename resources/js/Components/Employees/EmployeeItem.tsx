@@ -1,19 +1,31 @@
 import { Card, CardContent } from '@/Components/Ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/Components/Ui/avatar';
 import {
-    Edit,
-    Eye,
     Mail,
     Phone,
-    Building,
     FileText,
     CheckCircle,
     XCircle,
-    AlertCircle
+    AlertCircle,
+    MoreHorizontal, Edit, Users, Eye, Trash2,
+    MoreVertical,
+    Shield,
+    IdCard,
+    Warehouse,
+    Handshake
 } from 'lucide-react';
 import { Employee } from '@/Types';
 import { Badge } from '../Ui/badge';
 import { Button } from '../Ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/Components/Ui/dropdown-menu';
+import { Link } from '@inertiajs/react';
 
 export default function EmployeeItem({ employee, index }: { employee: Employee, index: number }) {
     const getStatusBadge = (status: string) => {
@@ -83,10 +95,6 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    {/* <div className="flex items-center gap-2">
-                                        <Building className="h-4 w-4" />
-                                        <span>Employee ID: {employee.id}</span>
-                                    </div> */}
                                     <div className="flex items-center gap-2">
                                         <FileText className="h-4 w-4" />
                                         <span>Joined: {new Date(employee.created_at).toLocaleDateString()}</span>
@@ -97,7 +105,7 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" asChild>
+                        {/* <Button variant="outline" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity" asChild>
                             <a href={route('dashboard.employees.show', employee.username)}>
                                 <Eye className="h-4 w-4 mr-2" />
                                 View
@@ -107,7 +115,54 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
                             <a href={route('dashboard.employees.edit', employee.username)}>
                                 <Edit className="h-4 w-4" />
                             </a>
-                        </Button>
+                        </Button> */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <Link href={route('dashboard.employees.show', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        View
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.edit', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit
+                                    </DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuSeparator />
+                                <Link href={route('dashboard.employees.assign-roles', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Shield className="mr-2 h-4 w-4" />
+                                        Assign Roles
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-abilities', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Handshake className="mr-2 h-4 w-4" />
+                                        Assign Abilities
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-departments', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <Warehouse className="mr-2 h-4 w-4" />
+                                        Assign Departments
+                                    </DropdownMenuItem>
+                                </Link>
+                                <Link href={route('dashboard.employees.assign-roles', employee.username)}>
+                                    <DropdownMenuItem>
+                                        <IdCard className="mr-2 h-4 w-4" />
+                                        Assign Job Titles
+                                    </DropdownMenuItem>
+                                </Link>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
             </CardContent>
