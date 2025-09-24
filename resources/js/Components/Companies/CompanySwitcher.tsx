@@ -10,6 +10,7 @@ import { router, usePage } from '@inertiajs/react';
 import { Company } from '@/Types/companies';
 import { User } from '@/Types/user';
 import { cn } from '@/Lib/utils';
+import { Badge } from '../Ui/badge';
 
 
 interface CompanySwitcherProps {
@@ -21,23 +22,6 @@ export function CompanySwitcher({ className = '' }: CompanySwitcherProps) {
     const user = (page.auth as { user: User }).user;
     const sidebarCompanies: Company[] = (page.sidebarCompanies as Company[]) || [];
     const currentCompany = user.activeCompany;
-
-    console.log(sidebarCompanies);
-    
-
-
-    // const getRoleColor = (role: string) => {
-    //     switch (role) {
-    //         case 'owner':
-    //             return 'text-orange-600';
-    //         case 'admin':
-    //             return 'text-purple-600';
-    //         default:
-    //             return 'text-blue-600';
-    //     }
-    // };
-
-    // if (!currentCompany) return null;
 
     return (
         <div className={className}>
@@ -79,7 +63,7 @@ export function CompanySwitcher({ className = '' }: CompanySwitcherProps) {
                             className={cn("flex items-center gap-3 p-3 cursor-pointer border", company.id === currentCompany.id && 'border-2 border-primary')}
                             onClick={() => router.post(route('select-company.save', company.slug), {}, { preserveScroll: true })}
                         >
-                            <Avatar className="h-8 w-8">
+                            <Avatar className="h-8 w-8 bg-muted">
                                 <AvatarImage src={company.logo_url} alt={company.name} />
                                 <AvatarFallback className="bg-primary/10 text-primary hover:bg-muted hover:text-muted">
                                     {company.name.split(' ').map(n => n[0]).join('').toUpperCase()}
@@ -89,14 +73,14 @@ export function CompanySwitcher({ className = '' }: CompanySwitcherProps) {
                                 <div className="flex items-center gap-2 mb-1">
                                     <p className="text-sm font-medium truncate">{company.name}</p>
                                 </div>
-                                <p className="text-xs">
+                                <Badge className="text-xs">
                                     <Users className="h-3 w-3 inline mr-1 text-muted" />
                                     {company.myRole}
-                                </p>
+                                </Badge>
                             </div>
 
                             {company.id === currentCompany.id && (
-                                <BadgeCheck className="h-12 w-12 text-7xl text-primary" />
+                                <BadgeCheck className="h-12 w-12 text-7xl hover:text-white" />
                             )}
                         </DropdownMenuItem>
                     ))}

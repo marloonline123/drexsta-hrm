@@ -32,7 +32,7 @@ export default function DeleteUser() {
 
                         <Form
                             method="delete"
-                            action={route('profile.destroy')}
+                            action={route('dashboard.profile.destroy')}
                             options={{
                                 preserveScroll: true,
                             }}

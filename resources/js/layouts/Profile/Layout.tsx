@@ -2,36 +2,36 @@ import Heading from '@/Components/heading';
 import { Button } from '@/Components/Ui/button';
 import { Separator } from '@/Components/Ui/separator';
 import { cn } from '@/Lib/utils';
-import { type NavItem } from '@/types';
+import { type NavItem } from '@/Types';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
-        href: '/settings/profile',
+        href: route('dashboard.profile.edit'),
         icon: null,
     },
     {
         title: 'Password',
-        href: '/settings/password',
+        href: route('dashboard.profile.password.edit'),
         icon: null,
     },
     {
         title: 'Appearance',
-        href: '/settings/appearance',
+        href: route('dashboard.profile.appearance'),
         icon: null,
     },
 ];
 
-export default function SettingsLayout({ children }: PropsWithChildren) {
+export default function ProfileLayout({ children }: PropsWithChildren) {
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
         return null;
     }
 
-    const currentPath = window.location.pathname;
-
+    const currentPath = window.location.href; 
+    
     return (
         <div className="px-4 py-6">
             <Heading title="Settings" description="Manage your profile and account settings" />
@@ -46,7 +46,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 variant="ghost"
                                 asChild
                                 className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === item.href,
+                                    'bg-accent text-muted': currentPath === item.href,
                                 })}
                             >
                                 <Link href={item.href} prefetch>

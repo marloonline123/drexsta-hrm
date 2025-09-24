@@ -6,7 +6,6 @@ import { Badge } from '@/Components/Ui/badge';
 import { LanguageToggle } from '@/Components/language-toggle';
 import AppearanceToggleDropdown from '@/Components/appearance-dropdown';
 import { useSidebar } from '@/Components/Ui/sidebar';
-import { useLanguage } from '@/Hooks/use-language';
 import { Link, usePage } from '@inertiajs/react';
 import {
     Search,
@@ -19,20 +18,13 @@ import {
     HelpCircle
 } from 'lucide-react';
 import { useState } from 'react';
+import { Auth } from '@/Types';
+import { t } from 'i18next';
 
 export function TopNavigation() {
-    const { t } = useLanguage();
     const { toggleSidebar } = useSidebar();
-    const { props } = usePage();
+    const { user } = usePage().props.auth as Auth;
     const [searchQuery, setSearchQuery] = useState('');
-    
-    // Mock user data - in real app this would come from props
-    const user = {
-        name: 'John Doe',
-        email: 'john.doe@company.com',
-        avatar: null,
-        role: 'Administrator'
-    };
 
     // Mock notifications
     const notifications = [
@@ -128,7 +120,7 @@ export function TopNavigation() {
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                                 <Avatar className="h-9 w-9">
-                                    <AvatarImage src={user.avatar || ''} alt={user.name} />
+                                    <AvatarImage src={user.profile_photo_url || ''} alt={user.name} />
                                     <AvatarFallback className="bg-primary/10">
                                         {user.name.split(' ').map(n => n[0]).join('')}
                                     </AvatarFallback>
@@ -142,19 +134,21 @@ export function TopNavigation() {
                                     <p className="text-xs leading-none text-muted-foreground">
                                         {user.email}
                                     </p>
-                                    <Badge variant="secondary" className="w-fit text-xs mt-1">
-                                        {user.role}
-                                    </Badge>
+                                    {user.roles?.length > 0 && user.roles.map((role) => (
+                                        <Badge key={role.id} variant="secondary" className="mt-1">
+                                            {role.name}
+                                        </Badge>
+                                    ))}
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link href="/profile" className="flex items-center">
+                                <Link href={route('dashboard.profile.edit')} className="flex items-center">
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profile</span>
                                 </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
+                            {/* <DropdownMenuItem asChild>
                                 <Link href="/settings" className="flex items-center">
                                     <Settings className="mr-2 h-4 w-4" />
                                     <span>Settings</span>
@@ -169,10 +163,10 @@ export function TopNavigation() {
                             <DropdownMenuItem>
                                 <HelpCircle className="mr-2 h-4 w-4" />
                                 <span>Help & Support</span>
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link href="/logout" method="post" className="flex items-center text-red-600">
+                                <Link href={route('logout')} method="post" className="flex items-center text-red-600">
                                     <LogOut className="mr-2 h-4 w-4" />
                                     <span>Log out</span>
                                 </Link>

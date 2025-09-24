@@ -1,6 +1,8 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
-import { Employee } from './employees';
+import { User } from './user';
+
+export type { Employee } from './employees';
 
 export interface Auth {
     user: User;
@@ -31,16 +33,3 @@ export interface SharedData {
     sidebarOpen: boolean;
     [key: string]: unknown;
 }
-
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
-}
-
-export type { Employee } from './employees';

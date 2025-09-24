@@ -71,6 +71,13 @@ export function ImageUpload({
         };
         reader.readAsDataURL(file);
 
+        // Update the file input element's files property
+        if (fileInputRef.current) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInputRef.current.files = dataTransfer.files;
+        }
+
         // Call onChange with the file
         onChange?.(file);
     }, [validateFile, onChange]);

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\JobRequisitionController;
 use App\Http\Controllers\Admin\JobTitleController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\Profile\PasswordController;
+use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\SelectCompanyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -74,6 +76,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('employees/{employee}/assign-jobTitles', [EmployeeActionsController::class, 'assignJobTitles'])->name('employees.assign-jobTitles.store');
         Route::get('employees/export', [EmployeeExcelController::class, 'export'])->name('employees.export');
         Route::post('employees/import', [EmployeeExcelController::class, 'import'])->name('employees.import');
+
+        // Profile Management
+        Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::get('profile/password', [PasswordController::class, 'edit'])->name('profile.password.edit');
+        Route::put('profile/password', [PasswordController::class, 'update'])
+            ->middleware('throttle:6,1')
+            ->name('profile.password.update');
+        Route::get('profile/appearance', function () {
+            return Inertia::render('Profile/Appearance');
+        })->name('profile.appearance');
     });
 
     Route::get('select-company', [SelectCompanyController::class, 'select'])->name('select-company.show');

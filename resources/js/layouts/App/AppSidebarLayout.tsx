@@ -2,7 +2,7 @@ import { AppContent } from '@/Components/Layout/AppContent';
 import { AppShell } from '@/Components/Layout/AppShell';
 import { AppSidebar } from '@/Components/Layout/AppSidebar';
 import { AppSidebarHeader } from '@/Components/Layout/AppSidebarHeader';
-import { TopNavigation } from '@/Components/top-navigation';
+import { TopNavigation } from '@/Components/Layout/TopNavigation';
 import { type BreadcrumbItem } from '@/Types';
 import { type PropsWithChildren } from 'react';
 import { useLanguage } from '@/Hooks/use-language';

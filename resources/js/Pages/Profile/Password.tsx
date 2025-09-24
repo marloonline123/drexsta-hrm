@@ -1,20 +1,19 @@
 import InputError from '@/Components/input-error';
 import AppLayout from '@/layouts/AppLayout';
-import SettingsLayout from '@/layouts/Settings/Layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from '@/Types';
 import { Transition } from '@headlessui/react';
 import { Form, Head } from '@inertiajs/react';
 import { useRef } from 'react';
-
 import HeadingSmall from '@/Components/heading-small';
 import { Button } from '@/Components/Ui/button';
 import { Input } from '@/Components/Ui/input';
 import { Label } from '@/Components/Ui/label';
+import ProfileLayout from '@/layouts/Profile/Layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Password settings',
-        href: '/settings/password',
+        href: route('dashboard.profile.password.edit'),
     },
 ];
 
@@ -26,13 +25,13 @@ export default function Password() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Password settings" />
 
-            <SettingsLayout>
+            <ProfileLayout>
                 <div className="space-y-6">
                     <HeadingSmall title="Update password" description="Ensure your account is using a long, random password to stay secure" />
 
                     <Form
                         method="put"
-                        action={route('password.update')}
+                        action={route('dashboard.profile.password.update')}
                         options={{
                             preserveScroll: true,
                         }}
@@ -64,7 +63,7 @@ export default function Password() {
                                         placeholder="Current password"
                                     />
 
-                                    <InputError message={errors.current_password} />
+                                    <InputError message={errors?.current_password} />
                                 </div>
 
                                 <div className="grid gap-2">
@@ -80,7 +79,7 @@ export default function Password() {
                                         placeholder="New password"
                                     />
 
-                                    <InputError message={errors.password} />
+                                    <InputError message={errors?.password} />
                                 </div>
 
                                 <div className="grid gap-2">
@@ -95,7 +94,7 @@ export default function Password() {
                                         placeholder="Confirm password"
                                     />
 
-                                    <InputError message={errors.password_confirmation} />
+                                    <InputError message={errors?.password_confirmation} />
                                 </div>
 
                                 <div className="flex items-center gap-4">
@@ -115,7 +114,7 @@ export default function Password() {
                         )}
                     </Form>
                 </div>
-            </SettingsLayout>
+            </ProfileLayout>
         </AppLayout>
     );
 }

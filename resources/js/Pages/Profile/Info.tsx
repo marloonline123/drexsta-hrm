@@ -1,58 +1,87 @@
-import { type BreadcrumbItem, type SharedData } from '@/types';
+import { type BreadcrumbItem, type SharedData } from '@/Types';
 import { Transition } from '@headlessui/react';
 import { Form, Head, Link, usePage } from '@inertiajs/react';
 
-import DeleteUser from '@/Components/delete-user';
+import DeleteUser from '@/Components/Profile/DeleteUser';
 import HeadingSmall from '@/Components/heading-small';
 import InputError from '@/Components/input-error';
 import { Button } from '@/Components/Ui/button';
 import { Input } from '@/Components/Ui/input';
 import { Label } from '@/Components/Ui/label';
 import AppLayout from '@/layouts/AppLayout';
-import SettingsLayout from '@/layouts/Settings/Layout';
+import ProfileLayout from '@/layouts/Profile/Layout';
+import { ImageUpload } from '@/Components/Ui/image-upload';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Profile settings',
-        href: '/settings/profile',
+        href: route('dashboard.profile.edit'),
     },
 ];
 
-export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+export default function Info({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Profile settings" />
 
-            <SettingsLayout>
+            <ProfileLayout>
                 <div className="space-y-6">
                     <HeadingSmall title="Profile information" description="Update your name and email address" />
 
                     <Form
-                        method="patch"
-                        action={route('profile.update')}
+                        method="post"
+                        action={route('dashboard.profile.update')}
                         options={{
                             preserveScroll: true,
                         }}
                         className="space-y-6"
+                        encType="multipart/form-data"
                     >
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
-
-                                    <Input
-                                        id="name"
-                                        className="mt-1 block w-full"
-                                        defaultValue={auth.user.name}
-                                        name="name"
-                                        required
-                                        autoComplete="name"
-                                        placeholder="Full name"
+                                <div className="flex-1">
+                                    <ImageUpload
+                                        name="profile_photo"
+                                        label="Upload Profile Picture"
+                                        value={auth?.user?.profile_photo_url ?? ''}
+                                        maxSize={5}
+                                        description="Accepted formats: PNG, JPG, JPEG, GIF (Max size: 5MB)"
                                     />
+                                </div>
+                                <div className='grid gap-6 md:grid-cols-2'>
+                                    <Input type="hidden" name="_method" value="PATCH" />
+                                    <div className="">
+                                        <Label htmlFor="name">Name</Label>
 
-                                    <InputError className="mt-2" message={errors.name} />
+                                        <Input
+                                            id="name"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.name}
+                                            name="name"
+                                            required
+                                            autoComplete="name"
+                                            placeholder="Full name"
+                                        />
+
+                                        <InputError className="mt-2" message={errors.name} />
+                                    </div>
+                                    <div className="">
+                                        <Label htmlFor="name">Phone</Label>
+
+                                        <Input
+                                            id="phone"
+                                            type="number"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.phone ?? ''}
+                                            name="phone"
+                                            autoComplete="phone"
+                                            placeholder="example: 01234567890"
+                                        />
+
+                                        <InputError className="mt-2" message={errors.phone} />
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-2">
@@ -113,7 +142,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                 </div>
 
                 <DeleteUser />
-            </SettingsLayout>
+            </ProfileLayout>
         </AppLayout>
     );
 }
