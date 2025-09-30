@@ -38,7 +38,7 @@ class CompanyController extends Controller
             ->sum('employees_count');
 
         $companies = CompanyResource::collection($companies)->additional(['meta' => ['employees_count' => $employeesCount]]);
-        return inertia()->render('Admin/Companies/Index', [
+        return inertia()->render('Dashboard/Companies/Index', [
             'companies' => $companies,
         ]);
     }
@@ -50,7 +50,7 @@ class CompanyController extends Controller
      */
     public function create(): Response
     {
-        return inertia()->render('Admin/Companies/Create');
+        return inertia()->render('Dashboard/Companies/Create');
     }
 
     /**
@@ -83,7 +83,7 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         $company->load('employees');
-        return inertia()->render('Admin/Companies/Show', [
+        return inertia()->render('Dashboard/Companies/Show', [
             'company' => CompanyResource::make($company)->resolve()
         ]);
     }
@@ -96,7 +96,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        return inertia()->render('Admin/Companies/Edit', [
+        return inertia()->render('Dashboard/Companies/Edit', [
             'company' => CompanyResource::make($company)->resolve()
         ]);
     }

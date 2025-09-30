@@ -35,7 +35,7 @@ class EmploymentTypeController extends Controller
 
         Log::debug($employmentTypes);
         // For regular page loads, return Inertia response  
-        return Inertia::render('Admin/EmploymentTypes/Index', [
+        return Inertia::render('Dashboard/EmploymentTypes/Index', [
             'employmentTypes' => $employmentTypesCollection ?? [],
         ]);
     }

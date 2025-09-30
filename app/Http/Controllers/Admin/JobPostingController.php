@@ -26,7 +26,7 @@ class JobPostingController extends Controller
             ->latest()
             ->paginate(12);
 
-        return Inertia::render('Admin/JobPostings/Index', [
+        return Inertia::render('Dashboard/JobPostings/Index', [
             'postings' => JobPostingResource::collection($postings),
         ]);
     }
@@ -43,7 +43,7 @@ class JobPostingController extends Controller
             // ->where('status', 'approved')
             ->get();
 
-        return Inertia::render('Admin/JobPostings/Create', [
+        return Inertia::render('Dashboard/JobPostings/Create', [
             'requisitions' => JobRequisitionResource::collection($requisitions)->resolve(),
             'employmentTypes' => $employmentTypes
         ]);
@@ -72,7 +72,7 @@ class JobPostingController extends Controller
     {
         $jobPosting->load(['jobRequisition.department', 'jobRequisition.jobTitle', 'jobRequisition.requester', 'company', 'employmentType']);
         
-        return Inertia::render('Admin/JobPostings/Show', [
+        return Inertia::render('Dashboard/JobPostings/Show', [
             'posting' => (new JobPostingResource($jobPosting))->resolve(),
         ]);
     }
@@ -91,7 +91,7 @@ class JobPostingController extends Controller
             // ->where('status', 'approved')
             ->get();
 
-        return Inertia::render('Admin/JobPostings/Edit', [
+        return Inertia::render('Dashboard/JobPostings/Edit', [
             'posting' => (new JobPostingResource($jobPosting))->resolve(),
             'requisitions' => $requisitions,
             'employmentTypes' => $employmentTypes

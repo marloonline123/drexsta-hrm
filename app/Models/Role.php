@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Role extends SpatieRole
 {
     use HasSearchScope, HasCompanyScope;
+
+    protected $fillable = [
+        'name',
+        'guard_name',
+        'company_id',
+    ];
+    
     /**
      * Get the company that owns the role.
      */

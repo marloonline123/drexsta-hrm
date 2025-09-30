@@ -25,7 +25,7 @@ class AbilitiesController extends Controller
             
         $abilitiesCollection = AbilityResource::collection($abilities);
 
-        return Inertia::render('Admin/Abilities/Index', [
+        return Inertia::render('Dashboard/Abilities/Index', [
             'abilities' => $abilitiesCollection,
         ]);
     }

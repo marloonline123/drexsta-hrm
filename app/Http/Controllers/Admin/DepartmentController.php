@@ -31,7 +31,7 @@ class DepartmentController extends Controller
         $activeDepartmentsCount = $company?->departments()->active()->count();
         $departments = DepartmentResource::collection($departments)->additional(['meta' => ['employees_count' => $company?->employees()->count(), 'active_departments_count' => $activeDepartmentsCount]]);
 
-        return Inertia::render('Admin/Departments/Index', [
+        return Inertia::render('Dashboard/Departments/Index', [
             'departments' => $departments,
         ]);
     }
@@ -44,7 +44,7 @@ class DepartmentController extends Controller
         $user = Auth::user();
         $employees = $user->activeCompany?->users()->get() ?? [];
 
-        return Inertia::render('Admin/Departments/Create', [
+        return Inertia::render('Dashboard/Departments/Create', [
             'employees' => UserResource::collection($employees)->resolve(),
         ]);
     }
@@ -71,7 +71,7 @@ class DepartmentController extends Controller
     public function show(Department $department)
     {
         $department->load('managerRelation', 'employees');
-        return Inertia::render('Admin/Departments/Show', [
+        return Inertia::render('Dashboard/Departments/Show', [
             'department' => (new DepartmentResource($department))->resolve(),
         ]);
     }
@@ -85,7 +85,7 @@ class DepartmentController extends Controller
         $department->load('managerRelation', 'employees');
         $employees = $user->activeCompany?->users()->get() ?? [];
 
-        return Inertia::render('Admin/Departments/Edit', [
+        return Inertia::render('Dashboard/Departments/Edit', [
             'department' => (new DepartmentResource($department))->resolve(),
             'employees' => UserResource::collection($employees)->resolve()
         ]);

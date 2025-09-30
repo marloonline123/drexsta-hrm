@@ -27,6 +27,6 @@ trait HasRoles
             return $relation;
         }
 
-        return $relation->where(config('permission.table_names.roles').'.company_id', '=', Auth::user()->company_id);
+        return $relation->where(config('permission.table_names.roles').'.company_id', '=', Auth::user()->active_company_id);
     }
 }

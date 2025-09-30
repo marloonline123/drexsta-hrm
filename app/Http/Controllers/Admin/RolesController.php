@@ -19,11 +19,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $company = $user->activeCompany();
-        
-        $roles = $company?->roles()
-            ->with('permissions', 'users')
+        $roles = Role::with('permissions', 'users')
             ->search(request('search'), 'name')
             ->paginate(12)
             ->withQueryString();
@@ -31,7 +27,7 @@ class RolesController extends Controller
         $rolesCollection = RoleResource::collection($roles);
 
         // Also fetch permissions for the frontend
-        $permissions = $company->permissions()->get();
+        $permissions = Permission::all();
         
         // Group permissions by name pattern (e.g., users.view, users.create)
         $groupedPermissions = [];
@@ -52,7 +48,7 @@ class RolesController extends Controller
             ];
         }
 
-        return Inertia::render('Admin/Roles/Index', [
+        return Inertia::render('Dashboard/Roles/Index', [
             'roles' => $rolesCollection,
             'permissions' => $groupedPermissions
         ]);
@@ -63,25 +59,12 @@ class RolesController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $user = Auth::user();
-        $company = $user->activeCompany();
-        
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
-        
         $data = $request->validated();
         
-        $role = Role::create([
-            'name' => $data['name'],
-            'guard_name' => 'web',
-            'company_id' => $company->id,
-        ]);
+        $role = Role::create($data);
         
         if (isset($data['permissions'])) {
-            $permissions = Permission::where('company_id', $company->id)
-                ->whereIn('id', $data['permissions'])
-                ->get();
+            $permissions = Permission::whereIn('id', $data['permissions'])->get();
             $role->syncPermissions($permissions);
         }
 
@@ -93,28 +76,12 @@ class RolesController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $user = Auth::user();
-        $company = $user->activeCompany();
-        
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
-        
-        // Ensure the role belongs to the current company
-        if ($role->company_id !== $company->id) {
-            return back()->with('error', 'Unauthorized access to role');
-        }
-        
         $data = $request->validated();
         
-        $role->update([
-            'name' => $data['name'],
-        ]);
+        $role->update($data);
         
         if (isset($data['permissions'])) {
-            $permissions = Permission::where('company_id', $company->id)
-                ->whereIn('id', $data['permissions'])
-                ->get();
+            $permissions = Permission::whereIn('id', $data['permissions'])->get();
             $role->syncPermissions($permissions);
         }
 
@@ -126,23 +93,6 @@ class RolesController extends Controller
      */
     public function destroy(Role $role)
     {
-        $user = Auth::user();
-        $company = $user->activeCompany();
-        
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
-        
-        // Ensure the role belongs to the current company
-        if ($role->company_id !== $company->id) {
-            return back()->with('error', 'Unauthorized access to role');
-        }
-        
-        // Check if role has users assigned
-        if ($role->users()->count() > 0) {
-            return back()->with('error', 'Cannot delete role with assigned users');
-        }
-
         $role->delete();
 
         return back()->with('success', 'Role deleted successfully');
@@ -154,7 +104,7 @@ class RolesController extends Controller
     public function permissions()
     {
         $user = Auth::user();
-        $company = $user->activeCompany();
+        $company = $user->activeCompany;
         
         if (!$company) {
             return response()->json(['permissions' => []]);

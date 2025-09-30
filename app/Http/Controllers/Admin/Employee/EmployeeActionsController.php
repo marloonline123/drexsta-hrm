@@ -33,7 +33,7 @@ class EmployeeActionsController extends Controller
         // Get all roles for the current company
         $roles = $company->roles()->get();
 
-        return Inertia::render('Admin/Employees/AssignRoles', [
+        return Inertia::render('Dashboard/Employees/AssignRoles', [
             'employee' => (new EmployeeResource($employee))->resolve(),
             'roles' => RoleResource::collection($roles)->resolve(),
         ]);
@@ -54,7 +54,7 @@ class EmployeeActionsController extends Controller
         // Get all abilities for the current company
         $abilities = $company->abilities()->get();
 
-        return Inertia::render('Admin/Employees/AssignAbilities', [
+        return Inertia::render('Dashboard/Employees/AssignAbilities', [
             'employee' => (new EmployeeResource($employee))->resolve(),
             'abilities' => AbilityResource::collection($abilities)->resolve(),
         ]);
@@ -75,7 +75,7 @@ class EmployeeActionsController extends Controller
         // Get all abilities for the current company
         $departments = $company->departments()->active(column: 'departments.is_active')->get();
 
-        return Inertia::render('Admin/Employees/AssignDepartments', [
+        return Inertia::render('Dashboard/Employees/AssignDepartments', [
             'employee' => (new EmployeeResource($employee))->resolve(),
             'departments' => DepartmentResource::collection($departments)->resolve(),
         ]);
@@ -96,7 +96,7 @@ class EmployeeActionsController extends Controller
         // Get all abilities for the current company
         $jobTitles = $company->jobTitles()->active(column: 'job_titles.is_active')->get();
 
-        return Inertia::render('Admin/Employees/AssignJobTitles', [
+        return Inertia::render('Dashboard/Employees/AssignJobTitles', [
             'employee' => (new EmployeeResource($employee))->resolve(),
             'jobTitles' => JobTitleResource::collection($jobTitles)->resolve(),
         ]);
@@ -124,7 +124,8 @@ class EmployeeActionsController extends Controller
         // Get roles that belong to the current company
         $roles = $company->roles()->whereIn('id', $request->input('roles', []))->get();
 
-        $employee->syncRolesWithCompany($roles, $company->id);
+        $employee->roles()->detach(); // ($roles->toArray(), ['company_id' => $company->id]);
+        $employee->roles()->attach($roles, ['company_id' => $company->id]);
 
         return redirect()->route('dashboard.employees.edit', $employee)->with('success', 'Roles assigned successfully');
     }

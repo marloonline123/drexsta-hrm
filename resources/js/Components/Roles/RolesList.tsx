@@ -120,7 +120,7 @@ export default function RolesList({ roles, groupedPermissions }: RolesListProps)
             {editingRole && (
                 <EditRoleModal
                     role={editingRole}
-                    open={true}
+                    open={editingRole !== null}
                     onOpenChange={(open) => !open && setEditingRole(null)}
                     groupedPermissions={groupedPermissions}
                 />
@@ -129,7 +129,7 @@ export default function RolesList({ roles, groupedPermissions }: RolesListProps)
             {deletingRole && (
                 <DeleteRoleModal
                     role={deletingRole}
-                    open={true}
+                    open={deletingRole !== null}
                     onOpenChange={(open) => !open && setDeletingRole(null)}
                 />
             )}

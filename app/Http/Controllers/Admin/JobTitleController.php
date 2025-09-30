@@ -33,7 +33,7 @@ class JobTitleController extends Controller
 
         Log::debug($jobTitles);
         // For regular page loads, return Inertia response  
-        return Inertia::render('Admin/JobTitles/Index', [
+        return Inertia::render('Dashboard/JobTitles/Index', [
             'jobTitles' => $jobTitlesCollection ?? [],
         ]);
     }

@@ -24,7 +24,7 @@ class ApprovalPolicyController extends BaseControlller
 
         $abilities = Ability::all();
 
-        return Inertia::render('Admin/ApprovalPolicies/Index', [
+        return Inertia::render('Dashboard/ApprovalPolicies/Index', [
             'policies' => ApprovalPolicyResource::collection($policies)->resolve(),
             'abilities' => $abilities,
         ]);

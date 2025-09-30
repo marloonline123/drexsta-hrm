@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\GlobalScopes\HasSearchScope;
-use App\Traits\ModelScopes\HasCompanyRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -66,12 +65,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function ownedCompanies()
     {
-        return $this->belongsToMany(Company::class, 'company_user')->where('company_user.role', 'owner');
+        return $this->belongsToMany(Company::class, 'company_user')->using(CompanyUser::class)->where('company_user.role', 'owner');
     }
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class, 'company_user');
+        return $this->belongsToMany(Company::class, 'company_user')->using(CompanyUser::class);
     }
 
     public function abilities()

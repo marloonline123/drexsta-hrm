@@ -38,12 +38,12 @@ class Company extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'company_user')->withPivot('role');
+        return $this->belongsToMany(User::class, 'company_user')->using(CompanyUser::class)->withPivot('role');
     }
 
     public function employees(): BelongsToMany
     {
-        return $this->users()->where('company_user.role', '!=', 'owner')->withPivot('role');
+        return $this->users()->where('company_user.role', '!=', 'owner')->using(CompanyUser::class)->withPivot('role');
     }
 
     public function departments(): HasMany

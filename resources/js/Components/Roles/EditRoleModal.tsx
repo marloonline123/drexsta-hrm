@@ -8,11 +8,11 @@ interface EditRoleModalProps {
     role: Role;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    groupedPermissions: Record<string, any[]>;
+    groupedPermissions: Record<string, string[]>;
 }
 
 export default function EditRoleModal({ role, open, onOpenChange, groupedPermissions }: EditRoleModalProps) {
-    const { data, setData, put, processing, errors, reset } = useForm<Omit<Role, 'description'>>({
+    const { data, setData, put, processing, errors, reset } = useForm<{ name: string; permissions: string[] }>({
         name: role.name,
         permissions: role.permissions.map(p => p.id.toString())
     });
@@ -22,7 +22,8 @@ export default function EditRoleModal({ role, open, onOpenChange, groupedPermiss
         put(route('dashboard.roles.update', role.id), {
             onSuccess: () => {
                 onOpenChange(false);
-            }
+            },
+            preserveScroll: true,
         });
     };
 
@@ -49,7 +50,7 @@ export default function EditRoleModal({ role, open, onOpenChange, groupedPermiss
 
                 <RoleForm
                     data={data}
-                    setData={(key, value) => setData(key as any, value)}
+                    setData={(key, value) => setData(key, value)}
                     errors={errors}
                     groupedPermissions={groupedPermissions}
                     processing={processing}

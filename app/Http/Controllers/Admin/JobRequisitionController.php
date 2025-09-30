@@ -27,7 +27,7 @@ class JobRequisitionController extends Controller
         $departments = Department::all();
         $jobTitles = JobTitle::all();
 
-        return Inertia::render('Admin/JobRequisitions/Index', [
+        return Inertia::render('Dashboard/JobRequisitions/Index', [
             'requisitions' => JobRequisitionResource::collection($requisitions),
             'departments' => $departments,
             'jobTitles' => $jobTitles,
@@ -44,7 +44,7 @@ class JobRequisitionController extends Controller
         $departments = Department::all();
         $jobTitles = JobTitle::all();
 
-        return Inertia::render('Admin/JobRequisitions/Create', [
+        return Inertia::render('Dashboard/JobRequisitions/Create', [
             'departments' => $departments,
             'jobTitles' => $jobTitles,
             'employmentTypes' => $company?->employmentTypes,
@@ -76,7 +76,7 @@ class JobRequisitionController extends Controller
         // $this->authorize('view', $jobRequisition);
         $jobRequisition->load(['department', 'jobTitle', 'requester', 'company', 'employmentType']);
         
-        return Inertia::render('Admin/JobRequisitions/Show', [
+        return Inertia::render('Dashboard/JobRequisitions/Show', [
             'requisition' => (new JobRequisitionResource($jobRequisition))->resolve(),
         ]);
     }
@@ -93,7 +93,7 @@ class JobRequisitionController extends Controller
         $departments = Department::all();
         $jobTitles = JobTitle::all();
 
-        return Inertia::render('Admin/JobRequisitions/Edit', [
+        return Inertia::render('Dashboard/JobRequisitions/Edit', [
             'requisition' => (new JobRequisitionResource($jobRequisition))->resolve(),
             'departments' => $departments,
             'jobTitles' => $jobTitles,

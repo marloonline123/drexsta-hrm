@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EmployeesResourceController extends Controller
@@ -31,7 +32,7 @@ class EmployeesResourceController extends Controller
             
         $employeesCollection = EmployeeResource::collection($employees);
 
-        return Inertia::render('Admin/Employees/Index', [
+        return Inertia::render('Dashboard/Employees/Index', [
             'employees' => $employeesCollection,
         ]);
     }
@@ -41,7 +42,7 @@ class EmployeesResourceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Employees/Create');
+        return Inertia::render('Dashboard/Employees/Create');
     }
 
     /**
@@ -64,7 +65,7 @@ class EmployeesResourceController extends Controller
         ]);
         
         // Attach the employee to the company
-        $company->users()->attach($employee->id, ['role' => 'employee', 'created_at' => now(), 'updated_at' => now()]);
+        $company->users()->attach($employee->id, ['role' => 'employee']);
 
         event(new EmployeeCreated($employee));
 
@@ -79,8 +80,7 @@ class EmployeesResourceController extends Controller
         // $this->authorize('view', $employee);
         
         $employee->load('roles', 'permissions', 'abilities', 'activeCompany', 'departments', 'jobTitles');
-        
-        return Inertia::render('Admin/Employees/Show', [
+        return Inertia::render('Dashboard/Employees/Show', [
             'employee' => (new EmployeeResource($employee))->resolve(),
         ]);
     }
@@ -94,7 +94,7 @@ class EmployeesResourceController extends Controller
         
         $employee->load('roles', 'permissions', 'abilities', 'activeCompany', 'departments', 'jobTitles');
         
-        return Inertia::render('Admin/Employees/Edit', [
+        return Inertia::render('Dashboard/Employees/Edit', [
             'employee' => (new EmployeeResource($employee))->resolve(),
         ]);
     }
