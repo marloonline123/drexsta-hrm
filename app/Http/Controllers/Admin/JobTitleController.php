@@ -21,8 +21,7 @@ class JobTitleController extends Controller
         $user = Auth::user();
         $company = $user->activeCompany;
         
-        $jobTitles = $company?->jobTitles()
-            ->search($request->get('search'), ['title', 'description'])
+        $jobTitles = JobTitle::search($request->get('search'), ['title', 'description'])
             ->filterBy('is_active', $request->has('status') ? $request->get('status') === 'active' : null)
             ->latest()
             ->paginate(12)
@@ -44,9 +43,7 @@ class JobTitleController extends Controller
      */
     public function store(JobTitleRequest $request)
     {
-        $user = Auth::user();
         $data = $request->validated();
-        $data['company_id'] = $user->active_company_id;
         $data['slug'] = generateSlug($data['title']);
         JobTitle::create($data);
 

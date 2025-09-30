@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Auth;
 
-class CompanyUser extends Model
+class CompanyUser extends Pivot
 {
-    // protected static function booted(): void
-    // {
-    //     self::created(static function (CompanyUser $companyUser): void {
-    //         $companyUser->updated_at = now();
-    //         $companyUser->created_at = now();
-    //         $companyUser->save();
-    //     });
-    // }
-
     protected $table = 'company_user';
 
-    public $timestamps = true;
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (Auth::check()) {
+                $model->company_id = $model->company_id ?? Auth::user()->active_company_id;
+            }
+            $model->updated_at = $model->updated_at ?? now();
+            $model->created_at = $model->created_at ?? now();
+        });
+    }
 
     protected $fillable = [
         'company_id',

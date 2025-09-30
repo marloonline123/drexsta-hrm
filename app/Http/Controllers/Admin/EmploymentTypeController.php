@@ -23,8 +23,7 @@ class EmploymentTypeController extends Controller
         $user = Auth::user();
         $company = $user->activeCompany;
         
-        $employmentTypes = $company?->employmentTypes()
-            ->search($request->get('search'), ['name', 'description'])
+        $employmentTypes = EmploymentType::search($request->get('search'), ['name', 'description'])
             ->filterBy('is_active', $request->has('status') ? $request->get('status') === 'active' : null)
             ->latest()
             ->paginate(12)
@@ -46,9 +45,7 @@ class EmploymentTypeController extends Controller
      */
     public function store(EmploymentTypeRequest $request)
     {
-        $user = Auth::user();
         $data = $request->validated();
-        $data['company_id'] = $user->active_company_id;
         $data['slug'] = generateSlug($data['name']);
         EmploymentType::create($data);
 

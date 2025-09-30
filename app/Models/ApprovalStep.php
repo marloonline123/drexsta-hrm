@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ApprovalStep extends Model
+class ApprovalStep extends BaseModel
 {
     protected $fillable = [
         'approval_instance_id',

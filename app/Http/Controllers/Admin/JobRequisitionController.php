@@ -20,15 +20,12 @@ class JobRequisitionController extends Controller
      */
     public function index()
     {
-        $company = request()->user()->activeCompany();
-        
-        $requisitions = JobRequisition::where('company_id', $company->id)
-            ->with(['department', 'jobTitle', 'requester'])
+        $requisitions = JobRequisition::with(['department', 'jobTitle', 'requester'])
             ->latest()
             ->paginate(10);
 
-        $departments = Department::where('company_id', $company->id)->get();
-        $jobTitles = JobTitle::where('company_id', $company->id)->get();
+        $departments = Department::all();
+        $jobTitles = JobTitle::all();
 
         return Inertia::render('Admin/JobRequisitions/Index', [
             'requisitions' => JobRequisitionResource::collection($requisitions),
@@ -42,10 +39,10 @@ class JobRequisitionController extends Controller
      */
     public function create()
     {
-        $company = request()->user()->activeCompany();
+        $company = request()->user()->activeCompany;
         
-        $departments = Department::where('company_id', $company?->id)->get();
-        $jobTitles = JobTitle::where('company_id', $company?->id)->get();
+        $departments = Department::all();
+        $jobTitles = JobTitle::all();
 
         return Inertia::render('Admin/JobRequisitions/Create', [
             'departments' => $departments,
@@ -60,9 +57,7 @@ class JobRequisitionController extends Controller
     public function store(JobRequisitionRequest $request)
     {
         $data = $request->validated();
-        $company = request()->user()->activeCompany();
         $requisition = JobRequisition::create($data + [
-            'company_id' => $company->id, 
             'requisition_code' => $this->generateRequisitionCode(),
             'requested_by' => request()->user()->id
         ]);
@@ -80,7 +75,6 @@ class JobRequisitionController extends Controller
     {
         // $this->authorize('view', $jobRequisition);
         $jobRequisition->load(['department', 'jobTitle', 'requester', 'company', 'employmentType']);
-        $jobRequisition->load(['department', 'jobTitle', 'requester', 'company']);
         
         return Inertia::render('Admin/JobRequisitions/Show', [
             'requisition' => (new JobRequisitionResource($jobRequisition))->resolve(),
@@ -94,12 +88,10 @@ class JobRequisitionController extends Controller
     {
         // $this->authorize('update', $jobRequisition);
         $jobRequisition->load(['department', 'jobTitle', 'requester', 'company', 'employmentType']);
-        $company = request()->user()->activeCompany();
+        $company = request()->user()->activeCompany;
         
-        $departments = Department::where('company_id', $company?->id)->get();
-        $jobTitles = JobTitle::where('company_id', $company?->id)->get();
-
-        $jobRequisition->load(['department', 'jobTitle', 'requester', 'company']);
+        $departments = Department::all();
+        $jobTitles = JobTitle::all();
 
         return Inertia::render('Admin/JobRequisitions/Edit', [
             'requisition' => (new JobRequisitionResource($jobRequisition))->resolve(),
@@ -139,10 +131,9 @@ class JobRequisitionController extends Controller
      */
     private function generateRequisitionCode(): string
     {
-        $company = request()->user()->activeCompany();
-        $prefix = 'JR_' . 'CMPID' . '-' . request()->user()->active_company_id . '_' . now()->format('Y-m-d') . '_';
-        $lastRequisition = JobRequisition::where('company_id', $company->id)
-            ->where('requisition_code', 'like', $prefix . '%')
+        $companyId = request()->user()->active_company_id;
+        $prefix = 'JR_' . 'CMPID' . '-' . $companyId . '_' . now()->format('Y-m-d') . '_';
+        $lastRequisition = JobRequisition::where('requisition_code', 'like', $prefix . '%')
             ->orderBy('id', 'desc')
             ->first();
 

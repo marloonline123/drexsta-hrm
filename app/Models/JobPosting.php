@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class JobPosting extends Model
-{
+class JobPosting extends BaseModel
+{    
     protected $fillable = [
         'company_id',
         'job_requisition_id',

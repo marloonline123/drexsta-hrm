@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Traits\GlobalScopes\HasActiveScope;
 use App\Traits\GlobalScopes\HasFilterByScope;
 use App\Traits\GlobalScopes\HasSearchScope;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Department extends Model
+class Department extends BaseModel
 {
     use SoftDeletes, HasSearchScope, HasFilterByScope, HasActiveScope;
 
@@ -29,7 +28,9 @@ class Department extends Model
 
     public function employees(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'department_employee', 'department_id', 'employee_id')->withPivot('role');
+        return $this->belongsToMany(User::class, 'department_employee', 'department_id', 'employee_id')
+            ->using(DepartmentEmployee::class)
+            ->withPivot('role');
     }
 
     public function managerRelation(): BelongsToMany

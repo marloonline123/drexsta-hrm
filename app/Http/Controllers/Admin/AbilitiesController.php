@@ -18,15 +18,7 @@ class AbilitiesController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $company = $user->activeCompany;
-        
-        if (!$company) {
-            return redirect()->route('select-company.show');
-        }
-        
-        $abilities = $company->abilities()
-            ->search(request()->input('search'), ['key', 'label', 'description'])
+        $abilities = Ability::search(request()->input('search'), ['key', 'label', 'description'])
             ->latest()
             ->paginate(12)
             ->withQueryString();
@@ -43,18 +35,8 @@ class AbilitiesController extends Controller
      */
     public function store(AbilityRequest $request)
     {
-        $user = Auth::user();
-        $company = $user->activeCompany;
-        
         $data = $request->validated();
-        
-        $ability = Ability::create([
-            'company_id' => $company->id,
-            'key' => $data['key'],
-            'label' => $data['label'],
-            'description' => $data['description'] ?? null,
-        ]);
-
+        Ability::create($data);
         return back()->with('success', 'Ability created successfully');
     }
 
@@ -64,9 +46,7 @@ class AbilitiesController extends Controller
     public function update(AbilityRequest $request, Ability $ability)
     {
         $data = $request->validated();
-        
         $ability->update($data);
-
         return back()->with('success', 'Ability updated successfully');
     }
 
@@ -75,25 +55,7 @@ class AbilitiesController extends Controller
      */
     public function destroy(Ability $ability)
     {
-        $user = Auth::user();
-        $company = $user->activeCompany;
-        
-        if (!$company) {
-            return back()->with('error', 'No active company found');
-        }
-        
-        // Ensure the ability belongs to the current company
-        if ($ability->company_id !== $company->id) {
-            return back()->with('error', 'Unauthorized access to ability');
-        }
-        
-        // Check if ability has users assigned
-        if ($ability->users()->count() > 0) {
-            return back()->with('error', 'Cannot delete ability with assigned users');
-        }
-
         $ability->delete();
-
         return back()->with('success', 'Ability deleted successfully');
     }
 }

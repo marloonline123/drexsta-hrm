@@ -18,14 +18,11 @@ class ApprovalPolicyController extends BaseControlller
      */
     public function index()
     {
-        $company = request()->user()->activeCompany();
-        
-        $policies = $company?->approvalPolicies()
-            ->with('company')
+        $policies = ApprovalPolicy::with('company')
             ->latest()
             ->get();
 
-        $abilities = $company?->abilities()->get();
+        $abilities = Ability::all();
 
         return Inertia::render('Admin/ApprovalPolicies/Index', [
             'policies' => ApprovalPolicyResource::collection($policies)->resolve(),

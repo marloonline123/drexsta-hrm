@@ -22,12 +22,9 @@ class JobPostingController extends Controller
      */
     public function index()
     {
-        $company = request()->user()->activeCompany();
-        
-        $postings = JobPosting::where('company_id', $company?->id)
-            ->with(['jobRequisition.department', 'jobRequisition.jobTitle'])
+        $postings = JobPosting::with(['jobRequisition.department', 'jobRequisition.jobTitle'])
             ->latest()
-            ->paginate(10);
+            ->paginate(12);
 
         return Inertia::render('Admin/JobPostings/Index', [
             'postings' => JobPostingResource::collection($postings),
@@ -39,11 +36,11 @@ class JobPostingController extends Controller
      */
     public function create()
     {
-        $company = request()->user()->activeCompany();
+        $company = request()->user()->activeCompany;
         $employmentTypes = $company?->employmentTypes()->active()->get();
         $requisitions = $company?->jobRequisitions()
-            // ->where('status', 'approved')
             ->with(['department', 'jobTitle'])
+            // ->where('status', 'approved')
             ->get();
 
         return Inertia::render('Admin/JobPostings/Create', [
@@ -86,12 +83,12 @@ class JobPostingController extends Controller
     public function edit(JobPosting $jobPosting)
     {
         $jobPosting->load(['jobRequisition.department', 'jobRequisition.jobTitle', 'jobRequisition.requester', 'company']);
-        $company = request()->user()->activeCompany();
+        $company = request()->user()->activeCompany;
         $employmentTypes = $company?->employmentTypes()->active()->get();
         
         $requisitions = JobRequisition::where('company_id', $company?->id)
-            // ->where('status', 'approved')
             ->with(['department', 'jobTitle'])
+            // ->where('status', 'approved')
             ->get();
 
         return Inertia::render('Admin/JobPostings/Edit', [

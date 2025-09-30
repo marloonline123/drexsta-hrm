@@ -21,8 +21,7 @@ class DepartmentController extends Controller
     {
         $user = Auth::user();
         $company = $user->activeCompany;
-        $departments = $company?->departments()
-            ->with('managerRelation', 'employees')
+        $departments = Department::with('managerRelation', 'employees')
             ->search(request('search'), ['name', 'description'])
             ->filterBy('departments.is_active', request()->has('status') ? request('status') === 'active' : null)
             ->latest()
@@ -43,10 +42,10 @@ class DepartmentController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $employees = $user->activeCompany()?->users()->get() ?? [];
+        $employees = $user->activeCompany?->users()->get() ?? [];
 
         return Inertia::render('Admin/Departments/Create', [
-            'employees' => $employees
+            'employees' => UserResource::collection($employees)->resolve(),
         ]);
     }
 
@@ -58,9 +57,8 @@ class DepartmentController extends Controller
         $user = Auth::user();
         $data = $request->validated();
         $data['slug'] = generateSlug($data['name']);
-        $data['company_id'] = $user->active_company_id;
         $department = Department::create($data);
-        $department->employees()->attach($data['manager_id'], ['role' => 'manager', 'company_id' => $user->active_company_id, 'created_at' => now(), 'updated_at' => now()]);
+        $department->employees()->attach($data['manager_id'], ['role' => 'manager']);
 
         event(new DepartmentCreated($department));
         
@@ -85,7 +83,7 @@ class DepartmentController extends Controller
     {
         $user = Auth::user();
         $department->load('managerRelation', 'employees');
-        $employees = $user->activeCompany()?->users()->get() ?? [];
+        $employees = $user->activeCompany?->users()->get() ?? [];
 
         return Inertia::render('Admin/Departments/Edit', [
             'department' => (new DepartmentResource($department))->resolve(),
@@ -110,8 +108,6 @@ class DepartmentController extends Controller
             $department->employees()->syncWithoutDetaching([
                 $data['manager_id'] => [
                     'role' => 'manager',
-                    'company_id' => $department->company_id,
-                    'updated_at' => now(),
                 ],
             ]);
         }

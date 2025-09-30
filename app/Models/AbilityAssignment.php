@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AbilityAssignment extends Model
+class AbilityAssignment extends BaseModel
 {
     protected $fillable = [
         'company_id',

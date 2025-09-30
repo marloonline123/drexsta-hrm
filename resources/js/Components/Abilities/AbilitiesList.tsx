@@ -38,7 +38,6 @@ export default function AbilitiesList({ abilities }: AbilitiesListProps) {
                                     <TableHead>{'Ability Key'}</TableHead>
                                     <TableHead>{'Label'}</TableHead>
                                     <TableHead>{'Users'}</TableHead>
-                                    <TableHead>{'Updated'}</TableHead>
                                     <TableHead className="w-[70px]">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -69,9 +68,6 @@ export default function AbilitiesList({ abilities }: AbilitiesListProps) {
                                             <Badge variant={getAbilityStatusColor(ability.users_count)}>
                                                 {ability.users_count} users
                                             </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-muted-foreground">
-                                            {ability.updated_at}
                                         </TableCell>
                                         <TableCell>
                                             <DropdownMenu>
