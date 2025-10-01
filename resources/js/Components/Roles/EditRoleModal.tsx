@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/Components/Ui/dialog';
 import RoleForm from './RoleForm';
-import { Role } from '@/Types/roles';
+import { GroupedPermission, Role, RoleFormData } from '@/Types/roles';
 
 interface EditRoleModalProps {
     role: Role;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    groupedPermissions: Record<string, string[]>;
+    groupedPermissions: Record<string, GroupedPermission[]>;
 }
 
 export default function EditRoleModal({ role, open, onOpenChange, groupedPermissions }: EditRoleModalProps) {
-    const { data, setData, put, processing, errors, reset } = useForm<{ name: string; permissions: string[] }>({
+    const { data, setData, put, processing, errors, reset } = useForm({
         name: role.name,
         permissions: role.permissions.map(p => p.id.toString())
     });
@@ -50,7 +50,7 @@ export default function EditRoleModal({ role, open, onOpenChange, groupedPermiss
 
                 <RoleForm
                     data={data}
-                    setData={(key, value) => setData(key, value)}
+                    setData={(key, value) => setData(key as keyof RoleFormData, value)}
                     errors={errors}
                     groupedPermissions={groupedPermissions}
                     processing={processing}

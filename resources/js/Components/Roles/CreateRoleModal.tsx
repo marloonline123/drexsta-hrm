@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/Components/Ui/dialog';
 import RoleForm from './RoleForm';
-import { RoleFormData } from '@/Types/roles';
+import { GroupedPermission, RoleFormData } from '@/Types/roles';
 
 interface CreateRoleModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    groupedPermissions: Record<string, any[]>;
+    groupedPermissions: Record<string, GroupedPermission[]>;
 }
 
 export default function CreateRoleModal({ open, onOpenChange, groupedPermissions }: CreateRoleModalProps) {
@@ -44,7 +44,7 @@ export default function CreateRoleModal({ open, onOpenChange, groupedPermissions
 
                 <RoleForm
                     data={data}
-                    setData={(key, value) => setData(key as any, value)}
+                    setData={(key, value) => setData(key as keyof RoleFormData, value)}
                     errors={errors}
                     groupedPermissions={groupedPermissions}
                     processing={processing}

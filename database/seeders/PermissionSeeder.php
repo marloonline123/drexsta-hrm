@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use Illuminate\Database\Seeder;
 use App\Services\Business\CompanySetupService;
-use App\Services\Business\PermissionRoleSetupService;
+use App\Services\Business\CompanySetup\PermissionRoleSetupService;
 
 class PermissionSeeder extends Seeder
 {

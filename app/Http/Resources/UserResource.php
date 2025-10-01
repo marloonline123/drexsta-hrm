@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Admin\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +31,8 @@ class UserResource extends JsonResource
             ),
             'activeCompany' => $this->when('activeCompany', (new CompanyResource($this->activeCompany))->resolve()),
             'joined_at' => $this->created_at?->format('Y-m-d'),
+            'roles' => $this->when('roles', RoleResource::collection($this->roles)->resolve()),
+            'permissions' => $this->when('permissions', PermissionResource::collection($this->permissions)->resolve()),
         ];
     }
 }

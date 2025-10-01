@@ -3,8 +3,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from '@/Components/Ui/button';
 import { Badge } from '@/Components/Ui/badge';
 import { Separator } from '@/Components/Ui/separator';
-import { Crown, Shield, Users, Building, Clock, Calculator, FileText, Settings } from 'lucide-react';
+import { Crown, Shield } from 'lucide-react';
 import { Role } from '@/Types/roles';
+import { getPermissionCategoryIcon } from '@/Lib/permissions';
+import { Permission } from '@/Types/permissions';
 
 interface ViewRoleModalProps {
     role: Role;
@@ -13,21 +15,6 @@ interface ViewRoleModalProps {
 }
 
 export default function ViewRoleModal({ role, open, onOpenChange }: ViewRoleModalProps) {
-    const getCategoryIcon = (category: string) => {
-        const icons = {
-            users: Users,
-            roles: Crown,
-            companies: Building,
-            employees: Users,
-            attendance: Clock,
-            payroll: Calculator,
-            reports: FileText,
-            settings: Settings
-        };
-        const Icon = icons[category as keyof typeof icons] || Shield;
-        return <Icon className="h-4 w-4" />;
-    };
-
     const getRoleStatusColor = (usersCount: number) => {
         if (usersCount === 0) return 'secondary';
         if (usersCount <= 5) return 'default';
@@ -81,11 +68,11 @@ export default function ViewRoleModal({ role, open, onOpenChange }: ViewRoleModa
                                         }
                                         acc[category].push(permission);
                                         return acc;
-                                    }, {} as Record<string, any[]>)
+                                    }, {} as Record<string, Permission[]>)
                                 ).map(([category, permissions]) => (
                                     <div key={category} className="space-y-2">
                                         <div className="flex items-center gap-2">
-                                            {getCategoryIcon(category)}
+                                            {getPermissionCategoryIcon(category)}
                                             <h4 className="font-medium">
                                                 {category.charAt(0).toUpperCase() + category.slice(1)}
                                             </h4>

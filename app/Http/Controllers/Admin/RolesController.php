@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Role;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Log;
 
 class RolesController extends Controller
 {
@@ -47,6 +48,8 @@ class RolesController extends Controller
                 'action' => $action,
             ];
         }
+
+        Log::debug($groupedPermissions);
 
         return Inertia::render('Dashboard/Roles/Index', [
             'roles' => $rolesCollection,

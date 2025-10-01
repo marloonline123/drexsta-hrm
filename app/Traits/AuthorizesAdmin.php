@@ -4,11 +4,11 @@ namespace App\Traits;
 
 use App\Models\User;
 
-trait AuthorizesAdminAndEmployersOnly
+trait AuthorizesAdmin
 {
     public function before(User $user, string $ability)
     {
-        if ($user->type === 'admin') {
+        if ($user->roles->includes('Super Admin')) {
             return true;
         }
         

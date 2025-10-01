@@ -199,6 +199,16 @@ const resources = {
                         attendance: 'Attendance Management',
                         payroll: 'Payroll Management',
                         reports: 'Reports & Analytics',
+                        leaves: 'Leave Management',
+                        abilities: 'Abilities Management',
+                        holidays: 'Holidays Management',
+                        "job-titles": 'Job Titles Management',
+                        "job-requisitions": 'Job Requisitions Management',
+                        "job-postings": 'Job Postings Management',
+                        "employment-types": 'Employment Types Management',
+                        "approval-policies": 'Approval Policies Management',
+                        "leave-types": 'Leave Types Management',
+                        departments: 'Departments Management',
                         settings: 'System Settings'
                     },
                     permissionActions: {
@@ -206,7 +216,11 @@ const resources = {
                         create: 'Create',
                         edit: 'Edit',
                         delete: 'Delete',
-                        manage: 'Manage'
+                        manage: 'Manage',
+                        "assign-roles": 'Assign Roles',
+                        "assign-abilities": 'Assign Abilities',
+                        "assign-job-titles": 'Assign Job Titles',
+                        "assign-departments": 'Assign Departments'
                     }
                 },
                 users: {
@@ -715,6 +729,16 @@ const resources = {
                         attendance: 'إدارة الحضور',
                         payroll: 'إدارة كشوف المرتبات',
                         reports: 'التقارير والتحليلات',
+                        leaves: 'إدارة الإجازات',
+                        abilities: 'إدارة القدرات',
+                        holidays: 'إدارة العطلات',
+                        "job-titles": 'إدارة المسميات الوظيفية',
+                        "job-requisitions": 'إدارة طلبات التوظيف',
+                        "job-postings": 'إدارة إعلانات الوظائف',
+                        "employment-types": 'إدارة أنواع التوظيف',
+                        "approval-policies": 'إدارة سياسات الموافقة',
+                        "leave-types": 'إدارة أنواع الإجازات',
+                        departments: 'إدارة الأقسام',
                         settings: 'إعدادات النظام'
                     },
                     permissionActions: {
@@ -722,7 +746,11 @@ const resources = {
                         create: 'إنشاء',
                         edit: 'تعديل',
                         delete: 'حذف',
-                        manage: 'إدارة'
+                        manage: 'إدارة',
+                        "assign-roles": 'تعيين الأدوار',
+                        "assign-abilities": 'تعيين القدرات',
+                        "assign-job-titles": 'تعيين المسميات الوظيفية',
+                        "assign-departments": 'تعيين الأقسام'
                     }
                 },
                 users: {

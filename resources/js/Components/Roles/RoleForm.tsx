@@ -4,11 +4,11 @@ import { Label } from '@/Components/Ui/label';
 import { Checkbox } from '@/Components/Ui/checkbox';
 import { Badge } from '@/Components/Ui/badge';
 import { Separator } from '@/Components/Ui/separator';
-import { Crown, Shield, Users, Building, Clock, Calculator, FileText, Settings } from 'lucide-react';
 import { GroupedPermission } from '@/Types/roles';
 import { useLanguage } from '@/Hooks/use-language';
 import { Button } from '@/Components/Ui/button';
 import InputError from '@/Components/input-error';
+import { getPermissionCategoryIcon } from '@/Lib/permissions';
 
 interface RoleFormProps {
     data: {
@@ -22,6 +22,7 @@ interface RoleFormProps {
     onSubmit: (e: React.FormEvent) => void;
     isEdit?: boolean;
 }
+
 
 export default function RoleForm({
     data,
@@ -40,21 +41,6 @@ export default function RoleForm({
         } else {
             setData('permissions', data.permissions.filter(id => id !== permissionId));
         }
-    };
-
-    const getCategoryIcon = (category: string) => {
-        const icons = {
-            users: Users,
-            roles: Crown,
-            companies: Building,
-            employees: Users,
-            attendance: Clock,
-            payroll: Calculator,
-            reports: FileText,
-            settings: Settings
-        };
-        const Icon = icons[category as keyof typeof icons] || Shield;
-        return <Icon className="h-4 w-4" />;
     };
 
     return (
@@ -90,7 +76,7 @@ export default function RoleForm({
                         {Object.entries(groupedPermissions).map(([category, permissions]) => (
                             <div key={category} className="space-y-3">
                                 <div className="flex items-center gap-2">
-                                    {getCategoryIcon(category)}
+                                    {getPermissionCategoryIcon(category)}
                                     <h4 className="font-medium">
                                         {t(`admin.roles.permissionCategories.${category}`) || category}
                                     </h4>
@@ -109,7 +95,8 @@ export default function RoleForm({
                                                 htmlFor={`permission-${permission.id}`}
                                                 className="text-sm font-normal flex items-center gap-2"
                                             >
-                                                {t(`admin.roles.permissionActions.${permission.action}`) || permission.action}
+                                                {t(`admin.roles.permissionActions.${permission.action}`)}
+                                                {permission.action}
                                                 <Badge variant="secondary" className="text-xs">
                                                     {permission.action}
                                                 </Badge>
