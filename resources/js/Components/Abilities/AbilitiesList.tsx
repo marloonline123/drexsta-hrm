@@ -4,16 +4,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/Components/Ui/badge';
 import { Button } from '@/Components/Ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/Components/Ui/dropdown-menu';
-import { MoreHorizontal, Edit, Trash2, Eye, Zap } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Zap } from 'lucide-react';
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import EditAbilityModal from './EditAbilityModal';
 import DeleteAbilityModal from './DeleteAbilityModal';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 interface AbilitiesListProps {
     abilities: Ability[];
 }
 
 export default function AbilitiesList({ abilities }: AbilitiesListProps) {
+    const { user } = usePage().props.auth as Auth;
     const [editingAbility, setEditingAbility] = useState<Ability | null>(null);
     const [deletingAbility, setDeletingAbility] = useState<Ability | null>(null);
 
@@ -78,19 +82,23 @@ export default function AbilitiesList({ abilities }: AbilitiesListProps) {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={() => setEditingAbility(ability)}>
-                                                        <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'abilities.edit') && (
+                                                        <DropdownMenuItem onClick={() => setEditingAbility(ability)}>
+                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                    )}
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem 
-                                                        onClick={() => setDeletingAbility(ability)}
-                                                        className="text-destructive"
-                                                        disabled={ability.users_count > 0}
-                                                    >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'abilities.delete') && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => setDeletingAbility(ability)}
+                                                            className="text-destructive"
+                                                            disabled={ability.users_count > 0}
+                                                        >
+                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    )}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>

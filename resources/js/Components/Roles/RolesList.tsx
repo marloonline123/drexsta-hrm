@@ -1,4 +1,4 @@
-import { Role } from '@/Types/roles';
+import { GroupedPermission, Role } from '@/Types/roles';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/Ui/table';
 import { Badge } from '@/Components/Ui/badge';
@@ -6,16 +6,20 @@ import { Button } from '@/Components/Ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/Components/Ui/dropdown-menu';
 import { MoreHorizontal, Edit, Trash2, Eye, Crown } from 'lucide-react';
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import EditRoleModal from './EditRoleModal';
 import DeleteRoleModal from './DeleteRoleModal';
 import ViewRoleModal from './ViewRoleModal';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 interface RolesListProps {
     roles: Role[];
-    groupedPermissions: Record<string, any[]>;
+    groupedPermissions: Record<string, GroupedPermission[]>;
 }
 
 export default function RolesList({ roles, groupedPermissions }: RolesListProps) {
+    const { user } = usePage().props.auth as Auth;
     const [editingRole, setEditingRole] = useState<Role | null>(null);
     const [deletingRole, setDeletingRole] = useState<Role | null>(null);
     const [viewingRole, setViewingRole] = useState<Role | null>(null);
@@ -84,19 +88,23 @@ export default function RolesList({ roles, groupedPermissions }: RolesListProps)
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => setEditingRole(role)}>
-                                                        <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'roles.edit') && (
+                                                        <DropdownMenuItem onClick={() => setEditingRole(role)}>
+                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                    )}
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem 
-                                                        onClick={() => setDeletingRole(role)}
-                                                        className="text-destructive"
-                                                        disabled={role.users_count > 0}
-                                                    >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'roles.delete') && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => setDeletingRole(role)}
+                                                            className="text-destructive"
+                                                            disabled={role.users_count > 0}
+                                                        >
+                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    )}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
@@ -139,7 +147,7 @@ export default function RolesList({ roles, groupedPermissions }: RolesListProps)
                     role={viewingRole}
                     open={true}
                     onOpenChange={(open) => !open && setViewingRole(null)}
-                    groupedPermissions={groupedPermissions}
+                    // groupedPermissions={groupedPermissions}
                 />
             )}
         </Card>

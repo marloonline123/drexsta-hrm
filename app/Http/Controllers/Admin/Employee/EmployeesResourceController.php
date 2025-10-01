@@ -6,7 +6,7 @@ use App\Events\EmployeeCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
-use App\Http\Resources\Admin\EmployeeResource;
+use App\Http\Resources\EmployeeResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

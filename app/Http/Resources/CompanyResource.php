@@ -20,14 +20,22 @@ class CompanyResource extends JsonResource
             'name' => $this->name,
             'industry' => $this->industry,
             'slug' => $this->slug,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'address' => $this->address,
+            'description' => $this->description,
             'logo_url' => $this->logo_path
-                ? Storage::disk(config('filesystems.default'))->url($this->logo_path)
-                : null,
+            ? Storage::disk(config('filesystems.default'))->url($this->logo_path)
+            : null,
+            'is_active' => $this->is_active,
+            'employees_count' => $this->whenLoaded('users', function () {
+                return $this->employees()->count();
+            }),
             'myRole' => $this->when('users', function () {
                 return $this->users->firstWhere('id', request()->user()->id)?->pivot->role;
             }) ?? null,
             'myJobTitles' => $this->whenLoaded('jobTitles', function () {
-                return $this->jobTitles->map(fn ($jobTitle) => [
+                return $this->jobTitles->map(fn($jobTitle) => [
                     'id' => $jobTitle->id,
                     'title' => $jobTitle->title,
                 ]);

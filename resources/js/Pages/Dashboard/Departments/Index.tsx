@@ -1,5 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
+import { Head, Link, usePage } from '@inertiajs/react';
+import AppLayout from '@/Layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import { Department } from '@/Types/deparments';
@@ -10,6 +10,8 @@ import DepartmentsList from '@/Components/Departments/DepartmentsList';
 import { Plus } from 'lucide-react';
 import Filter from '@/Components/Shared/Filter';
 import Pagination from '@/Components/Shared/Pagination';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +30,7 @@ interface DepartmentsIndexProps {
 
 export default function DepartmentsIndex({ departments }: DepartmentsIndexProps) {
     const departmentsData = departments.data;
+    const { user } = usePage().props.auth as Auth;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -43,12 +46,14 @@ export default function DepartmentsIndex({ departments }: DepartmentsIndexProps)
                         </p>
                     </div>
 
-                    <Link href="/dashboard/departments/create">
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Department
-                        </Button>
-                    </Link>
+                    {hasPermissionTo(user, 'departments.create') && (
+                        <Link href="/dashboard/departments/create">
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Department
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* Overview Cards */}

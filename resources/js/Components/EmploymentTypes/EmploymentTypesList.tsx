@@ -6,16 +6,20 @@ import { Button } from '@/Components/Ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/Components/Ui/dropdown-menu';
 import { MoreHorizontal, Edit, Trash2, Eye, Briefcase } from 'lucide-react';
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import EditEmploymentTypeModal from './EditEmploymentTypeModal';
 import DeleteEmploymentTypeModal from './DeleteEmploymentTypeModal';
 import ViewEmploymentTypeModal from './ViewEmploymentTypeModal';
 import { truncateText } from '@/Lib/utils';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 interface EmploymentTypesListProps {
     employmentTypes: EmploymentType[];
 }
 
 export default function EmploymentTypesList({ employmentTypes }: EmploymentTypesListProps) {
+    const { user } = usePage().props.auth as Auth;
     const [editingEmploymentType, setEditingEmploymentType] = useState<EmploymentType | null>(null);
     const [deletingEmploymentType, setDeletingEmploymentType] = useState<EmploymentType | null>(null);
     const [viewingEmploymentType, setViewingEmploymentType] = useState<EmploymentType | null>(null);
@@ -56,7 +60,7 @@ export default function EmploymentTypesList({ employmentTypes }: EmploymentTypes
                                         </TableCell>
                                         <TableCell>
                                             <div className="max-w-[200px] truncate">
-                                                {truncateText(employmentType.description) || 'No description'}
+                                                {truncateText(employmentType.description || '') || 'No description'}
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -80,18 +84,22 @@ export default function EmploymentTypesList({ employmentTypes }: EmploymentTypes
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => setEditingEmploymentType(employmentType)}>
-                                                        <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'employment-types.edit') && (
+                                                        <DropdownMenuItem onClick={() => setEditingEmploymentType(employmentType)}>
+                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                    )}
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem 
-                                                        onClick={() => setDeletingEmploymentType(employmentType)}
-                                                        className="text-destructive"
-                                                    >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'employment-types.delete') && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => setDeletingEmploymentType(employmentType)}
+                                                            className="text-destructive"
+                                                        >
+                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    )}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>

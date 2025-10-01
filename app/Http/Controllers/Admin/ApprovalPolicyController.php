@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseControlller;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ApprovalPolicyRequest;
-use App\Http\Resources\Admin\ApprovalPolicyResource;
+use App\Http\Resources\ApprovalPolicyResource;
 use App\Models\Ability;
 use App\Models\ApprovalPolicy;
 use Illuminate\Http\Request;

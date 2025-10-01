@@ -13,7 +13,7 @@ export type User = {
     activeCompany: Company;
     phone?: string;
     roles: Role[];
-    permissions?: Permission[];
+    permissions: Permission[];
     created_at: string;
     updated_at: string;
 };

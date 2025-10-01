@@ -96,10 +96,9 @@ export default function RoleForm({
                                                 className="text-sm font-normal flex items-center gap-2"
                                             >
                                                 {t(`admin.roles.permissionActions.${permission.action}`)}
-                                                {permission.action}
-                                                <Badge variant="secondary" className="text-xs">
+                                                {/* <Badge variant="secondary" className="text-xs">
                                                     {permission.action}
-                                                </Badge>
+                                                </Badge> */}
                                             </Label>
                                         </div>
                                     ))}

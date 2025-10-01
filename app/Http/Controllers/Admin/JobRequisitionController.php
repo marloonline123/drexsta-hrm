@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Events\JobRequisitionCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobRequisitionRequest;
-use App\Http\Resources\Admin\JobRequisitionResource;
-use App\Models\Company;
+use App\Http\Resources\JobRequisitionResource;
 use App\Models\Department;
 use App\Models\JobRequisition;
 use App\Models\JobTitle;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class JobRequisitionController extends Controller

@@ -1,6 +1,6 @@
-import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/Types';
+import { Head, usePage } from '@inertiajs/react';
+import AppLayout from '@/Layouts/AppLayout';
+import { Auth, type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import { JobTitle } from '@/Types/job-titles';
 import { PaginatedData } from '@/Types/global';
@@ -12,6 +12,7 @@ import Filter from '@/Components/Shared/Filter';
 import Pagination from '@/Components/Shared/Pagination';
 import { useState } from 'react';
 import EmptyResource from '@/Components/Shared/EmptyResource';
+import { hasPermissionTo } from '@/Lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,6 +30,7 @@ interface JobTitlesIndexProps {
 }
 
 export default function JobTitlesIndex({ jobTitles }: JobTitlesIndexProps) {
+    const { user } = usePage().props.auth as Auth;
     const jobTitlesData = jobTitles?.data || [];
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -51,10 +53,12 @@ export default function JobTitlesIndex({ jobTitles }: JobTitlesIndexProps) {
                         </p>
                     </div>
 
-                    <Button onClick={() => setIsCreateModalOpen(true)}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Job Title
-                    </Button>
+                    {hasPermissionTo(user, 'job-titles.create') && (
+                        <Button onClick={() => setIsCreateModalOpen(true)}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Job Title
+                        </Button>
+                    )}
                 </div>
 
                 {/* Overview Cards */}

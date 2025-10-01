@@ -2,16 +2,17 @@ import { Briefcase, Plus, Edit, Eye, Trash2, Play, Square } from 'lucide-react';
 import { toast } from 'sonner';
 import { PaginatedData } from '@/Types/global';
 import Filter from '@/Components/Shared/Filter';
-import { Head } from '@inertiajs/react';
-import { Button } from '@/Components/Ui/button';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { Button, buttonVariants } from '@/Components/Ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/Ui/table';
 import { Badge } from '@/Components/Ui/badge';
-import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/Types';
+import AppLayout from '@/Layouts/AppLayout';
+import { type BreadcrumbItem, Auth } from '@/Types';
 import { router } from '@inertiajs/core';
 import { useLanguage } from '@/Hooks/use-language';
 import { JobPosting } from '@/Types/job-postings';
+import { hasPermissionTo } from '@/Lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -30,8 +31,9 @@ interface JobPostingsIndexProps {
 
 export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
   const { t } = useLanguage();
+  const { user } = usePage().props.auth as Auth;
   const postingsData = postings.data;
-  
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'draft':
@@ -59,7 +61,7 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
   };
 
   const updateStatus = (posting: JobPosting, status: 'open' | 'closed') => {
-    router.patch(route('dashboard.job-postings.update-status', posting.id), 
+    router.patch(route('dashboard.job-postings.update-status', posting.id),
       { status },
       {
         onSuccess: () => {
@@ -89,17 +91,17 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
             </p>
           </div>
 
-          <Button asChild>
-            <a href={route('dashboard.job-postings.create')}>
+          {hasPermissionTo(user, 'job-postings.create') && (
+            <Link href={route('dashboard.job-postings.create')} className={buttonVariants({ variant: 'default' })}>
               <Plus className="mr-2 h-4 w-4" />
               {t('jobPostings.addPosting')}
-            </a>
-          </Button>
+            </Link>
+          )}
         </div>
 
         {/* Search */}
-        <Filter 
-          routeName='dashboard.job-postings.index' 
+        <Filter
+          routeName='dashboard.job-postings.index'
           fields={{
             search: { type: 'text', placeholder: t('jobPostings.searchPlaceholder') },
           }}
@@ -140,20 +142,20 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
                       <TableCell>{new Date(posting.created_at).toLocaleDateString()}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          {posting.status === 'draft' && (
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
+                          {posting.status === 'draft' && hasPermissionTo(user, 'job-postings.edit') && (
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => updateStatus(posting, 'open')}
                               title={t('jobPostings.openPosting')}
                             >
                               <Play className="h-4 w-4" />
                             </Button>
                           )}
-                          {posting.status === 'open' && (
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
+                          {posting.status === 'open' && hasPermissionTo(user, 'job-postings.edit') && (
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => updateStatus(posting, 'closed')}
                               title={t('jobPostings.closePosting')}
                             >
@@ -165,18 +167,22 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
                               <Eye className="h-4 w-4" />
                             </a>
                           </Button>
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={route('dashboard.job-postings.edit', posting.id)}>
-                              <Edit className="h-4 w-4" />
-                            </a>
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDelete(posting)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {hasPermissionTo(user, 'job-postings.edit') && (
+                            <Button variant="outline" size="sm" asChild>
+                              <a href={route('dashboard.job-postings.edit', posting.id)}>
+                                <Edit className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          )}
+                          {hasPermissionTo(user, 'job-postings.delete') && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(posting)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -190,12 +196,12 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
                 <p className="text-muted-foreground mb-4">
                   {t('jobPostings.createFirst')}
                 </p>
-                <Button asChild>
-                  <a href={route('dashboard.job-postings.create')}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    {t('jobPostings.addPosting')}
-                  </a>
-                </Button>
+                {hasPermissionTo(user, 'job-postings.create') && (
+                    <Link href={route('dashboard.job-postings.create')} className={buttonVariants({ variant: 'default' })}>
+                      <Plus className="mr-2 h-4 w-4" />
+                      {t('jobPostings.addPosting')}
+                    </Link>
+                )}
               </div>
             )}
           </CardContent>

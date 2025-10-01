@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\AbilityResource;
-use App\Http\Resources\Admin\DepartmentResource;
-use App\Http\Resources\Admin\EmployeeResource;
-use App\Http\Resources\Admin\JobTitleResource;
-use App\Http\Resources\Admin\RoleResource;
+use App\Http\Resources\AbilityResource;
+use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\JobTitleResource;
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Business\AbilityService;

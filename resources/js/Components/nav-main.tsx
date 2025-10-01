@@ -1,5 +1,5 @@
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/Components/Ui/sidebar';
-import { type NavItem } from '@/types';
+import { type NavItem } from '@/Types';
 import { Link, usePage } from '@inertiajs/react';
 
 interface NavMainProps {
@@ -26,7 +26,7 @@ export function NavMain({ items = [], label }: NavMainProps) {
         <SidebarGroup className="px-2 py-0">
             <SidebarGroupLabel>{getGroupLabel()}</SidebarGroupLabel>
             <SidebarMenu>
-                {items.map((item) => (
+                {items.map((item) => item.show && (
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild isActive={page.url.startsWith(item.href)} tooltip={{ children: item.title }}>
                             <Link href={item.href} prefetch>

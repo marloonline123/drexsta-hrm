@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/Components/Ui/card';
-import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/Types';
-import { Head, Link } from '@inertiajs/react';
+import AppLayout from '@/Layouts/AppLayout';
+import { Auth, type BreadcrumbItem } from '@/Types';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { buttonVariants } from '@/Components/Ui/button';
 import {
     Building,
@@ -13,6 +13,7 @@ import Filter from '@/Components/Shared/Filter';
 import CompaniesGrid from '@/Components/Companies/CompaniesGrid';
 import CompaniesStats from '@/Components/Companies/CompaniesStats';
 import { t } from 'i18next';
+import { hasPermissionTo } from '@/Lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,6 +28,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function CompaniesPage({ companies }: { companies: CompaniesResponse }) {
     const companiesData = companies.data || [];
+    const { user } = usePage().props.auth as Auth;
+
+    console.log('user:', user);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -44,10 +48,12 @@ export default function CompaniesPage({ companies }: { companies: CompaniesRespo
                             {t('companies.description')}
                         </p>
                     </div>
-                    <Link href={route('dashboard.companies.create')} className={buttonVariants()}>
-                        <Plus className="h-4 w-4 mr-2" />
-                        {t('companies.addCompany')}
-                    </Link>
+                    {hasPermissionTo(user, 'companies.create') && (
+                        <Link href={route('dashboard.companies.create')} className={buttonVariants()}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            {t('companies.addCompany')}
+                        </Link>
+                    )}
                 </div>
 
                 {/* Stats Cards */}

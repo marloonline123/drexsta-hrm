@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobPostingRequest;
-use App\Http\Resources\Admin\JobPostingResource;
-use App\Http\Resources\Admin\JobRequisitionResource;
-use App\Models\Company;
+use App\Http\Resources\JobPostingResource;
+use App\Http\Resources\JobRequisitionResource;
 use App\Models\JobPosting;
 use App\Models\JobRequisition;
 use App\Services\Business\JobPostingService;

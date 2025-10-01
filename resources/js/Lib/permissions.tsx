@@ -1,7 +1,8 @@
+import { User } from "@/Types/user";
 import {
     Users, Crown, Building, Clock, Calculator, FileText, Settings, Shield,
-    Calendar, Briefcase, ClipboardList, ClipboardCheck, LayoutList,
-    FilePlus2, FileCheck2, FileSignature, Layers, CheckSquare,
+    Calendar, Briefcase, ClipboardList, ClipboardCheck,
+    FilePlus2, FileCheck2, Layers, CheckSquare,
     CalendarDays, Network
 } from "lucide-react";
 
@@ -29,3 +30,9 @@ export const getPermissionCategoryIcon = (category: string) => {
     const Icon = icons[category as keyof typeof icons] || Shield;
     return <Icon className="h-4 w-4" />;
 };
+
+export const hasPermissionTo = (user: User, permission: string): boolean => {
+    return user.permissions.find(p => p.name === permission)
+    // || user.roles.find(r => r.name === 'Super Admin') 
+    ? true : false;
+}

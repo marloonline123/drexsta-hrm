@@ -19,12 +19,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Badge } from '@/Components/Ui/badge';
 import { useState } from 'react';
 import { useLanguage } from '@/Hooks/use-language';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import DeleteCompanyModal from './DeleteCompanyModal';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 export default function CompanyCard({ company }: { company: Company }) {
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const { t } = useLanguage();
+    const { user } = usePage().props.auth as Auth;
 
     const getStatusBadge = (isActive: boolean) => {
         return isActive ? (
@@ -67,14 +70,18 @@ export default function CompanyCard({ company }: { company: Company }) {
                                 <Eye className="h-4 w-4 mr-2" />
                                 {t('common.view')}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(route('dashboard.companies.edit', company.slug))}>
-                                <Edit className="h-4 w-4 mr-2" />
-                                {t('common.edit')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setShowDeleteModal(true)}>
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                {t('common.delete')}
-                            </DropdownMenuItem>
+                            {hasPermissionTo(user, 'companies.edit') && (
+                                <DropdownMenuItem onClick={() => router.visit(route('dashboard.companies.edit', company.slug))}>
+                                    <Edit className="h-4 w-4 mr-2" />
+                                    {t('common.edit')}
+                                </DropdownMenuItem>
+                            )}
+                            {hasPermissionTo(user, 'companies.delete') && (
+                                <DropdownMenuItem onClick={() => setShowDeleteModal(true)}>
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    {t('common.delete')}
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

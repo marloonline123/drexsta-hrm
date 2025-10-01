@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\CompanyCreated;
+use App\Http\Controllers\BaseControlller;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
-use App\Http\Resources\Admin\CompanyResource;
+use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\Shared\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
-class CompanyController extends Controller
+class CompanyController extends BaseControlller
 {
     public function __construct(protected FileService $fileService) {}
 
@@ -23,6 +24,7 @@ class CompanyController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', Company::class);
         $user = Auth::user();
         $companies = $user->ownedCompanies()
             ->with('employees')

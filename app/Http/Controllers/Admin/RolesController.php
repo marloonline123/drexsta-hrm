@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
-use App\Http\Resources\Admin\RoleResource;
-use App\Models\Company;
-use Illuminate\Http\Request;
+use App\Http\Resources\RoleResource;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Role;

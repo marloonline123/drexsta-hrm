@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbilityRequest;
-use App\Http\Resources\Admin\AbilityResource;
+use App\Http\Resources\AbilityResource;
 use App\Models\Ability;
-use App\Models\Company;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AbilitiesController extends Controller

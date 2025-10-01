@@ -2,16 +2,17 @@ import { Briefcase } from 'lucide-react';
 import { t } from 'i18next'; import { toast } from 'sonner';
 import { PaginatedData } from '@/Types/global';
 import Filter from '@/Components/Shared/Filter';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Button } from '@/Components/Ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/Ui/table';
 import { Badge } from '@/Components/Ui/badge';
 import { Plus, Edit, Eye, Trash2 } from 'lucide-react';
-import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/Types';
+import AppLayout from '@/Layouts/AppLayout';
+import { type BreadcrumbItem, Auth } from '@/Types';
 import { JobRequisition } from '@/Types/job-requisitions';
 import { router } from '@inertiajs/core';
+import { hasPermissionTo } from '@/Lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -29,6 +30,7 @@ interface JobRequisitionsIndexProps {
 }
 
 export default function JobRequisitionsIndex({ requisitions }: JobRequisitionsIndexProps) {
+  const { user } = usePage().props.auth as Auth;
   const requisitionsData = requisitions.data;
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -77,12 +79,14 @@ export default function JobRequisitionsIndex({ requisitions }: JobRequisitionsIn
             </p>
           </div>
 
-          <Button asChild>
-            <a href={route('dashboard.job-requisitions.create')}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Job Requisition
-            </a>
-          </Button>
+          {hasPermissionTo(user, 'job-requisitions.create') && (
+            <Button asChild>
+              <a href={route('dashboard.job-requisitions.create')}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Job Requisition
+              </a>
+            </Button>
+          )}
         </div>
 
         {/* Search */}
@@ -131,18 +135,22 @@ export default function JobRequisitionsIndex({ requisitions }: JobRequisitionsIn
                               <Eye className="h-4 w-4" />
                             </a>
                           </Button>
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={route('dashboard.job-requisitions.edit', requisition.id)}>
-                              <Edit className="h-4 w-4" />
-                            </a>
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDelete(requisition)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {hasPermissionTo(user, 'job-requisitions.edit') && (
+                            <Button variant="outline" size="sm" asChild>
+                              <a href={route('dashboard.job-requisitions.edit', requisition.id)}>
+                                <Edit className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          )}
+                          {hasPermissionTo(user, 'job-requisitions.delete') && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(requisition)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>

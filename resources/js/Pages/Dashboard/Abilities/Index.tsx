@@ -1,6 +1,6 @@
-import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
-import { type BreadcrumbItem } from '@/Types';
+import { Head, usePage } from '@inertiajs/react';
+import AppLayout from '@/Layouts/AppLayout';
+import { type BreadcrumbItem, Auth } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import { Ability } from '@/Types/abilities';
 import { PaginatedData } from '@/Types/global';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import CreateAbilityModal from '@/Components/Abilities/CreateAbilityModal';
 import AbilitiesList from '@/Components/Abilities/AbilitiesList';
 import EmptyResource from '@/Components/Shared/EmptyResource';
+import { hasPermissionTo } from '@/Lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +29,7 @@ interface AbilitiesIndexProps {
 }
 
 export default function AbilitiesIndex({ abilities }: AbilitiesIndexProps) {
+    const { user } = usePage().props.auth as Auth;
     const abilitiesData = abilities?.data || [];
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -48,10 +50,12 @@ export default function AbilitiesIndex({ abilities }: AbilitiesIndexProps) {
                         </p>
                     </div>
 
-                    <Button onClick={() => setIsCreateModalOpen(true)}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Ability
-                    </Button>
+                    {hasPermissionTo(user, 'abilities.create') && (
+                        <Button onClick={() => setIsCreateModalOpen(true)}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Ability
+                        </Button>
+                    )}
                 </div>
 
                 {/* Filters and Search */}

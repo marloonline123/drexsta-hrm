@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Events\DepartmentCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DepartmentRequest;
-use App\Http\Resources\Admin\DepartmentResource;
+use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\UserResource;
 use App\Models\Department;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 

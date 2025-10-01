@@ -6,16 +6,20 @@ import { Button } from '@/Components/Ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/Components/Ui/dropdown-menu';
 import { MoreHorizontal, Edit, Trash2, Eye, BadgeCheck } from 'lucide-react';
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import EditJobTitleModal from './EditJobTitleModal';
 import DeleteJobTitleModal from './DeleteJobTitleModal';
 import ViewJobTitleModal from './ViewJobTitleModal';
 import { truncateText } from '@/Lib/utils';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 interface JobTitlesListProps {
     jobTitles: JobTitle[];
 }
 
 export default function JobTitlesList({ jobTitles }: JobTitlesListProps) {
+    const { user } = usePage().props.auth as Auth;
     const [editingJobTitle, setEditingJobTitle] = useState<JobTitle | null>(null);
     const [deletingJobTitle, setDeletingJobTitle] = useState<JobTitle | null>(null);
     const [viewingJobTitle, setViewingJobTitle] = useState<JobTitle | null>(null);
@@ -80,18 +84,22 @@ export default function JobTitlesList({ jobTitles }: JobTitlesListProps) {
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => setEditingJobTitle(jobTitle)}>
-                                                        <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'job-titles.edit') && (
+                                                        <DropdownMenuItem onClick={() => setEditingJobTitle(jobTitle)}>
+                                                            <Edit className="mr-2 h-4 w-4" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                    )}
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem 
-                                                        onClick={() => setDeletingJobTitle(jobTitle)}
-                                                        className="text-destructive"
-                                                    >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete
-                                                    </DropdownMenuItem>
+                                                    {hasPermissionTo(user, 'job-titles.delete') && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => setDeletingJobTitle(jobTitle)}
+                                                            className="text-destructive"
+                                                        >
+                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    )}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>

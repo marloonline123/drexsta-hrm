@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmploymentTypeRequest;
-use App\Http\Resources\Admin\EmploymentTypeResource;
+use App\Http\Resources\EmploymentTypeResource;
 use App\Models\EmploymentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class EmploymentTypeController extends Controller

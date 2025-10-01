@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Admin;
+namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EmploymentTypeResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,16 +16,10 @@ class EmploymentTypeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'description' => $this->description,
+            'name' => $this->label,
             'company_id' => $this->company_id,
-            'is_active' => $this->is_active,
-            'company' => $this->whenLoaded('company', fn() => [
-                'id' => $this->company->id,
-                'name' => $this->company->name,
-                'slug' => $this->company->slug,
-            ]),
+            'permissions' => $this->when('permissions', PermissionResource::collection($this->permissions)->resolve()),
+            'users_count' => $this->users->count(),
             'created_at' => $this->created_at?->format('Y-m-d'),
             'updated_at' => $this->updated_at?->format('Y-m-d'),
         ];

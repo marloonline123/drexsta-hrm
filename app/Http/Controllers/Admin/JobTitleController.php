@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobTitleRequest;
-use App\Http\Resources\Admin\JobTitleResource;
+use App\Http\Resources\JobTitleResource;
 use App\Models\JobTitle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

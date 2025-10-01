@@ -10,7 +10,7 @@ import {
 } from '@/Components/Ui/dropdown-menu';
 import { MoreHorizontal, Edit, Users, Eye, Trash2 } from 'lucide-react';
 import { formatCurrency } from '@/Lib/utils';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Button } from '../Ui/button';
 import {
     TableCell,
@@ -19,9 +19,12 @@ import {
 import { Department } from '@/Types/deparments';
 import DeleteDepartmentModal from './DeleteDepartmentModal';
 import { useState } from 'react';
+import { hasPermissionTo } from '@/Lib/permissions';
+import { Auth } from '@/Types';
 
 export default function DepartmentTableRow({ department }: { department: Department }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const { user } = usePage().props.auth as Auth;
 
     return (
         <TableRow key={department.id}>
@@ -83,20 +86,24 @@ export default function DepartmentTableRow({ department }: { department: Departm
                                 View
                             </DropdownMenuItem>
                         </Link>
-                        <Link href={route('dashboard.departments.edit', department.slug)}>
-                            <DropdownMenuItem>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                            </DropdownMenuItem>
-                        </Link>
+                        {hasPermissionTo(user, 'departments.edit') && (
+                            <Link href={route('dashboard.departments.edit', department.slug)}>
+                                <DropdownMenuItem>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                </DropdownMenuItem>
+                            </Link>
+                        )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => setShowDeleteModal(true)}
-                            className="text-destructive"
-                        >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                        </DropdownMenuItem>
+                        {hasPermissionTo(user, 'departments.delete') && (
+                            <DropdownMenuItem
+                                onClick={() => setShowDeleteModal(true)}
+                                className="text-destructive"
+                            >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                            </DropdownMenuItem>
+                        )}
                         {/* <DeleteDepartmentModal department={department} /> */}
                     </DropdownMenuContent>
                 </DropdownMenu>

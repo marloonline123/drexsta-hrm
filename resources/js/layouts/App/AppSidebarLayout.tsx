@@ -10,8 +10,6 @@ import { cn } from '@/Lib/utils';
 
 export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
     const { isRTL } = useLanguage();
-
-
     return (
         <AppShell variant="sidebar">
             <TopNavigation />
