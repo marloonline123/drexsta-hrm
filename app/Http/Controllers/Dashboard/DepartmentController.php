@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Events\DepartmentCreated;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\DepartmentRequest;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\UserResource;
@@ -11,13 +11,14 @@ use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class DepartmentController extends Controller
+class DepartmentController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Department::class);
         $user = Auth::user();
         $company = $user->activeCompany;
         $departments = Department::with('managerRelation', 'employees')
@@ -40,6 +41,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Department::class);
         $user = Auth::user();
         $employees = $user->activeCompany?->users()->get() ?? [];
 
@@ -53,6 +55,7 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentRequest $request)
     {
+        $this->authorize('create', Department::class);
         $user = Auth::user();
         $data = $request->validated();
         $data['slug'] = generateSlug($data['name']);
@@ -60,7 +63,7 @@ class DepartmentController extends Controller
         $department->employees()->attach($data['manager_id'], ['role' => 'manager']);
 
         event(new DepartmentCreated($department));
-        
+
         return redirect()->route('dashboard.departments.index')->with('success', 'Department created successfully.');
     }
 
@@ -69,6 +72,7 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
+        $this->authorize('view', $department);
         $department->load('managerRelation', 'employees');
         return Inertia::render('Dashboard/Departments/Show', [
             'department' => (new DepartmentResource($department))->resolve(),
@@ -80,6 +84,7 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
+        $this->authorize('update', $department);
         $user = Auth::user();
         $department->load('managerRelation', 'employees');
         $employees = $user->activeCompany?->users()->get() ?? [];
@@ -95,6 +100,7 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentRequest $request, Department $department)
     {
+        $this->authorize('update', $department);
         $data = $request->validated();
         $department->fill($data);
         if ($department->isDirty('manager_id')) {
@@ -102,7 +108,7 @@ class DepartmentController extends Controller
             $department->employees()
             ->wherePivot('role', 'manager')
             ->detach();
-            
+
             // Attach the new manager
             $department->employees()->syncWithoutDetaching([
                 $data['manager_id'] => [
@@ -121,6 +127,7 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
+        $this->authorize('delete', $department);
         $department->delete();
 
         return redirect()->route('dashboard.departments.index')->with('success', 'Department deleted successfully.');

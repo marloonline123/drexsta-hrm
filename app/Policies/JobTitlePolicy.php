@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Ability;
+use App\Models\JobTitle;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class AbilityPolicy
+class JobTitlePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return $user->hasPermissionTo('job-titles.view');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Ability $ability): bool
+    public function view(User $user, JobTitle $jobTitle): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return $user->hasPermissionTo('job-titles.view');
     }
 
     /**
@@ -29,29 +29,29 @@ class AbilityPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.create');
+        return $user->hasPermissionTo('job-titles.create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Ability $ability): bool
+    public function update(User $user, JobTitle $jobTitle): bool
     {
-        return $user->hasPermissionTo('abilities.edit');
+        return $user->hasPermissionTo('job-titles.edit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Ability $ability): bool
+    public function delete(User $user, JobTitle $jobTitle): bool
     {
-        return $user->hasPermissionTo('abilities.delete');
+        return $user->hasPermissionTo('job-titles.delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Ability $ability): bool
+    public function restore(User $user, JobTitle $jobTitle): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class AbilityPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Ability $ability): bool
+    public function forceDelete(User $user, JobTitle $jobTitle): bool
     {
         return false;
     }

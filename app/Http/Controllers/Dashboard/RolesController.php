@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\RoleRequest;
 use App\Http\Resources\RoleResource;
 use Illuminate\Support\Facades\Auth;
@@ -11,34 +11,35 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Log;
 
-class RolesController extends Controller
+class RolesController extends BaseController
 {
     /**
      * Display the roles management page.
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
         $roles = Role::with('permissions', 'users')
             ->search(request('search'), 'name')
             ->paginate(12)
             ->withQueryString();
-            
+
         $rolesCollection = RoleResource::collection($roles);
 
         // Also fetch permissions for the frontend
         $permissions = Permission::all();
-        
+
         // Group permissions by name pattern (e.g., users.view, users.create)
         $groupedPermissions = [];
         foreach ($permissions as $permission) {
             $parts = explode('.', $permission->name);
             $category = $parts[0] ?? 'general';
             $action = $parts[1] ?? $permission->name;
-            
+
             if (!isset($groupedPermissions[$category])) {
                 $groupedPermissions[$category] = [];
             }
-            
+
             $groupedPermissions[$category][] = [
                 'id' => $permission->id,
                 'name' => $permission->name,
@@ -60,10 +61,11 @@ class RolesController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        $this->authorize('create', Role::class);
         $data = $request->validated();
-        
+
         $role = Role::create($data);
-        
+
         if (isset($data['permissions'])) {
             $permissions = Permission::whereIn('id', $data['permissions'])->get();
             $role->syncPermissions($permissions);
@@ -77,10 +79,11 @@ class RolesController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
+        $this->authorize('update', $role);
         $data = $request->validated();
-        
+
         $role->update($data);
-        
+
         if (isset($data['permissions'])) {
             $permissions = Permission::whereIn('id', $data['permissions'])->get();
             $role->syncPermissions($permissions);
@@ -94,6 +97,7 @@ class RolesController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
         $role->delete();
 
         return back()->with('success', 'Role deleted successfully');

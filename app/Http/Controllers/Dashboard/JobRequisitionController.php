@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Events\JobRequisitionCreated;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\JobRequisitionRequest;
 use App\Http\Resources\JobRequisitionResource;
 use App\Models\Department;
@@ -11,13 +11,14 @@ use App\Models\JobRequisition;
 use App\Models\JobTitle;
 use Inertia\Inertia;
 
-class JobRequisitionController extends Controller
+class JobRequisitionController extends BaseController
 {
     /**
      * Display a listing of the job requisitions.
      */
     public function index()
     {
+        $this->authorize('viewAny', JobRequisition::class);
         $requisitions = JobRequisition::with(['department', 'jobTitle', 'requester'])
             ->latest()
             ->paginate(10);
@@ -37,8 +38,9 @@ class JobRequisitionController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', JobRequisition::class);
         $company = request()->user()->activeCompany;
-        
+
         $departments = Department::all();
         $jobTitles = JobTitle::all();
 
@@ -54,6 +56,7 @@ class JobRequisitionController extends Controller
      */
     public function store(JobRequisitionRequest $request)
     {
+        $this->authorize('create', JobRequisition::class);
         $data = $request->validated();
         $requisition = JobRequisition::create($data + [
             'requisition_code' => $this->generateRequisitionCode(),
@@ -71,7 +74,7 @@ class JobRequisitionController extends Controller
      */
     public function show(JobRequisition $jobRequisition)
     {
-        // $this->authorize('view', $jobRequisition);
+        $this->authorize('view', $jobRequisition);
         $jobRequisition->load(['department', 'jobTitle', 'requester', 'company', 'employmentType']);
         
         return Inertia::render('Dashboard/JobRequisitions/Show', [
@@ -84,7 +87,7 @@ class JobRequisitionController extends Controller
      */
     public function edit(JobRequisition $jobRequisition)
     {
-        // $this->authorize('update', $jobRequisition);
+        $this->authorize('update', $jobRequisition);
         $jobRequisition->load(['department', 'jobTitle', 'requester', 'company', 'employmentType']);
         $company = request()->user()->activeCompany;
         
@@ -104,7 +107,7 @@ class JobRequisitionController extends Controller
      */
     public function update(JobRequisitionRequest $request, JobRequisition $jobRequisition)
     {
-        // $this->authorize('update', $jobRequisition);
+        $this->authorize('update', $jobRequisition);
         $data = $request->validated();
         $jobRequisition->update($data);
 
@@ -116,7 +119,7 @@ class JobRequisitionController extends Controller
      */
     public function destroy(JobRequisition $jobRequisition)
     {
-        // $this->authorize('delete', $jobRequisition);
+        $this->authorize('delete', $jobRequisition);
         
         $jobRequisition->delete();
 

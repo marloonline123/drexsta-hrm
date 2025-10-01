@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Ability;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class AbilityPolicy
+class RolePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return $user->hasPermissionTo('roles.view');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Ability $ability): bool
+    public function view(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return $user->hasPermissionTo('roles.view');
     }
 
     /**
@@ -29,29 +29,29 @@ class AbilityPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.create');
+        return $user->hasPermissionTo('roles.create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Ability $ability): bool
+    public function update(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('abilities.edit');
+        return $user->hasPermissionTo('roles.edit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Ability $ability): bool
+    public function delete(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('abilities.delete');
+        return $user->hasPermissionTo('roles.delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Ability $ability): bool
+    public function restore(User $user, Role $role): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class AbilityPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Ability $ability): bool
+    public function forceDelete(User $user, Role $role): bool
     {
         return false;
     }

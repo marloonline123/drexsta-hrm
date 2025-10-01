@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Ability;
+use App\Models\ApprovalPolicy as ApprovalPolicyModel;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class AbilityPolicy
+class ApprovalPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return $user->hasPermissionTo('approval-policies.edit');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Ability $ability): bool
+    public function view(User $user, ApprovalPolicyModel $approvalPolicy): bool
     {
-        return $user->hasPermissionTo('abilities.view');
+        return false;
     }
 
     /**
@@ -29,29 +29,29 @@ class AbilityPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('abilities.create');
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Ability $ability): bool
+    public function update(User $user, ApprovalPolicyModel $approvalPolicy): bool
     {
-        return $user->hasPermissionTo('abilities.edit');
+        return $user->hasPermissionTo('approval-policies.edit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Ability $ability): bool
+    public function delete(User $user, ApprovalPolicyModel $approvalPolicy): bool
     {
-        return $user->hasPermissionTo('abilities.delete');
+        return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Ability $ability): bool
+    public function restore(User $user, ApprovalPolicyModel $approvalPolicy): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class AbilityPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Ability $ability): bool
+    public function forceDelete(User $user, ApprovalPolicyModel $approvalPolicy): bool
     {
         return false;
     }

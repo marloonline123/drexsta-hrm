@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Employee;
+namespace App\Http\Controllers\Dashboard\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AbilityResource;

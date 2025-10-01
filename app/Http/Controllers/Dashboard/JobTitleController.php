@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\JobTitleRequest;
 use App\Http\Resources\JobTitleResource;
 use App\Models\JobTitle;
@@ -11,16 +11,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class JobTitleController extends Controller
+class JobTitleController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', JobTitle::class);
         $user = Auth::user();
         $company = $user->activeCompany;
-        
+
         $jobTitles = JobTitle::search($request->get('search'), ['title', 'description'])
             ->filterBy('is_active', $request->has('status') ? $request->get('status') === 'active' : null)
             ->latest()
@@ -32,7 +33,7 @@ class JobTitleController extends Controller
             ->additional(['meta' => ['total_job_titles' => $totalJobTitles]]);
 
         Log::debug($jobTitles);
-        // For regular page loads, return Inertia response  
+        // For regular page loads, return Inertia response
         return Inertia::render('Dashboard/JobTitles/Index', [
             'jobTitles' => $jobTitlesCollection ?? [],
         ]);
@@ -43,6 +44,7 @@ class JobTitleController extends Controller
      */
     public function store(JobTitleRequest $request)
     {
+        $this->authorize('create', JobTitle::class);
         $data = $request->validated();
         $data['slug'] = generateSlug($data['title']);
         JobTitle::create($data);
@@ -55,6 +57,7 @@ class JobTitleController extends Controller
      */
     public function update(JobTitleRequest $request, JobTitle $jobTitle)
     {
+        $this->authorize('update', $jobTitle);
         $data = $request->validated();
         $jobTitle->update($data);
 
@@ -66,6 +69,7 @@ class JobTitleController extends Controller
      */
     public function destroy(JobTitle $jobTitle)
     {
+        $this->authorize('delete', $jobTitle);
         $jobTitle->delete();
 
         return back()->with('success', 'Job title deleted successfully');

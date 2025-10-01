@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Employee;
+namespace App\Http\Controllers\Dashboard\Employee;
 
 use App\Events\EmployeeCreated;
 use App\Http\Controllers\Controller;

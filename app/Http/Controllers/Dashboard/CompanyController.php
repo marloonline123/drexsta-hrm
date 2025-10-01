@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Events\CompanyCreated;
-use App\Http\Controllers\BaseControlller;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\Shared\FileService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
-class CompanyController extends BaseControlller
+class CompanyController extends BaseController
 {
     public function __construct(protected FileService $fileService) {}
 
@@ -52,6 +50,7 @@ class CompanyController extends BaseControlller
      */
     public function create(): Response
     {
+        $this->authorize('create', Company::class);
         return inertia()->render('Dashboard/Companies/Create');
     }
 
@@ -63,6 +62,7 @@ class CompanyController extends BaseControlller
      */
     public function store(CompanyRequest $request)
     {
+        $this->authorize('create', Company::class);
         $data = $request->validated();
         $data['slug'] = generateSlug($data['name']);
         if ($request->hasFile('logo_image')) {
@@ -84,6 +84,7 @@ class CompanyController extends BaseControlller
      */
     public function show(Company $company)
     {
+        $this->authorize('view', $company);
         $company->load('employees');
         return inertia()->render('Dashboard/Companies/Show', [
             'company' => CompanyResource::make($company)->resolve()
@@ -98,6 +99,7 @@ class CompanyController extends BaseControlller
      */
     public function edit(Company $company)
     {
+        $this->authorize('update', $company);
         return inertia()->render('Dashboard/Companies/Edit', [
             'company' => CompanyResource::make($company)->resolve()
         ]);
@@ -112,6 +114,7 @@ class CompanyController extends BaseControlller
      */
     public function update(CompanyRequest $request, Company $company)
     {
+        $this->authorize('update', $company);
         $data = $request->validated();
         if ($request->hasFile('logo_image')) {
             $data['logo_path'] = $this->fileService->storeImage($request->file('logo_image'), 'companies');
@@ -129,6 +132,7 @@ class CompanyController extends BaseControlller
      */
     public function destroy(Company $company)
     {
+        $this->authorize('delete', $company);
         $company->delete();
         return back()->with('success', 'Company deleted successfully.');
     }

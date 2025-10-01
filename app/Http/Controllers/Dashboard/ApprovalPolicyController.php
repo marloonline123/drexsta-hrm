@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\BaseControlller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\ApprovalPolicyRequest;
 use App\Http\Resources\ApprovalPolicyResource;
 use App\Models\Ability;
@@ -10,13 +10,14 @@ use App\Models\ApprovalPolicy;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ApprovalPolicyController extends BaseControlller
+class ApprovalPolicyController extends BaseController
 {
     /**
      * Display a listing of the approval policies.
      */
     public function index()
     {
+        $this->authorize('viewAny', ApprovalPolicy::class);
         $policies = ApprovalPolicy::with('company')
             ->latest()
             ->get();
@@ -34,7 +35,7 @@ class ApprovalPolicyController extends BaseControlller
      */
     public function update(ApprovalPolicyRequest $request, ApprovalPolicy $approvalPolicy)
     {
-        // $this->authorize('update', $approvalPolicy);
+        $this->authorize('update', $approvalPolicy);
         $data = $request->validated();
         $approvalPolicy->update([
             'steps' => $data['steps'],

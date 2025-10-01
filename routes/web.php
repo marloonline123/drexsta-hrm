@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\AbilitiesController;
-use App\Http\Controllers\Admin\ApprovalPolicyController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\DepartmentController;
-use App\Http\Controllers\Admin\Employee\EmployeeActionsController;
-use App\Http\Controllers\Admin\Employee\EmployeeExcelController;
-use App\Http\Controllers\Admin\Employee\EmployeesResourceController;
-use App\Http\Controllers\Admin\Employee\UpdateEmployeePasswordController;
-use App\Http\Controllers\Admin\EmploymentTypeController;
-use App\Http\Controllers\Admin\JobPostingController as AdminJobPostingController;
-use App\Http\Controllers\Admin\JobRequisitionController;
-use App\Http\Controllers\Admin\JobTitleController;
-use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Dashboard\AbilitiesController;
+use App\Http\Controllers\Dashboard\ApprovalPolicyController;
+use App\Http\Controllers\Dashboard\CompanyController;
+use App\Http\Controllers\Dashboard\DepartmentController;
+use App\Http\Controllers\Dashboard\Employee\EmployeeActionsController;
+use App\Http\Controllers\Dashboard\Employee\EmployeeExcelController;
+use App\Http\Controllers\Dashboard\Employee\EmployeesResourceController;
+use App\Http\Controllers\Dashboard\Employee\UpdateEmployeePasswordController;
+use App\Http\Controllers\Dashboard\EmploymentTypeController;
+use App\Http\Controllers\Dashboard\JobPostingController as AdminJobPostingController;
+use App\Http\Controllers\Dashboard\JobRequisitionController;
+use App\Http\Controllers\Dashboard\JobTitleController;
+use App\Http\Controllers\Dashboard\RolesController;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\Profile\PasswordController;
 use App\Http\Controllers\Profile\ProfileController;
