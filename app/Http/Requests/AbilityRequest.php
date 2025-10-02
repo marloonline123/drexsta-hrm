@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ability;
+use App\Rules\UniqueScoped;
 use Illuminate\Validation\Rule;
 
 class AbilityRequest extends FormRequest
@@ -29,9 +30,11 @@ class AbilityRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                Rule::unique(Ability::class)->ignore($this->ability?->id),
+                (new UniqueScoped(Ability::class, 'key', 'company_id', Auth::user()->company_id, $this->ability?->id))->except($this->ability?->id ?? 0),
             ],
-            'label' => 'required|string|max:150',
+            'label' => ['required', 'string', 'max:150',
+                (new UniqueScoped(Ability::class, 'label', 'company_id', Auth::user()->company_id, $this->ability?->id))->except($this->ability?->id ?? 0),
+            ],
             'description' => 'nullable|string|max:255',
         ];
     }

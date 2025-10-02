@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('label'); // e.g. Finance Approver
             $table->text('description')->nullable(); // Explain the responsibility
             $table->timestamps();
+
+            $table->unique(['company_id', 'key', 'label']);
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueScoped;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DepartmentRequest extends FormRequest
@@ -29,7 +30,9 @@ class DepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 
+                (new UniqueScoped('departments', 'name', 'company_id', request()->user()->active_company_id))->except($this->department?->id ?? 0)
+            ],
             'manager_id' => 'required|exists:users,id',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'sometimes|boolean',

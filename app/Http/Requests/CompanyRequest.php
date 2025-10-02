@@ -31,7 +31,7 @@ class CompanyRequest extends FormRequest
     {
         $companyId = $this->route('company')?->id;
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name,' . $companyId,
             'industry' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20|unique:companies,phone,' . $companyId,
             'email' => 'nullable|email|max:255|unique:companies,email,' . $companyId,
