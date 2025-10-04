@@ -1,3 +1,4 @@
+import { Company } from "./companies";
 import { EmploymentType } from "./employment-types";
 
 export interface JobPosting {
@@ -21,9 +22,10 @@ export interface JobPosting {
   experience_years: number | null;
   education_level: string | null;
   is_remote: boolean;
-  custom_fields: Record<string, any> | null;
+  custom_fields: Record<string, string> | null;
   created_at: string;
   updated_at: string;
+  company: Company;
   jobRequisition?: {
     id: number;
     requisition_code: string;

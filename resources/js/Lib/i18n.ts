@@ -465,7 +465,44 @@ const resources = {
                 updating: 'Updating...',
                 applicationUpdateSuccess: 'Your application has been updated successfully!',
                 applicationUpdateError: 'There was an error updating your application. Please try again.',
-                goBack: 'Go Back'
+                goBack: 'Go Back',
+                applyNow: 'Apply Now',
+                searchPlaceholder: 'Search for jobs...',
+                filterDepartment: 'Filter by department',
+                allDepartments: 'All Departments',
+                filterEmploymentType: 'Filter by type',
+                allTypes: 'All Types',
+                clearFilters: 'Clear Filters',
+                noResults: 'No jobs found',
+                tryDifferentFilters: 'Try adjusting your search or filters.',
+                loadMore: 'Load More'
+            },
+            public: {
+                about: 'About',
+                contact: 'Contact'
+            },
+            about: {
+                title: 'About Us',
+                subtitle: 'We are a team of passionate people working to build the future of HR.',
+                missionTitle: 'Our Mission',
+                missionText: 'To empower organizations to build happier, more productive workplaces.',
+                visionTitle: 'Our Vision',
+                visionText: 'To be the leading HR platform for small and medium-sized businesses.'
+            },
+            contact: {
+                title: 'Get in Touch',
+                subtitle: 'We\'d love to hear from you. Here\'s how you can reach us.',
+                email: 'Email',
+                phone: 'Phone',
+                address: 'Address',
+                formTitle: 'Send us a message',
+                name: 'Name',
+                subject: 'Subject',
+                message: 'Message',
+                sending: 'Sending...',
+                sendMessage: 'Send Message',
+                success: 'Your message has been sent successfully!',
+                error: 'There was an error sending your message. Please try again.'
             },
             // Common
             common: {
@@ -995,7 +1032,44 @@ const resources = {
                 updating: 'جاري التحديث...',
                 applicationUpdateSuccess: 'تم تحديث طلبك بنجاح!',
                 applicationUpdateError: 'حدث خطأ أثناء تحديث طلبك. يرجى المحاولة مرة أخرى.',
-                goBack: 'العودة'
+                goBack: 'العودة',
+                applyNow: 'تقدم الآن',
+                searchPlaceholder: 'ابحث عن وظائف...',
+                filterDepartment: 'فرز حسب القسم',
+                allDepartments: 'جميع الأقسام',
+                filterEmploymentType: 'فرز حسب النوع',
+                allTypes: 'جميع الأنواع',
+                clearFilters: 'مسح الفلاتر',
+                noResults: 'لم يتم العثور على وظائف',
+                tryDifferentFilters: 'حاول تعديل بحثك أو فلاترك.',
+                loadMore: 'تحميل المزيد'
+            },
+            public: {
+                about: 'من نحن',
+                contact: 'اتصل بنا'
+            },
+            about: {
+                title: 'من نحن',
+                subtitle: 'نحن فريق من الأشخاص المتحمسين الذين يعملون على بناء مستقبل الموارد البشرية.',
+                missionTitle: 'مهمتنا',
+                missionText: 'تمكين المنظمات من بناء أماكن عمل أكثر سعادة وإنتاجية.',
+                visionTitle: 'رؤيتنا',
+                visionText: 'أن نكون المنصة الرائدة في مجال الموارد البشرية للشركات الصغيرة والمتوسطة.'
+            },
+            contact: {
+                title: 'تواصل معنا',
+                subtitle: 'يسعدنا أن نسمع منك. إليك كيفية الوصول إلينا.',
+                email: 'البريد الإلكتروني',
+                phone: 'الهاتف',
+                address: 'العنوان',
+                formTitle: 'أرسل لنا رسالة',
+                name: 'الاسم',
+                subject: 'الموضوع',
+                message: 'الرسالة',
+                sending: 'جار الإرسال...',
+                sendMessage: 'إرسال الرسالة',
+                success: 'تم إرسال رسالتك بنجاح!',
+                error: 'حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى.'
             }
         }
     }

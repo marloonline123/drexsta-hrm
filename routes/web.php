@@ -17,6 +17,7 @@ use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\Profile\PasswordController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\SelectCompanyController;
+use App\Http\Controllers\PublicPagesController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -128,10 +129,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
+// Public Pages
+Route::get('{company}/about', [PublicPagesController::class, 'about'])->name('about');
+Route::get('{company}/contact', [PublicPagesController::class, 'contact'])->name('contact');
+Route::post('{company}/contact', [PublicPagesController::class, 'storeContactForm'])->name('contact.store');
+
+
 // Public Job Postings Routes
 Route::get('jobs/{company}', [JobPostingController::class, 'index'])->name('jobs.index');
 Route::get('jobs/{company}/{jobPosting}', [JobPostingController::class, 'show'])->name('jobs.show');
-Route::post('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
+Route::get('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
+Route::post('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'storeApplication'])->name('jobs.apply.store');
 Route::get('applications/{company}/{token}/edit', [JobPostingController::class, 'editApplication'])->name('applications.edit');
 Route::put('applications/{company}/{token}', [JobPostingController::class, 'updateApplication'])->name('applications.update');
 

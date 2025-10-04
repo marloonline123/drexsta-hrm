@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobApplicationRequest;
-use App\Http\Resources\Admin\JobPostingResource;
+use App\Http\Resources\JobPostingResource;
+use App\Models\Company;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
@@ -15,32 +16,49 @@ class JobPostingController extends Controller
     /**
      * Display a listing of open job postings for candidates.
      */
-    public function index()
+    public function index(Request $request, Company $company)
     {
-        $postings = JobPosting::open()
-            ->with(['jobRequisition.department', 'jobRequisition.jobTitle', 'employmentType'])
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
+        $query = $company->jobPostings()->open()
+            ->with(['company', 'jobRequisition.department', 'jobRequisition.jobTitle', 'employmentType']);
 
-        return Inertia::render('JobPostings/Index', [
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%');
+        }
+
+        if ($request->filled('department')) {
+            $query->whereHas('jobRequisition', function ($q) use ($request) {
+                $q->where('department_id', $request->input('department'));
+            });
+        }
+
+        if ($request->filled('employment_type')) {
+            $query->where('employment_type_id', $request->input('employment_type'));
+        }
+
+        $postings = $query->latest()->paginate(9)->withQueryString();
+
+        return Inertia::render('Public/JobPostings/Index', [
             'postings' => JobPostingResource::collection($postings),
+            'company' => $company,
+            'departments' => $company->departments()->get(['id', 'name']),
+            'employmentTypes' => \App\Models\EmploymentType::all(['id', 'name']),
+            'filters' => $request->only(['search', 'department', 'employment_type']),
         ]);
     }
 
     /**
      * Display the specified job posting for candidates.
      */
-    public function show(JobPosting $jobPosting)
+    public function show(Company $company, JobPosting $jobPosting)
     {
         // Only show open job postings
         if ($jobPosting->status !== 'open') {
             abort(404);
         }
 
-        $jobPosting->load(['jobRequisition.department', 'jobRequisition.jobTitle', 'employmentType']);
+        $jobPosting->load(['company', 'jobRequisition.department', 'jobRequisition.jobTitle', 'employmentType']);
 
-        return Inertia::render('JobPostings/Show', [
+        return Inertia::render('Public/JobPostings/Show', [
             'posting' => JobPostingResource::make($jobPosting)->resolve(),
         ]);
     }
@@ -48,7 +66,18 @@ class JobPostingController extends Controller
     /**
      * Store a new job application.
      */
-    public function apply(JobApplicationRequest $request, JobPosting $jobPosting)
+    public function apply(Company $company, JobPosting $jobPosting)
+    {
+        return Inertia::render('Public/JobPostings/Apply', [
+            'posting' => JobPostingResource::make($jobPosting)->resolve(),
+            'company' => $company,
+        ]);
+    }
+
+    /**
+     * Store a new job application.
+     */
+    public function storeApplication(JobApplicationRequest $request, Company $company, JobPosting $jobPosting)
     {
         // Only allow applications for open job postings
         if ($jobPosting->status !== 'open') {
@@ -56,8 +85,9 @@ class JobPostingController extends Controller
         }
 
         // Check for duplicate applications
+        $validated = $request->validated();
         $existingApplication = JobApplication::where('job_posting_id', $jobPosting->id)
-            ->where('email', $request->email)
+            ->where('email', $validated['email'])
             ->first();
 
         if ($existingApplication) {
@@ -92,7 +122,7 @@ class JobPostingController extends Controller
             abort(403, 'This application cannot be edited.');
         }
 
-        return Inertia::render('JobPostings/EditApplication', [
+        return Inertia::render('Public/JobPostings/EditApplication', [
             'application' => $application,
             'posting' => $application->jobPosting,
         ]);

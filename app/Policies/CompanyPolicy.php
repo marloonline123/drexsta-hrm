@@ -23,7 +23,7 @@ class CompanyPolicy
      */
     public function view(User $user, Company $company): bool
     {
-        return false;
+        return $user->hasPermissionTo('companies.view');
     }
 
     /**

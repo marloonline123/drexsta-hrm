@@ -38,6 +38,11 @@ class JobPosting extends BaseModel
         'custom_fields' => 'array',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

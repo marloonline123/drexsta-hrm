@@ -39,6 +39,7 @@ class JobPostingResource extends JsonResource
             'updated_at' => $this->updated_at,
             'employmentType' => $this->whenLoaded('employmentType'),
             'jobRequisition' => $this->whenLoaded('jobRequisition'),
+            'company' => $this->whenLoaded('company'),
             'applications_count' => $this->whenLoaded('applications', fn() => $this->applications->count()),
         ];
     }
