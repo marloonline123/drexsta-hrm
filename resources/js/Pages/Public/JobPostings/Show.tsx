@@ -1,11 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { DollarSign, User, Calendar } from 'lucide-react';
-import { Button } from '@/Components/Ui/button';
+import { Button, buttonVariants } from '@/Components/Ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/Ui/card';
 import { Badge } from '@/Components/Ui/badge';
 import { JobPosting } from '@/Types/job-postings';
 import { useLanguage } from '@/Hooks/use-language';
 import PublicLayout from '@/Layouts/PublicLayout';
+import { cn } from '@/Lib/utils';
 
 interface JobPostingShowProps {
   posting: JobPosting;
@@ -59,7 +60,7 @@ export default function PublicJobPostingShow({ posting, flash }: JobPostingShowP
                         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{posting.title}</h1>
                         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
                             <p className="text-sm text-muted-foreground">{posting.company.name}</p>
-                            <Badge variant="outline">{posting.employmentType.name}</Badge>
+                            <Badge>{posting.employmentType.name}</Badge>
                             {posting.location && <p className="text-sm text-muted-foreground">{posting.location}</p>}
                             {posting.is_remote && <Badge variant="secondary">{t('publicJobs.remote')}</Badge>}
                         </div>
@@ -96,8 +97,8 @@ export default function PublicJobPostingShow({ posting, flash }: JobPostingShowP
             <div className="mt-8 lg:mt-0 lg:col-span-4">
                 <div className="sticky top-8 space-y-6">
                     <div className="lg:hidden">
-                        <Link href={route('jobs.apply', { company: posting.company.slug, jobPosting: posting.slug })} className="w-full">
-                            <Button size="lg" className="w-full">{t('publicJobs.applyNow')}</Button>
+                        <Link href={route('jobs.apply', { company: posting.company.slug, jobPosting: posting.slug })} className={cn("w-full", buttonVariants({ variant: 'default', size: 'lg' }))}>
+                            {t('publicJobs.applyNow')}
                         </Link>
                     </div>
                     <Card>

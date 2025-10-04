@@ -15,8 +15,8 @@ import {
     Handshake
 } from 'lucide-react';
 import { Employee } from '@/Types';
-import { Badge } from '../Ui/badge';
-import { Button } from '../Ui/button';
+import { Badge } from '@/Components/Ui/badge';
+import { Button } from '@/Components/Ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -73,9 +73,9 @@ export default function EmployeeItem({ employee, index }: { employee: Employee, 
 
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2">
-                                <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                                <Link href={route('dashboard.employees.show', employee.username)} className="font-semibold text-lg group-hover:text-primary transition-colors">
                                     {employee.name}
-                                </h3>
+                                </Link>
                                 {getStatusIcon(employee.email_verified_at ? 'active' : 'inactive')}
                                 {employee.email_verified_at ?
                                     <Badge className="bg-green-100 text-green-800">Active</Badge> :

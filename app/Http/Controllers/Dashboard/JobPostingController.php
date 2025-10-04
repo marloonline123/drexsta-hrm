@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\JobPostingStatus;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\JobPostingRequest;
 use App\Http\Resources\JobPostingResource;
@@ -10,6 +11,7 @@ use App\Models\JobPosting;
 use App\Models\JobRequisition;
 use App\Services\Business\JobPostingService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class JobPostingController extends BaseController
@@ -133,7 +135,7 @@ class JobPostingController extends BaseController
     {
         $this->authorize('update', $jobPosting);
         $request->validate([
-            'status' => 'required|in:draft,open,closed',
+            'status' => ['required', Rule::enum(JobPostingStatus::class)],
         ]);
 
         $jobPosting->update(['status' => $request->status]);

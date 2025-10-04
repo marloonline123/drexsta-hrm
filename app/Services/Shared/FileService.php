@@ -41,6 +41,30 @@ class FileService
     }
 
     /**
+     * Store an uploaded image and return its storage path.
+     */
+    public function storeFile(UploadedFile $file, int $companyId, string $directory = 'files/others', ?string $customName = null): string
+    {
+        try {
+            // Ensure the directory has no trailing slash
+            $directory = 'COMPANYID_' . $companyId . '/' . rtrim($directory, '/');
+
+            // Generate a filename (custom or original)
+            $filename = $customName
+                ? $customName . '.' . $file->extension()
+                : $file->hashName();
+
+            // Ensure uniqueness
+            $filename = $this->ensureUniqueFilename($directory, $filename);
+
+            // Store the file
+            return $file->storeAs($directory, $filename, $this->disk);
+        } catch (Exception $e) {
+            throw new Exception("Image upload failed: " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
      * Delete a file from storage.
      */
     public function deleteFile(string $filePath): bool

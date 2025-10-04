@@ -1,8 +1,20 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import PublicHeader from '@/Layouts/Public/PublicHeader';
-import PublicFooter from '@/Layouts/Public/PublicFooter';
+import PublicFooter from './Public/PublicFooter';
+import { usePage } from '@inertiajs/react';
+import { toast, Toaster } from 'sonner';
 
 export default function PublicLayout({ children }: PropsWithChildren) {
+    const flashMessage = usePage().props.flash as { success?: string; error?: string } | undefined;
+    useEffect(() => {
+        if (flashMessage?.success) {
+            toast.success(flashMessage.success);
+        }
+        if (flashMessage?.error) {
+            toast.error(flashMessage.error);
+        }
+    }, [flashMessage?.error, flashMessage?.success]);
+
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
             <PublicHeader />
@@ -10,6 +22,7 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                 {children}
             </main>
             <PublicFooter />
+            <Toaster />
         </div>
     );
 }

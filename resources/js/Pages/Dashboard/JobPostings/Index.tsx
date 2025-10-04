@@ -13,6 +13,7 @@ import { router } from '@inertiajs/core';
 import { useLanguage } from '@/Hooks/use-language';
 import { JobPosting } from '@/Types/job-postings';
 import { hasPermissionTo } from '@/Lib/permissions';
+import { cn } from '@/Lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -49,7 +50,7 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
 
   const handleDelete = (posting: JobPosting) => {
     if (confirm(t('jobPostings.confirmDelete'))) {
-      router.delete(route('dashboard.job-postings.destroy', posting.id), {
+      router.delete(route('dashboard.job-postings.destroy', posting.slug), {
         onSuccess: () => {
           toast.success(t('jobPostings.deleteSuccess'));
         },
@@ -61,7 +62,7 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
   };
 
   const updateStatus = (posting: JobPosting, status: 'open' | 'closed') => {
-    router.patch(route('dashboard.job-postings.update-status', posting.id),
+    router.patch(route('dashboard.job-postings.update-status', posting.slug),
       { status },
       {
         onSuccess: () => {
@@ -131,7 +132,7 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
                 </TableHeader>
                 <TableBody>
                   {postingsData.map((posting) => (
-                    <TableRow key={posting.id}>
+                    <TableRow key={posting.slug}>
                       <TableCell className="font-medium">{posting.title}</TableCell>
                       <TableCell>
                         {posting.jobRequisition?.requisition_code || 'N/A'}
@@ -162,17 +163,13 @@ export default function JobPostingsIndex({ postings }: JobPostingsIndexProps) {
                               <Square className="h-4 w-4" />
                             </Button>
                           )}
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={route('dashboard.job-postings.show', posting.id)}>
+                          <Link href={route('dashboard.job-postings.show', posting.slug)} className={cn(buttonVariants({variant: 'outline', size: 'sm'}))}>
                               <Eye className="h-4 w-4" />
-                            </a>
-                          </Button>
+                          </Link>
                           {hasPermissionTo(user, 'job-postings.edit') && (
-                            <Button variant="outline" size="sm" asChild>
-                              <a href={route('dashboard.job-postings.edit', posting.id)}>
-                                <Edit className="h-4 w-4" />
-                              </a>
-                            </Button>
+                            <Link href={route('dashboard.job-postings.edit', posting.slug)} className={cn(buttonVariants({variant: 'outline', size: 'sm'}))}>
+                              <Edit className="h-4 w-4" />
+                            </Link>
                           )}
                           {hasPermissionTo(user, 'job-postings.delete') && (
                             <Button

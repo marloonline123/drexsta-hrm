@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Public;
 
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Models\Company;
 
-class PublicPagesController extends Controller
+class PublicPagesController extends BaseController
 {
     public function about(Company $company)
     {

@@ -56,6 +56,9 @@ class PermissionRoleSetupService
             // Job Requesitions Management
             'job-requisitions.view', 'job-requisitions.create', 'job-requisitions.edit', 'job-requisitions.delete',
 
+            // Job Applications Management
+            'job-applications.view', 'job-applications.edit', 'job-applications.delete',
+
             // Abilities Management
             'abilities.view', 'abilities.create', 'abilities.edit', 'abilities.delete',
 
@@ -116,7 +119,8 @@ class PermissionRoleSetupService
             'leave-types.edit','leave-types.delete', 'employment-types.view','employment-types.create',
             'employment-types.edit','employment-types.delete', 'job-postings.view','job-postings.create',
             'job-postings.edit','job-postings.delete', 'job-requisitions.view','job-requisitions.create',
-            'job-requisitions.edit','job-requisitions.delete', 'abilities.view','abilities.create','abilities.edit',
+            'job-requisitions.edit','job-requisitions.delete', 'job-applications.view','job-applications.edit',
+            'job-applications.delete', 'abilities.view','abilities.create','abilities.edit',
             'abilities.delete', 'approval-policies.edit',
         ]));
 

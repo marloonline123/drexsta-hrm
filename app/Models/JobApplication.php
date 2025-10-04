@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\JobApplicationStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class JobApplication extends Model
+class JobApplication extends BaseModel
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'company_id',
         'job_posting_id',
-        'first_name',
-        'last_name',
+        'number',
+        'name',
         'email',
         'phone',
         'cover_letter',
@@ -23,6 +26,7 @@ class JobApplication extends Model
     ];
 
     protected $casts = [
+        'status' => JobApplicationStatus::class,
         'token_expires_at' => 'datetime',
         'custom_fields' => 'array',
     ];

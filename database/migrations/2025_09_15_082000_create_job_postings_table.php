@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('job_requisition_id')->constrained()->cascadeOnDelete();
             $table->foreignId('employment_type_id')->constrained('employment_types')->cascadeOnDelete();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
+            $table->string('number')->unique();
             $table->text('description')->nullable();
             $table->text('requirements')->nullable();
             $table->string('location')->nullable();
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->decimal('max_salary', 10, 2)->nullable();
             $table->date('target_start_date')->nullable();
             $table->date('closing_date')->nullable();
-            $table->enum('status', ['draft', 'pending_approval', 'approved', 'rejected', 'listed', 'closed'])->default('draft');
+            $table->string('status');
             $table->text('benefits')->nullable();
             $table->text('responsibilities')->nullable();
             $table->integer('experience_years')->nullable();
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->boolean('is_remote')->default(false);
             $table->json('custom_fields')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

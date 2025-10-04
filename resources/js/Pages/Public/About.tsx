@@ -13,7 +13,7 @@ export default function About({ company }: AboutProps) {
 
     return (
         <PublicLayout>
-            <Head title={t('public.about')} />
+            <Head title={t('public.about') + ' | ' + company.name} />
             <div className="space-y-8">
                 <section className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">

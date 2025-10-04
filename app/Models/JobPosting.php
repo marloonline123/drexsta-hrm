@@ -2,14 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\JobPostingStatus;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class JobPosting extends BaseModel
-{    
+class JobPosting extends Model
+{
+    use SoftDeletes;
+    
     protected $fillable = [
         'company_id',
         'job_requisition_id',
+        'number',
         'title',
         'slug',
         'description',
@@ -36,6 +42,7 @@ class JobPosting extends BaseModel
         'closing_date' => 'date',
         'is_remote' => 'boolean',
         'custom_fields' => 'array',
+        'status' => JobPostingStatus::class,
     ];
 
     public function getRouteKeyName(): string
@@ -68,7 +75,7 @@ class JobPosting extends BaseModel
      */
     public function scopeOpen($query)
     {
-        return $query->where('status', 'open');
+        return $query->where('status', JobPostingStatus::OPEN);
     }
 
     /**
@@ -76,6 +83,6 @@ class JobPosting extends BaseModel
      */
     public function scopeNotClosed($query)
     {
-        return $query->where('status', '!=', 'closed');
+        return $query->where('status', '!=', JobPostingStatus::CLOSED);
     }
 }

@@ -3,6 +3,7 @@ import type { Config } from 'ziggy-js';
 import { User } from './user';
 
 export type { Employee } from './employees';
+export type { JobApplication, JobApplicationForm } from './job-applications';
 
 export interface Auth {
     user: User;
@@ -23,8 +24,16 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
-    show?: boolean;
+    permission: string | null;
 }
+
+export interface NavItemData {
+    categoryName: string;
+    categoryIcon: LucideIcon | null;
+    items: NavItem[];
+}
+
+export type NavItemsData = NavItemData[];
 
 export interface SharedData {
     name: string;

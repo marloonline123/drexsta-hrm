@@ -3,8 +3,8 @@ import { Link, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { useLanguage } from '@/Hooks/use-language';
 import { Company } from '@/Types/companies';
-import { ThemeToggle } from '@/Components/ThemeToggle';
-import { LanguageSelector } from '@/Components/LanguageSelector';
+import { ThemeToggle } from '@/Components/Layout/ThemeToggle';
+import { LanguageSelector } from '@/Components/Layout/LanguageSelector';
 
 export default function PublicHeader() {
     const { t } = useLanguage();

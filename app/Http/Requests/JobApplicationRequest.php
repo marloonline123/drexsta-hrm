@@ -22,11 +22,11 @@ class JobApplicationRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'cover_letter' => 'nullable|string',
+            'resume_file' => 'required|file|mimes:pdf,doc,docx|max:10240', // Max 10MB
         ];
 
         // Additional rules for application updates

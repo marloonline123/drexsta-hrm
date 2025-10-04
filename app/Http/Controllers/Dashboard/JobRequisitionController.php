@@ -57,6 +57,9 @@ class JobRequisitionController extends BaseController
     public function store(JobRequisitionRequest $request)
     {
         $this->authorize('create', JobRequisition::class);
+        if (JobRequisition::whereDate('created_at', today())->count() >= 9999) {
+            return redirect()->back()->with('error', 'Requisition Limit Reached Try again tomorrow');
+        }
         $data = $request->validated();
         $requisition = JobRequisition::create($data + [
             'requisition_code' => $this->generateRequisitionCode(),
@@ -133,18 +136,18 @@ class JobRequisitionController extends BaseController
     private function generateRequisitionCode(): string
     {
         $companyId = request()->user()->active_company_id;
-        $prefix = 'JR_' . 'CMPID' . '-' . $companyId . '_' . now()->format('Y-m-d') . '_';
+        $prefix = 'CMP' . '_' . $companyId . '_' . now()->format('Y-m-d') . 'JR-';
         $lastRequisition = JobRequisition::where('requisition_code', 'like', $prefix . '%')
             ->orderBy('id', 'desc')
             ->first();
 
         if ($lastRequisition) {
-            $lastNumber = (int) str_replace($prefix . '_', '', $lastRequisition->requisition_code);
+            $lastNumber = (int) str_replace($prefix, '', $lastRequisition->requisition_code);
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
 
-        return $prefix . '_' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        return $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 }

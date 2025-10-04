@@ -14,6 +14,7 @@ class JobPostingService
         $posting = JobPosting::create($data + [
             'company_id' => $company->id,
             'job_requisition_id' => $requisition->id,
+            'number' => $this->generateJobPostingNumber($company->id),
             'title' => $requisition->jobTitle->title,
             'slug' => uniqueSlug(JobPosting::class, $company->id, $data['title'] ?? $requisition->jobTitle->title),
             'description' => $requisition->job_description,
@@ -24,5 +25,22 @@ class JobPostingService
         ]);
 
         return $posting;
+    }
+
+    private function generateJobPostingNumber(int $companyId): string
+    {
+        $prefix = 'CMP_' . $companyId . '_' . now()->format('Ymd') . '_JobPost-';
+        $lastJobPosting = JobPosting::where('number', 'like', $prefix . '%')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($lastJobPosting) {
+            $lastJobPostingNumber = str_replace($prefix, '', $lastJobPosting->number);
+            $newNumber = $lastJobPostingNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        return $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 }

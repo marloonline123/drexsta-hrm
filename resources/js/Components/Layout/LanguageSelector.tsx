@@ -12,8 +12,6 @@ export function LanguageSelector() {
         { code: 'ar', label: 'العربية' },
     ];
 
-    const currentLang = languages.find(lang => lang.code === currentLanguage);
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

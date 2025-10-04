@@ -9,15 +9,16 @@ use App\Http\Controllers\Dashboard\Employee\EmployeeExcelController;
 use App\Http\Controllers\Dashboard\Employee\EmployeesResourceController;
 use App\Http\Controllers\Dashboard\Employee\UpdateEmployeePasswordController;
 use App\Http\Controllers\Dashboard\EmploymentTypeController;
+use App\Http\Controllers\Dashboard\JobApplicationController;
 use App\Http\Controllers\Dashboard\JobPostingController as AdminJobPostingController;
 use App\Http\Controllers\Dashboard\JobRequisitionController;
 use App\Http\Controllers\Dashboard\JobTitleController;
 use App\Http\Controllers\Dashboard\RolesController;
-use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\Public\JobPostingController;
 use App\Http\Controllers\Profile\PasswordController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\SelectCompanyController;
-use App\Http\Controllers\PublicPagesController;
+use App\Http\Controllers\Public\PublicPagesController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -63,7 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Job Postings
         Route::resource('job-postings', AdminJobPostingController::class);
         Route::patch('job-postings/{jobPosting}/status', [AdminJobPostingController::class, 'updateStatus'])->name('job-postings.update-status');
-        
+
+        // Job Applications
+        Route::resource('job-applications', JobApplicationController::class)->except(['create', 'store']);
+
         // Employees
         Route::resource('employees', EmployeesResourceController::class);
         Route::patch('employees/{employee}/update-password', [UpdateEmployeePasswordController::class, 'updatePassword'])->name('employees.update-password');
@@ -140,6 +144,7 @@ Route::get('jobs/{company}', [JobPostingController::class, 'index'])->name('jobs
 Route::get('jobs/{company}/{jobPosting}', [JobPostingController::class, 'show'])->name('jobs.show');
 Route::get('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'apply'])->name('jobs.apply');
 Route::post('jobs/{company}/{jobPosting}/apply', [JobPostingController::class, 'storeApplication'])->name('jobs.apply.store');
+Route::get('jobs/{company}/{jobPosting}/success/{applicationNumber}', [JobPostingController::class, 'applicationSuccess'])->name('jobs.apply.success');
 Route::get('applications/{company}/{token}/edit', [JobPostingController::class, 'editApplication'])->name('applications.edit');
 Route::put('applications/{company}/{token}', [JobPostingController::class, 'updateApplication'])->name('applications.update');
 

@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
+import AppLayout from '@/Layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { Button } from '@/Components/Ui/button';
 import {
