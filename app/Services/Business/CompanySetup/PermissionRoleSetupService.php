@@ -73,6 +73,9 @@ class PermissionRoleSetupService
             'reports.view', 'reports.create',
             // Settings
             'settings.view', 'settings.manage',
+
+            // Payment Methods Management
+            'payment-methods.view', 'payment-methods.create', 'payment-methods.edit', 'payment-methods.delete',
         ];
     }
 
@@ -121,7 +124,8 @@ class PermissionRoleSetupService
             'job-postings.edit','job-postings.delete', 'job-requisitions.view','job-requisitions.create',
             'job-requisitions.edit','job-requisitions.delete', 'job-applications.view','job-applications.edit',
             'job-applications.delete', 'abilities.view','abilities.create','abilities.edit',
-            'abilities.delete', 'approval-policies.edit',
+            'abilities.delete', 'approval-policies.edit', 'payment-methods.view','payment-methods.create',
+            'payment-methods.edit','payment-methods.delete',
         ]));
 
         $financeRole->syncPermissions($this->filterPermissions($permissions, [

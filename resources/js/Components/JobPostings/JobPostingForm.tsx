@@ -52,7 +52,7 @@ export default function JobPostingForm({ requisitions, employmentTypes, handleSu
                                     </SelectTrigger>
                                     <SelectContent>
                                         {requisitions.map((requisition) => (
-                                            <SelectItem key={requisition.id} value={requisition.id}>
+                                            <SelectItem key={requisition.id} value={requisition.id.toString()}>
                                                 {requisition.requisition_code}
                                             </SelectItem>
                                         ))}

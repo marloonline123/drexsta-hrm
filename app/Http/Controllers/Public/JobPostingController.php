@@ -56,9 +56,9 @@ class JobPostingController extends BaseController
     public function show(Company $company, JobPosting $jobPosting)
     {
         // Only show open job postings
-        if ($jobPosting->status !== 'open') {
-            abort(404);
-        }
+        // if ($jobPosting->status !== 'open') {
+        //     abort(404);
+        // }
 
         $jobPosting->load(['company', 'jobRequisition.department', 'jobRequisition.jobTitle', 'employmentType']);
 
@@ -96,9 +96,9 @@ class JobPostingController extends BaseController
     public function storeApplication(JobApplicationRequest $request, Company $company, JobPosting $jobPosting)
     {
         // Only allow applications for open job postings
-        if ($jobPosting->status !== 'open') {
-            return redirect()->back()->with('error', 'This job posting is no longer accepting applications.');
-        }
+        // if ($jobPosting->status !== 'open') {
+        //     return redirect()->back()->with('error', 'This job posting is no longer accepting applications.');
+        // }
 
         if (JobApplication::whereDate('created_at', today())->count() >= 9999) {
             return redirect()->back()->with('error', 'Application Limit Reached Try again tomorrow');

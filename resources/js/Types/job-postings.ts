@@ -5,6 +5,8 @@ export interface JobPosting {
   id: number;
   company_id: number;
   job_requisition_id: number;
+  job_title_id: number;
+  job_title: string;
   title: string;
   slug: string;
   description: string | null;

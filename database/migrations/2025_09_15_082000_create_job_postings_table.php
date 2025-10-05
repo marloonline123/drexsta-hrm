@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('job_requisition_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('job_title_id')->constrained()->cascadeOnDelete();
             $table->foreignId('employment_type_id')->constrained('employment_types')->cascadeOnDelete();
             $table->string('title');
             $table->string('slug');

@@ -18,6 +18,7 @@ class JobPostingResource extends JsonResource
             'id' => $this->id,
             'company_id' => $this->company_id,
             'job_requisition_id' => $this->job_requisition_id,
+            'job_title_id' => $this->job_title_id,
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
@@ -39,6 +40,7 @@ class JobPostingResource extends JsonResource
             'updated_at' => $this->updated_at,
             'employmentType' => $this->whenLoaded('employmentType'),
             'jobRequisition' => $this->whenLoaded('jobRequisition'),
+            'jobTitle' => $this->whenLoaded('jobTitle'),
             'company' => $this->whenLoaded('company'),
             'applications_count' => $this->whenLoaded('applications', fn() => $this->applications->count()),
         ];

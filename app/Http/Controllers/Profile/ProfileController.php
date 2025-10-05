@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Http\Requests\UpdatePaymentMethodsRequest;
+use App\Models\PaymentMethod;
+use App\Models\UserPaymentData;
 use App\Services\Shared\FileService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,9 +30,19 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+        $companyId = $user->active_company_id;
+
+        $paymentMethods = PaymentMethod::where('company_id', $companyId)->active()->get();
+        $userPaymentData = UserPaymentData::where('user_id', $user->id)
+            ->with('paymentMethod')
+            ->get();
+
         return Inertia::render('Profile/Info', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'paymentMethods' => $paymentMethods,
+            'userPaymentData' => $userPaymentData,
         ]);
     }
 
@@ -56,6 +70,44 @@ class ProfileController extends Controller
         $user->save();
 
         return to_route('dashboard.profile.edit')->with('success', 'Profile updated successfully.');
+    }
+
+    /**
+     * Show the payment data edit page.
+     */
+    public function editPaymentData(Request $request): Response
+    {
+        $user = $request->user();
+        $companyId = $user->active_company_id;
+
+        $paymentMethods = PaymentMethod::where('company_id', $companyId)->active()->get();
+        $userPaymentData = UserPaymentData::where('user_id', $user->id)
+            ->where('company_id', $companyId)
+            ->with('paymentMethod')
+            ->get();
+
+        return Inertia::render('Profile/PaymentData', [
+            'paymentMethods' => $paymentMethods,
+            'userPaymentData' => $userPaymentData,
+        ]);
+    }
+
+    /**
+     * Update the user's payment data.
+     */
+    public function updatePaymentData(UpdatePaymentMethodsRequest $request): RedirectResponse
+    {
+        $user = FacadesAuth::user();
+        $companyId = $user->active_company_id;
+        $data = $request->validated();
+
+        // Create new payment data if provided
+        UserPaymentData::updateOrCreate([
+            'user_id' => $user->id,
+            'company_id' => $companyId,
+        ], $data);
+
+        return to_route('dashboard.profile.edit', ['tab' => 'payment-data'])->with('success', 'Payment methods updated successfully.');
     }
 
     /**

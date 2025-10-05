@@ -15,6 +15,7 @@ class JobPosting extends Model
     protected $fillable = [
         'company_id',
         'job_requisition_id',
+        'job_title_id',
         'number',
         'title',
         'slug',
@@ -58,6 +59,11 @@ class JobPosting extends Model
     public function jobRequisition(): BelongsTo
     {
         return $this->belongsTo(JobRequisition::class);
+    }
+
+    public function jobTitle(): BelongsTo
+    {
+        return $this->belongsTo(JobTitle::class);
     }
 
     public function employmentType(): BelongsTo

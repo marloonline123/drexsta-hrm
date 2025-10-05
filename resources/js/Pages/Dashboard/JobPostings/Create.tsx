@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
 import { Briefcase } from 'lucide-react';
-import AppLayout from '@/layouts/AppLayout';
+import AppLayout from '@/Layouts/AppLayout';
 import { type BreadcrumbItem } from '@/Types';
 import { useForm } from '@inertiajs/react';
 import { JobPostingForm } from '@/Types/job-postings';

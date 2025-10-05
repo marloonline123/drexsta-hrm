@@ -75,14 +75,14 @@ const ApplicationSuccess = ({ posting, company, applicationNumber }: Application
                             variants={itemVariants}
                             className="text-3xl font-bold text-gray-900 mb-2"
                         >
-                            {t('publicJobs.applicationSuccess')}
+                            {t('publicJobs.applicationSuccess', { position: posting.title })}
                         </motion.h1>
 
                         <motion.p
                             variants={itemVariants}
                             className="text-lg text-gray-600"
                         >
-                            {t('publicJobs.applicationSuccessMessage', { position: posting.title })}
+                            {t('publicJobs.applicationSuccessText')}
                         </motion.p>
                     </motion.div>
 

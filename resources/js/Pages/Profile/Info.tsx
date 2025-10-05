@@ -8,7 +8,7 @@ import InputError from '@/Components/input-error';
 import { Button } from '@/Components/Ui/button';
 import { Input } from '@/Components/Ui/input';
 import { Label } from '@/Components/Ui/label';
-import AppLayout from '@/layouts/AppLayout';
+import AppLayout from '@/Layouts/AppLayout';
 import ProfileLayout from '@/layouts/Profile/Layout';
 import { ImageUpload } from '@/Components/Ui/image-upload';
 

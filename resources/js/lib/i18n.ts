@@ -36,7 +36,13 @@ const resources = {
                 approvalPolicies: 'Approval Policies',
                 jobRequisitions: 'Job Requisitions',
                 jobPostings: 'Job Postings',
-                jobApplications: 'Job Applications'
+                jobApplications: 'Job Applications',
+                myAttendance: 'My Attendance',
+                myLeaves: 'My Leaves',
+                myPayroll: 'My Payroll',
+                myLoans: 'My Loans',
+                paymentData: 'Payment Data',
+                paymentMethods: 'Payment Methods'
             },
             // Companies
             companies: {
@@ -479,6 +485,7 @@ const resources = {
                 noResults: 'No jobs found',
                 tryDifferentFilters: 'Try adjusting your search or filters.',
                 loadMore: 'Load More',
+                applicationSuccess: 'Thank you for applying to {{position}}',
                 applicationSuccessMessage: 'Thank you for applying to {{position}}',
                 applicationDetails: 'Application Details',
                 applicationConfirmation: 'Your application has been received and is being reviewed.',
@@ -640,7 +647,12 @@ const resources = {
                 abilities: 'القدرات',
                 jobRequisitions: 'طلبات التوظيف',
                 jobPostings: 'إعلانات الوظائف',
-                jobApplications: 'طلبات التوظيف'
+                jobApplications: 'طلبات التوظيف',
+                myAttendance: 'حضوري',
+                myLeaves: 'إجازاتي',
+                myPayroll: 'مرتبي',
+                myLoans: 'قروضي',
+                paymentData: 'بيانات الدفع'
             },
             // Companies
             companies: {
@@ -1147,6 +1159,31 @@ const resources = {
                 sendMessage: 'إرسال الرسالة',
                 success: 'تم إرسال رسالتك بنجاح!',
                 error: 'حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى.'
+            },
+            paymentMethods: {
+                title: 'Payment Methods',
+                description: 'Manage payment methods available for employees',
+                addMethod: 'Add Payment Method',
+                create: 'Create Payment Method',
+                createDescription: 'Add a new payment method for your organization',
+                edit: 'Edit Payment Method',
+                editDescription: 'Update payment method settings',
+                deleteTitle: 'Delete Payment Method',
+                deleteDescription: 'Are you sure you want to delete this payment method? This action cannot be undone.',
+                deleteButton: 'Delete Payment Method',
+                deleteWarning: 'This will permanently remove the payment method and cannot be undone.',
+                list: 'Payment Methods',
+                listDescription: 'All payment methods configured for your organization',
+                noMethods: 'No payment methods found',
+                createFirst: 'Create your first payment method',
+                details: 'Payment Method Details',
+                detailsDescription: 'Configure the payment method settings',
+                namePlaceholder: 'e.g., Bank Transfer, Credit Card',
+                descriptionPlaceholder: 'Describe how this payment method works...',
+                active: 'Active',
+                activeDescription: 'Inactive payment methods won\'t be available for employees to select',
+                saveButton: 'Save Payment Method',
+                viewDescription: 'Payment method details and settings'
             }
         }
     }

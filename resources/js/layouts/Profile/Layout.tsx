@@ -11,16 +11,25 @@ const sidebarNavItems: NavItem[] = [
         title: 'Profile',
         href: route('dashboard.profile.edit'),
         icon: null,
+        permission: null,
+    },
+    {
+        title: 'Payment Data',
+        href: route('dashboard.profile.payment-data.edit'),
+        icon: null,
+        permission: null,
     },
     {
         title: 'Password',
         href: route('dashboard.profile.password.edit'),
         icon: null,
+        permission: null,
     },
     {
         title: 'Appearance',
         href: route('dashboard.profile.appearance'),
         icon: null,
+        permission: null,
     },
 ];
 

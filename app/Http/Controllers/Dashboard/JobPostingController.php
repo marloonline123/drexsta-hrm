@@ -24,7 +24,7 @@ class JobPostingController extends BaseController
     public function index()
     {
         $this->authorize('viewAny', JobPosting::class);
-        $postings = JobPosting::with(['jobRequisition.department', 'jobRequisition.jobTitle'])
+        $postings = JobPosting::with(['jobRequisition.department', 'jobRequisition.jobTitle', 'jobTitle'])
             ->latest()
             ->paginate(12);
 
@@ -75,7 +75,7 @@ class JobPostingController extends BaseController
     public function show(JobPosting $jobPosting)
     {
         $this->authorize('view', $jobPosting);
-        $jobPosting->load(['jobRequisition.department', 'jobRequisition.jobTitle', 'jobRequisition.requester', 'company', 'employmentType']);
+        $jobPosting->load(['jobRequisition.department', 'jobRequisition.jobTitle', 'jobRequisition.requester', 'company', 'employmentType', 'jobTitle']);
 
         return Inertia::render('Dashboard/JobPostings/Show', [
             'posting' => (new JobPostingResource($jobPosting))->resolve(),

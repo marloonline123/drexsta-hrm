@@ -13,6 +13,7 @@ class JobPostingService
         // Create the job posting with data from requisition
         $posting = JobPosting::create($data + [
             'company_id' => $company->id,
+            'job_title_id' => $requisition->job_title_id,
             'job_requisition_id' => $requisition->id,
             'number' => $this->generateJobPostingNumber($company->id),
             'title' => $requisition->jobTitle->title,

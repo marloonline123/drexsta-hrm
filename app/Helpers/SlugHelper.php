@@ -41,9 +41,9 @@ function generateSlug($string, $separator = '-')
     return $string;
 }
 
-function uniqueSlug(string $model, $companyId, string $title): string {
+function uniqueSlug(string $model, string $title): string {
     $slug = generateSlug($title);
-    if ($model::where('company_id', $companyId)->where('slug', $slug)->exists()) {
+    if ($model::where('slug', $slug)->exists()) {
         $slug = $slug . '-' . rand(1000, 9999);
         return uniqueSlug($model, $slug);
     }

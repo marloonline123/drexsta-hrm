@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\JobPostingStatus;
 use App\Events\JobRequisitionCreated;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\JobRequisitionRequest;
 use App\Http\Resources\JobRequisitionResource;
 use App\Models\Department;
+use App\Models\JobPosting;
 use App\Models\JobRequisition;
 use App\Models\JobTitle;
 use Inertia\Inertia;
@@ -112,8 +114,15 @@ class JobRequisitionController extends BaseController
     {
         $this->authorize('update', $jobRequisition);
         $data = $request->validated();
-        $jobRequisition->update($data);
+        $jobRequisition->fill($data);
 
+        if ($jobRequisition->isDirty('job_title_id')) {
+            JobPosting::where('job_requisition_id', $jobRequisition->id)
+                ->whereIn('status', [JobPostingStatus::DRAFT, JobPostingStatus::OPEN])
+                ->update(['job_title_id' => $data['job_title_id']]);
+        }
+
+        $jobRequisition->save();
         return redirect()->back()->with('success', 'Job requisition updated successfully.');
     }
 

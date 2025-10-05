@@ -57,6 +57,30 @@ const hrmNavItems: NavItem[] = [
         permission: 'departments.view',
     },
     {
+        title: t('nav.myAttendance'),
+        href: route('dashboard.my-attendance.index'),
+        icon: Clock,
+        permission: null,
+    },
+    {
+        title: t('nav.myLeaves'),
+        href: route('dashboard.my-leaves.index'),
+        icon: Calendar,
+        permission: null,
+    },
+    {
+        title: t('nav.myPayroll'),
+        href: route('dashboard.my-payroll.index'),
+        icon: Calculator,
+        permission: null,
+    },
+    {
+        title: t('nav.myLoans'),
+        href: route('dashboard.my-loans.index'),
+        icon: CreditCard,
+        permission: null,
+    },
+    {
         title: t('nav.attendance'),
         href: '/hrm/attendance',
         icon: Clock,
@@ -136,6 +160,12 @@ const adminNavItems: NavItem[] = [
         href: route('dashboard.abilities.index'),
         icon: Zap,
         permission: 'abilities.view',
+    },
+    {
+        title: t('nav.paymentMethods', 'Payment Methods'),
+        href: route('dashboard.payment-methods.index'),
+        icon: CreditCard,
+        permission: 'payment-methods.view',
     },
     {
         title: t('nav.admin'),

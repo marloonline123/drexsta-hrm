@@ -13,6 +13,12 @@ use App\Http\Controllers\Dashboard\JobApplicationController;
 use App\Http\Controllers\Dashboard\JobPostingController as AdminJobPostingController;
 use App\Http\Controllers\Dashboard\JobRequisitionController;
 use App\Http\Controllers\Dashboard\JobTitleController;
+use App\Http\Controllers\Dashboard\MyAttendanceController;
+use App\Http\Controllers\Dashboard\MyDashboardController;
+use App\Http\Controllers\Dashboard\MyLeavesController;
+use App\Http\Controllers\Dashboard\MyLoansController;
+use App\Http\Controllers\Dashboard\MyPayrollController;
+use App\Http\Controllers\Dashboard\PaymentMethodController;
 use App\Http\Controllers\Dashboard\RolesController;
 use App\Http\Controllers\Public\JobPostingController;
 use App\Http\Controllers\Profile\PasswordController;
@@ -31,9 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->middleware('hasActiveCompany')->group(function () {
 
         // Main dashboard page
-        Route::get('/', function () {
-            return Inertia::render('dashboard');
-        })->name('index');
+        Route::get('/', [MyDashboardController::class, 'index'])->name('index');
 
         // Companies
         Route::resource('companies', CompanyController::class);
@@ -68,6 +72,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Job Applications
         Route::resource('job-applications', JobApplicationController::class)->except(['create', 'store']);
 
+        // Payment Methods
+        Route::resource('payment-methods', PaymentMethodController::class);
+
         // Employees
         Route::resource('employees', EmployeesResourceController::class);
         Route::patch('employees/{employee}/update-password', [UpdateEmployeePasswordController::class, 'updatePassword'])->name('employees.update-password');
@@ -90,9 +97,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('profile/password', [PasswordController::class, 'update'])
             ->middleware('throttle:6,1')
             ->name('profile.password.update');
+        Route::get('profile/payment-data', [ProfileController::class, 'editPaymentData'])->name('profile.payment-data.edit');
+        Route::patch('profile/payment-data', [ProfileController::class, 'updatePaymentData'])->name('profile.payment-data.update');
         Route::get('profile/appearance', function () {
             return Inertia::render('Profile/Appearance');
         })->name('profile.appearance');
+
+        // Employee Pages
+        Route::get('my-attendance', [MyAttendanceController::class, 'index'])->name('my-attendance.index');
+        Route::get('my-leaves', [MyLeavesController::class, 'index'])->name('my-leaves.index');
+        Route::get('my-payroll', [MyPayrollController::class, 'index'])->name('my-payroll.index');
+        Route::get('my-loans', [MyLoansController::class, 'index'])->name('my-loans.index');
     });
 
     Route::get('select-company', [SelectCompanyController::class, 'select'])->name('select-company.show');
